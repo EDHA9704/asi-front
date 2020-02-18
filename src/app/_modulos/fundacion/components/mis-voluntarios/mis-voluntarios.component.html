@@ -142,15 +142,11 @@
           </button>
         </div>
         <div class="modal-body">
-            <mat-horizontal-stepper [linear]="isLinear" #stepper>
+            <mat-horizontal-stepper #stepper>
 
                 <mat-step >
-                    <div style="text-align: center;" class="alert alert-danger" role="alert" *ngIf="statusValid == 'errorCC'" >
-                        <p  style="text-align: center;">La cédula y correo electrónico ya están en uso</p>
-                      </div>
-                      <div style="text-align: center;" class="alert alert-danger" role="alert" *ngIf="statusValid == 'errorValidar'" >
-                          <p  style="text-align: center;">Error al validar datos, intentalo nuevamente</p>
-                        </div>
+                   
+                    
                     <form id="RGF" #registerForm2="ngForm" class="formRg needs-validation" novalidate>
                     
                     <ng-template matStepLabel></ng-template>
@@ -195,7 +191,6 @@
                                   <mat-icon matSuffix><i class="fa fa-user" aria-hidden="true"></i></mat-icon>
                                  <mat-error *ngIf="nombres.invalid">{{getErrorMessage()}}</mat-error>
                                 </mat-form-field>
-                                <p id="nmbr" class="errNC" *ngIf="statusValid == 'errorNombre' || statusValid == 'errorNC'">El nombre ya está en uso</p>
         
                             </div>
                             <div class="form-group col-md-6">
@@ -218,9 +213,7 @@
                                       <mat-icon matSuffix><i class="fa fa-id-card-o" aria-hidden="true"></i></mat-icon>
                                      <mat-error *ngIf="cedula.invalid">{{getErrorMessage3()}}</mat-error>
                                     </mat-form-field>
-                                    <p id="nmbr" class="errNC" *ngIf="statusValid == 'errorCedula' || statusValid == 'errorCC'">El número de cédula  ya está en uso</p>
-                                    <p id="nmbr4" class="errNC" *ngIf="statusValid == 'errorCedula2'">El número de cédula no es válido</p>
-      
+                                   
                                 </div>
                                 <div class="form-group col-md-6" [class.formError]="!fechaNacimiento.valid && fechaNacimiento.touched">
                
@@ -254,7 +247,6 @@
                                 <mat-icon matSuffix><i class="fa fa-envelope" aria-hidden="true"></i></mat-icon>
                                <mat-error *ngIf="correo.invalid">{{getErrorMessage5()}}</mat-error>
                               </mat-form-field>
-                              <p id="corr" class="errNC" *ngIf="statusValid == 'errorCorreo' || statusValid == 'errorCC'">El correo electrónico ya está en uso</p>
       
                         </div>
                         <div class="form-group col-md-6" *ngIf="actualizar == false">

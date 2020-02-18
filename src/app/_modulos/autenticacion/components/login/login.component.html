@@ -53,7 +53,6 @@
                                    
                                 
                                 </mat-form-field>
-                                <p id="nmbr" class="errNC" *ngIf="statusValid == 'errorNombre' || statusValid == 'errorNC'">El nombre ya está en uso</p>
 
                             </div>
                             <div class="form-group col-md-12">
@@ -139,7 +138,6 @@
         
                                         </mat-error>
                                       </mat-form-field>
-                                      <p id="corr" class="errNC" *ngIf="statusValid == 'errorCorreo' || statusValid == 'errorNC'">El correo electrónico ya está en uso</p>
         
                                 </div>
                                 <div class="form-group col-md-12">
@@ -321,14 +319,14 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" *ngIf="status=='error' || status == 'success'">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
       </div>
     </div>
     <!--VERIFICACION DE CORREO-->
     <div class="modal-content" *ngIf="advertencia == false">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Verificación de cuenta</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" *ngIf="status=='error'">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

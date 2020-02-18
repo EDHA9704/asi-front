@@ -177,7 +177,7 @@
                     <ng-template matStepLabel></ng-template>
                     <div class="col-12 imgRG">
         
-                        <p [class.errIM]="status == 'errorImage'">Selecciona una imagen que represente a la mascota</p>
+                        <p >Selecciona una imagen que represente a la mascota</p>
                         
                         <div class="imgRD"> 
                             <img *ngIf="imL2 == false" src="../../../../../assets/img/fondos-de-perros.jpg" class="img-fluid" alt="Responsive image">
@@ -311,7 +311,7 @@
                               <mat-icon matSuffix><i class="fa fa-birthday-cake" aria-hidden="true"></i></mat-icon>
                               <mat-error *ngIf="anios.invalid">{{getErrorMessage9()}}</mat-error>
                             </mat-form-field>
-                            <p id="nmbr" class="errNC" *ngIf="statusValid == 'errorED' || statusValid == 'errorNC'">Selecciona los años</p>
+                           
         
                         </div>
                        
@@ -338,7 +338,7 @@
                           <mat-icon matSuffix><i class="fa fa-birthday-cake" aria-hidden="true"></i></mat-icon>
                           <mat-error *ngIf="meses.invalid">{{getErrorMessage10()}}</mat-error>
                         </mat-form-field>
-                        <p id="nmbr2" class="errNC" *ngIf="statusValid == 'errorED' || statusValid == 'errorNC'">Selecciona los meses</p>
+                        
         
                         </div>
                     </div>
