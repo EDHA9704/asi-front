@@ -27,7 +27,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 @NgModule({
   declarations: [
     AppComponent,
-    AdminComponent,
+    //AdminComponent,
     //SpinnerComponent,
 
   
