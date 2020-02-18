@@ -352,7 +352,7 @@ verificarCodigo(){
               this.loadingCodigo = false
               $('#modalFundacion').modal('hide');
               this._meesageService.showError('Registro','No se pudo registrar tus datos. Inténtalo de nuevo')
-
+ 
               this.authenticationService.borrarUsuario(response.usuario._id).subscribe(
                 resb=>{ 
                 },

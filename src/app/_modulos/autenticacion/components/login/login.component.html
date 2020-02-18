@@ -307,7 +307,7 @@
         
         <div class="registroExitosoFun">
           <div class="imgScss">
-            <img src="../../../assets/img/affirmative-156538_640.png">
+            <img style="width: 8rem;" src="../../../assets/img/affirmative-156538_640.png">
           </div>
           <p>
               El proceso de registro fue completado exitosamente, los datos fueron enviados al administrador para la verificación
@@ -322,58 +322,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal" >Cerrar</button>
       </div>
     </div>
-    <!--VERIFICACION DE CORREO-->
-    <div class="modal-content" >
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Verificación de cuenta</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-        
-          <div class="col-12">
-            <p class="">Un código de verificación fue enviado al correo electrónico que proporcionaste. Ingresalo a continuación:</p>
-          </div>
-        </div>
-        <form #registerCodigo="ngForm"  class="needs-validation" novalidate>
-          <div class="form-group col-md-12">
 
-            <label for="codigo">Código</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupPrepend">
-                  <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                </span>
-              </div>
-              <input required pattern="[0-9]{4}" type="number" class="form-control" id="codigo" placeholder="Ingresa el código de verificación"
-                name="codigo" #codigo="ngModel" [(ngModel)]="codi.codigo" [class.is-invalid]="!codigo.valid && codigo.touched"
-                [class.is-valid]="codigo.valid">
-
-              <div class="msjError" *ngIf="(!codigo.valid && codigo.touched)">
-                <div *ngIf="codigo.errors.required">
-                  Es necesario que ingreses el código.
-                </div>
-                <div *ngIf="codigo.errors.pattern">
-                  El código debe contener mínimo y máximo 4 números.
-                </div>
-               
-              </div>
-             
-             
-            </div>
-          </div>
-
-          <div class="form-group col-md-12">
-            <button type="button" (click)="verificarCodigo()" class="btn btn-primary btnRGA" [disabled]=!registerCodigo.form.valid>Verificar</button>
-            
-          </div>
-
-        </form>
-      </div>
-
-    </div>
 
   </div>
 </div>
