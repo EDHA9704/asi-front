@@ -489,6 +489,7 @@ export class MisMascotasComponent implements OnInit {
    public filesToUpload2: Array<File>;
    urls2 = new Array<string>();
    fileChangeEvent2(fileInput:any){
+     console.log(fileInput);
      this.filesToUpload2 = <Array<File>>fileInput.target.files;
      
       let files = <Array<File>>fileInput.target.files;
@@ -659,5 +660,27 @@ $("#descripcion").keyup(()=>{
   redirectMascota(nombre,name,id,idr){
     this._router.navigate(['/perfil/mascota',name,nombre,id,idr]);
     
+  }
+ public croppedImage
+ public nameCropFoto
+  subirFoto(id){
+    var body = {
+      image:this.croppedImage,
+      name:this.nameCropFoto
+    }
+    this._mascotaService.registerFotoMascota(body,id).subscribe(
+      response=>{
+        
+        this.croppedImage = ''
+        
+      
+
+      },
+      error=>{
+        this._messageService.showError('Error','No se pudo guardar la imagen')
+        console.log(<any>error)
+      }
+    )
+  
   }
 }
