@@ -1,0 +1,70 @@
+<app-header ></app-header>
+<header id="header">
+
+    <div class="titulo">
+      <h3>Contactanos</h3>
+      <span class="lineTi"></span>
+    </div>
+  
+  
+  </header>
+
+  <div id="mainMS" class="main">
+
+
+      <!--Seccion de cartas de mascotas-->
+      <section class="main-mascotas">
+    
+   
+        <div class="mascots" *ngIf="fundacion" >
+  
+          <div class="container containerContactanos">
+              <h5>¿Tienes alguna duda?</h5>
+             
+              <p>Descarga la aplicación móvil y realiza tus consultas directamente ó contáctanos por medio de:</p>
+            
+              <div class="row justify-content-center">
+                <div class="col-5" >
+                  <div class="datosContactos" *ngIf="fundacion">
+                    <ul>
+                     
+                      <li>
+                        <span>
+                          <i class="fa fa-phone" aria-hidden="true"></i>
+                        </span>
+                        <p>{{fundacion.telefono}}</p>
+                      </li>
+                      <li>
+                        <span>
+                          <i class="fa fa-mobile" aria-hidden="true"></i>
+                        </span>
+                        <p>{{fundacion.celular}}</p>
+                      </li>
+                      <li>
+                        <span>
+                          <i class="fa fa-envelope-open" aria-hidden="true"></i>
+                        </span>
+                        <p>{{fundacion.correo}}</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+               <div class="col-5">
+                   <div class="dir" style="width: 100%; text-align: start;">
+                    <h5>Dirección:</h5>
+                    <p>Sector: {{fundacion.sector}}</p>
+                    <p>Barrio: {{fundacion.barrio}}</p>
+                    <p>Calle 1: {{fundacion.calleP}}</p>
+                    <p>Calle 2: {{fundacion.calleS}}</p>
+                   </div>
+                   
+               </div>
+              </div>
+            
+            </div>
+   
+        </div>
+
+
+      </section>
+    </div>

@@ -1,0 +1,59 @@
+p{
+    font-family: 'Exo', sans-serif
+}
+h3,h2,h1{
+    font-family: 'Righteous', cursive;
+}
+.header{
+    margin-top: 11rem;
+    width: 100%;
+   
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .titulo{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-direction: column;
+            align-items: center;
+            h3{
+                font-size: 5rem;
+                color: #555;
+            }
+            span{
+                max-width: 40%;
+                min-width: 40%;
+                border: 1px solid #3bbfad;
+            }
+        }
+        
+        .header-descrip{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            .header-photo{
+                width: 10rem;
+                height: 10rem;
+                margin:1rem;
+                img{
+                    width: 100%;
+                    border-radius: 10px;
+                }
+            }
+            .header-text{
+                display: flex;
+                align-items: center;
+                max-width: 50%;
+                p{
+                    font-size: 1.7rem;
+                }
+            }
+    
+        }
+    }
+   
+}
