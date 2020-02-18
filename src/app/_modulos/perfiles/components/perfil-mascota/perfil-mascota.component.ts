@@ -159,7 +159,7 @@ especie = new FormControl('', [Validators.required]);
                _id:'',
                name:''
              }
-             imag.image = "http://192.168.1.7:3800/api/"+"obtener-foto-mascota/"+element.name;
+             imag.image = "https://fundacionesbck.herokuapp.com/api/"+"obtener-foto-mascota/"+element.name;
              imag._id = element._id;
              imag.name = element.name;
              console.log(con)
