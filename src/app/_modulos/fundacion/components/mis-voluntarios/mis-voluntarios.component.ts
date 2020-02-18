@@ -33,7 +33,8 @@ export class MisVoluntariosComponent implements OnInit {
   public voluntarios:UsuarioVoluntario[];
   public usuario:UsuarioVoluntario;
   public usuario2:any;
-
+  minDate = new Date(1980, 0, 1);
+  maxDate = new Date(2019, 7, 31);
   public page
   public total;
   public pages;
