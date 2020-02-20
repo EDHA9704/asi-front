@@ -49,7 +49,9 @@
                 <div class="card-status">
                     <span *ngIf="emerg.estado == 0">Pendiente</span>
                     <span *ngIf="emerg.estado == 1">Asignada</span>
-                    <span *ngIf="emerg.estado == 2">Atendida</span>
+                    <span *ngIf="emerg.estado == 2">Aprobado</span>
+                    <span *ngIf="emerg.estado == 3">Negado</span>
+                    <span *ngIf="emerg.estado == 4">Atendida</span>
                 </div>
                 <div class="card-body">
                     <div class="card-body-title">
@@ -57,7 +59,8 @@
                             <p>{{emerg.tipoEmergencia}}</p>
                         </div>
                         <div class="card-body-title-photo" style="cursor: pointer;">
-                            <img (click)="verFoto(emerg.fotoMascota)" src="{{url + 'obtener-imagen-emergencia/' + emerg.fotoMascota}}" class="d-block w-100" alt="mascota">
+                            <img (click)="verFoto(emerg.fotoMascota)" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                emerg.fotoMascota}}" class="d-block w-100" alt="mascota">
                         </div>
                     </div>
                     <div class="card-body-subtitle">
@@ -123,7 +126,8 @@
                 <span aria-hidden="true">&times;</span>
               </button>
               <div class="imgModalCom">
-                  <img *ngIf="imgCom != 's'" src="{{url + 'obtener-imagen-emergencia/' + imgCom}}">
+                  <img *ngIf="imgCom != 's'" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    imgCom}}">
                   <img *ngIf="imgCom == 's'" src="../../../../assets/img/Captura2.png">
 
               </div>

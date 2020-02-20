@@ -22,6 +22,7 @@ export class MiPerfilComponent implements OnInit {
   public url:string;
   public statusValid;
   public valid;
+  imageObj: File;
   rgxPass  = new RegExp("^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$")
   rgxPass2  = new RegExp("^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,30}$")
   rg = new RegExp("^([a-zA-ZñáéíóúñÑ]+[\\s]+[a-zA-ZñáéíóúñÑ]+[\\s]*)+$")
@@ -412,8 +413,16 @@ $("#banco").keyup(()=>{
                 if(response.n == '2'){
                   this._usuarioService.actualizarUsuario(update,this.usuarioFundacion._id).subscribe(
                     response=>{
-              
-                      this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+this.usuarioFundacion._id,[],this.filesToUpload3,'logo')
+                      const imageForm = new FormData();
+                      imageForm.append('image', this.imageObj);
+                      this._uploadService.imageUpload(imageForm,'subir-foto-fundacion/',this.usuarioFundacion._id).subscribe(res => {
+                        this.status='success';
+                        this.usuarioFundacion.logo = res['usuario']['logo'];
+                        localStorage.setItem('identity', JSON.stringify(res['usuario']));
+
+                        this._messageService.showSuccess('Perfil','Datos actualizados')
+                      });
+                     /* this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+this.usuarioFundacion._id,[],this.filesToUpload3,'logo')
                           .then((result:any)=>{
                             if(result.n == '3' ){
                               console.log(result)
@@ -430,7 +439,7 @@ $("#banco").keyup(()=>{
               
               
               
-                          });
+                          });*/
               
                     },
                     error=>{
@@ -449,8 +458,17 @@ $("#banco").keyup(()=>{
           }else{
             this._usuarioService.actualizarUsuario(update,this.usuarioFundacion._id).subscribe(
               response=>{
-        
-                this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+this.usuarioFundacion._id,[],this.filesToUpload3,'logo')
+                const imageForm = new FormData();
+                imageForm.append('image', this.imageObj);
+                this._uploadService.imageUpload(imageForm,'subir-foto-fundacion/',this.usuarioFundacion._id).subscribe(res => {
+                  this.status='success';
+                      
+                        this.usuarioFundacion.logo = res['usuario']['logo'];
+                        localStorage.setItem('identity', JSON.stringify(res['usuario']));
+
+                        this._messageService.showSuccess('Perfil','Datos actualizados')
+                });
+               /* this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+this.usuarioFundacion._id,[],this.filesToUpload3,'logo')
                     .then((result:any)=>{
                       if(result.n == '3' ){
                         localStorage.setItem('identity', JSON.stringify(result.usuario));
@@ -468,7 +486,7 @@ $("#banco").keyup(()=>{
         
         
         
-                    });
+                    });*/
         
               },
               error=>{
@@ -657,10 +675,12 @@ $("#banco").keyup(()=>{
  //para editar fundaciones
  public filesToUpload3: Array<File>;
  urls3 = new Array<string>();
- fileChangeEvent3(fileInput:any){
-   this.filesToUpload3 = <Array<File>>fileInput.target.files;
+ fileChangeEvent3(event:any){
+  const FILE = (event.target as HTMLInputElement).files[0];
+  this.imageObj= FILE;
+   this.filesToUpload3 = <Array<File>>event.target.files;
    
-    let files = <Array<File>>fileInput.target.files;
+    let files = <Array<File>>event.target.files;
    this.urls3 = [];
     if (files) {
      for (let file of files) {

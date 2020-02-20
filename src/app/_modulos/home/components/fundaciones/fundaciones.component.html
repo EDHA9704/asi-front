@@ -44,7 +44,8 @@
                             <p>{{fund.nombreFundacion}}</p>
                         </div>
                         <div class="card-body-title-photo" [routerLink]="['/fundacion',fund._id,'nosotros','all']">
-                            <img  src="{{url + 'obtener-foto/' + fund.logo}}" class="d-block w-100" alt="mascota">
+                            <img  src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                fund.logo}}" class="d-block w-100" alt="mascota">
                         </div>
                     </div>
                     <div class="card-body-subtitle">

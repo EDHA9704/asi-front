@@ -179,7 +179,8 @@
                       <form #registerFormMV="ngForm"  class="formRg needs-validation" novalidate>
                           <div class="form-row datosUser justify-content-center">
                               <div class="col-12 imgRG">
-                                  <img *ngIf="usuarioFundacion.logo != null " src="{{url + 'obtener-foto/' + usuarioFundacion.logo}}" class="img-fluid" alt="Responsive image">
+                                  <img *ngIf="usuarioFundacion.logo != null " src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                    usuarioFundacion.logo}}" class="img-fluid" alt="Responsive image">
                                   
                                   <button type="button" *ngIf="usuarioFundacion.logo" class="btn btnElimLog" (click)="eliminarLogo(usuarioFundacion._id,usuarioFundacion.logo)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                  

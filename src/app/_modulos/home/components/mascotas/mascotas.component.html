@@ -57,7 +57,8 @@
                             <p>{{mascota.ms.nombre}}</p>
                         </div>
                         <div class="card-body-title-photo">
-                            <img (click)="verFoto(mascota.photo.name)" src="{{url + 'obtener-foto-mascota/' + mascota.photo.name}}" class="d-block w-100" alt="mascota">
+                            <img (click)="verFoto(mascota.photo.name)" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                mascota.photo.name}}" class="d-block w-100" alt="mascota">
                         </div>
                     </div>
                     <div class="card-body-subtitle">
@@ -136,7 +137,8 @@
                 <span aria-hidden="true">&times;</span>
               </button>
               <div class="imgModalCom">
-                  <img src="{{url + 'obtener-foto-mascota/' + imgCom}}">
+                  <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    imgCom}}">
               </div>
           
         </div>

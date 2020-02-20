@@ -75,7 +75,9 @@
                             <p>{{adop.mascota.nombre}}</p>
                         </div>
                         <div class="card-body-title-photo">
-                            <img (click)="verFoto(adop.mascota.fotos[0].name,'m')" src="{{url + 'obtener-foto-mascota/' + adop.mascota.fotos[0].name}}" class="d-block w-100" alt="...">
+                            <img (click)="verFoto(adop.mascota.fotos[0].name,'m')" src="
+                            https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                              adop.mascota.fotos[0].name}}" class="d-block w-100" alt="...">
 
                         </div>
                     </div>
@@ -143,8 +145,11 @@
               <div class="imgModalCom">
                   
                   <img *ngIf="imgCom == 's' && opAd == 'v'"   class="profile-img card-img-top" src="../../../../assets/img/ab893f9074d536e3e940d61f0fc62b39-los-usuarios-firman-en-rojo-by-vexels.png" alt="Card image cap" >
-                  <img *ngIf="imgCom != 's' && opAd == 'v'"  src="{{url + 'obtener-foto/' + imgCom}}"  class="profile-img card-img-top">
-                  <img *ngIf="imgCom != 's' && opAd == 'm'"  src="{{url + 'obtener-foto-mascota/' + imgCom}}"  class="profile-img card-img-top">
+                  <img *ngIf="imgCom != 's' && opAd == 'v'"  src="
+                  https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    imgCom}}"  class="profile-img card-img-top">
+                  <img *ngIf="imgCom != 's' && opAd == 'm'"  src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    imgCom}}"  class="profile-img card-img-top">
 
               </div>
           
