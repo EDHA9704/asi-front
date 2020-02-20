@@ -65,7 +65,8 @@
                             <p>{{adop.adoptante.nombres}} {{adop.adoptante.apellidos}}</p>
                         </div>
                         <div class="card-body-title-photo">
-                            <img matTooltip="Ver foto" (click)="verFoto(adop.adoptante.foto, 'v')" *ngIf="adop.adoptante.foto && adop.adoptante.password" src="{{url + 'obtener-foto/' + adop.adoptante.foto}}" class="card-img-top" alt="...">
+                            <img matTooltip="Ver foto" (click)="verFoto(adop.adoptante.foto, 'v')" *ngIf="adop.adoptante.foto && adop.adoptante.password" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                              adop.adoptante.foto}}" class="card-img-top" alt="...">
                            <img matTooltip="Ver foto"  *ngIf="!adop.adoptante.foto && !adop.adoptante.password" src="{{adop.adoptante.foto}}" class="card-img-top" alt="...">
               
                         </div>
