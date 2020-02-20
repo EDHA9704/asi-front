@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
   public url:string;
-  constructor() {
+  constructor(private http: HttpClient) {
     this.url =environment.apiUrl;
    }
    makeGileRequest(url:string, params:Array<string>, files:Array<File>, name:string){
@@ -61,5 +62,11 @@ makeGileRequest2(url:string, params:Array<string>, files:Array<File>, name:strin
       xhr.send(formData);
   });
 }
+
+imageUpload(imageForm: FormData,path,id) {
+    console.log('image uploading');
+    return this.http.post(this.url+path+id, 
+    imageForm);
+   }
 }
 

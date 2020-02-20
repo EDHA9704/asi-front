@@ -52,6 +52,10 @@ export class LoginComponent implements OnInit {
   rgxPass2  = new RegExp("^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,30}$")
   rgx3 = new RegExp("[\\w ]+")
   rg = new RegExp("^([a-zA-ZñáéíóúñÑ]+[\\s]+[a-zA-ZñáéíóúñÑ]+[\\s]*)+$")
+
+  
+imageObj: File;
+imageUrl: string;
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -184,8 +188,11 @@ export class LoginComponent implements OnInit {
   //para fundaciones
 public filesToUpload2: Array<File>;
 urls2 = new Array<string>();
-fileChangeEvent2(fileInput:any){
-  this.filesToUpload2 = <Array<File>>fileInput.target.files;
+fileChangeEvent2(/*fileInput:any*/event: Event){
+  const FILE = (event.target as HTMLInputElement).files[0];
+  this.imageObj = FILE;
+  console.log(this.imageObj)
+  /*this.filesToUpload2 = <Array<File>>fileInput.target.files;
   
    let files = <Array<File>>fileInput.target.files;
   this.urls2 = []; 
@@ -202,7 +209,7 @@ fileChangeEvent2(fileInput:any){
   }
    if(this.filesToUpload2 != undefined){
     this.imL2 = false;
-  }
+  }*/
 }
 
 //registro fundacion
@@ -232,7 +239,7 @@ this.usuarioFundacion2 = this.usuarioFundacion;
 
 
   
- if(this.filesToUpload2 != undefined && this.filesToUpload2.length > 0){
+ //if(this.filesToUpload2 != undefined && this.filesToUpload2.length > 0){
 
   this.authenticationService.validarUsuarioF(this.usuarioFundacion2).subscribe(
     response=>{
@@ -313,17 +320,16 @@ this.usuarioFundacion2 = this.usuarioFundacion;
     }
   )
 
- }else{
+ /*}else{
   this.loadingRG = false;
   this._meesageService.showError('Error','Selecciona un logo de tu fundación')
 
   stepper.selectedIndex = 0;
    //this.status = 'errorImage';
    //this.mensaje = 'Debes seleccionar una imagen';
- }
+ }*/
  
 }
-
 
 verificarCodigo(){
  // this.advertencia = true;
@@ -343,8 +349,24 @@ verificarCodigo(){
     response =>{
 
       if(response.usuario && response.usuario._id && response.n == '1'){ 
-       
-          this._uploadService.makeGileRequest2(`${environment.apiUrl}subir-foto-fundacion/${response.usuario._id}`,[],this.filesToUpload2,'logo')
+        const imageForm = new FormData();
+        imageForm.append('image', this.imageObj);
+        this._uploadService.imageUpload(imageForm,'subir-foto-fundacion/',response.usuario._id).subscribe(res => {
+          this.imageUrl = res['image'];
+        });
+        this.loadingCodigo = false
+              $('#modalFundacion').modal('hide');
+              $('#modalFundacion2').modal('show');
+              this.limipiarForms()
+              this.authenticationService.eliminarCodigo(responseC.codigo._id).subscribe(
+                response=>{
+
+                },
+                error=>{
+
+                }
+              )
+          /*this._uploadService.makeGileRequest2(`${environment.apiUrl}subir-foto-fundacion/${response.usuario._id}`,[],this.filesToUpload2,'logo')
           .then((result:any)=>{
             if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
               //this.status='error';
@@ -387,7 +409,7 @@ verificarCodigo(){
 
 
 
-          });
+          });*/
        
       }else if(response.n == '4'|| response.n == '6'){
         this.loadingCodigo = false

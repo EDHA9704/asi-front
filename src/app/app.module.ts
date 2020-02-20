@@ -24,9 +24,11 @@ import { HomeModule} from './_modulos/home/home.module';
 //extrernals
 //extrernals
 import { NgxSpinnerModule } from "ngx-spinner";
+import { EmptyElementComponent } from './_shared/components/empty-element/empty-element.component';
 @NgModule({
   declarations: [
     AppComponent,
+    EmptyElementComponent,
     //AdminComponent,
     //SpinnerComponent,
 

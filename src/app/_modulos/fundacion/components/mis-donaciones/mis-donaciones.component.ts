@@ -134,7 +134,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
             this.nombreProducto.hasError('minlength') ? 'Especifica mejor el nombre':
             '';
   }
-  
+  imageObj: File;
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _uploadService:UploadService,
     private _donacionService:DonacionService,
@@ -252,9 +252,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
             this.pagesSelec.push(i)
             
           }
-          if(page > this.pages){
-            this._router.navigate[('/login')]
-          }
+         
         
       },
       error=>{
@@ -301,6 +299,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
         }
       },
       error=>{
+        this.donaciones = []
         this.carga = false;
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
@@ -502,10 +501,12 @@ eliminarSeleccion(){
 
   public filesToUpload2: Array<File>;
   urls2 = new Array<string>();
-  fileChangeEvent2(fileInput:any){
-    this.filesToUpload2 = <Array<File>>fileInput.target.files;
+  fileChangeEvent2(event:any){
+    const FILE = (event.target as HTMLInputElement).files[0];
+    this.imageObj= FILE;
+    this.filesToUpload2 = <Array<File>>event.target.files;
     
-     let files = <Array<File>>fileInput.target.files;
+     let files = <Array<File>>event.target.files;
     this.urls2 = [];
      if (files) {
       for (let file of files) {
@@ -532,7 +533,21 @@ eliminarSeleccion(){
       response=>{
  
         if(response.donacion && response.n == '1'){
-          this._uploadService.makeGileRequest(this.url+'subir-comprobante/'+response.donacion._id,[],this.filesToUpload2,'comprobante')
+          const imageForm = new FormData();
+          imageForm.append('image', this.imageObj);
+          this._uploadService.imageUpload(imageForm,'subir-comprobante/',response.donacion._id).subscribe(res => {
+            
+            this._messageService.showSuccess('Donación','Registro exitoso')
+            this.userSelect = "";
+            this.actualPage2()
+            $("#modalDonacion").modal("hide")
+            $("#RGDO")[0].reset();
+            $("#RGF2")[0].reset();
+            stepper.selectedIndex = 0;
+            this.filesToUpload2 = undefined;
+            this.imL2 = false;
+          });
+          /*this._uploadService.makeGileRequest(this.url+'subir-comprobante/'+response.donacion._id,[],this.filesToUpload2,'comprobante')
           .then((result:any)=>{
             //alert('si')
              if(result.n == '1'){
@@ -550,7 +565,7 @@ eliminarSeleccion(){
             
             }
            
-          });
+          });*/
         }
       
        

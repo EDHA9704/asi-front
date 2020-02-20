@@ -1,7 +1,8 @@
 <app-header ></app-header>
 <section class="tituloPage" *ngIf="fundacion">
   <div class="tituloPage-logo">
-    <img src="{{url + 'obtener-foto/' + fundacion.logo}}">
+    <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+      fundacion.logo}}">
   </div>
     <div class="tituloPage-name">
       <h3>Voluntarios</h3>
@@ -51,8 +52,9 @@
                             <p>{{vol.nombres}} {{vol.apellidos}}</p>
                         </div>
                         <div class="card-body-title-photo">
-                            <img matTooltip="Ver foto" (click)="verFoto('s')" class="profile-img card-img-top" src="../../../../assets/img/ab893f9074d536e3e940d61f0fc62b39-los-usuarios-firman-en-rojo-by-vexels.png" alt="Card image cap" *ngIf="!vol.foto">
-                           <img matTooltip="Ver foto" (click)="verFoto(vol.foto)" src="{{url + 'obtener-foto/' + vol.foto}}" *ngIf="vol.foto" class="profile-img card-img-top">
+                            <img matTooltip="Ver foto"  class="profile-img card-img-top" src="../../../../assets/img/ab893f9074d536e3e940d61f0fc62b39-los-usuarios-firman-en-rojo-by-vexels.png" alt="Card image cap" *ngIf="!vol.foto">
+                           <img matTooltip="Ver foto" (click)="verFoto(vol.foto)" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            vol.foto}}" *ngIf="vol.foto" class="profile-img card-img-top">
  
                         </div>
                     </div>
@@ -123,7 +125,8 @@
                 <span aria-hidden="true">&times;</span>
               </button>
               <div class="imgModalCom">
-                  <img src="{{url + 'obtener-foto/' + imgCom}}">
+                  <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    imgCom}}">
               </div>
           
         </div>
@@ -135,11 +138,17 @@
   <div class="modal fade" id="modalMascota" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Registro de voluntario</h5>
+        <div class="modal-header" style="align-items: center;">
+          <h5 class="modal-title" id="exampleModalLongTitle" style="font-size: 1.5rem; margin: 0;">Registro de voluntario</h5>
+          <div class="btnModalVolAcc" >
+            <button *ngIf="actualizar == true" class="btn btn-danger" style="background: #bf3b3b !important;" (click)="eliminarVoluntarioEstado(usuario,usuario._id)">Eliminar usuario </button>
+
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
+          </div>
+          
+          
         </div>
         <div class="modal-body">
             <mat-horizontal-stepper #stepper>
@@ -169,7 +178,8 @@
                             <img *ngIf="imL == false && !usuario.foto" src="../../../../../assets/img/ab893f9074d536e3e940d61f0fc62b39-los-usuarios-firman-en-rojo-by-vexels.png"
                             class="img-fluid" alt="Responsive image">
                           <img *ngIf="imL == true" src="{{imgUN}}">
-                          <img *ngIf="actualizar == true && usuario.foto && imL == false" src="{{url + 'obtener-foto/' + usuario.foto}}">
+                          <img *ngIf="actualizar == true && usuario.foto && imL == false" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            usuario.foto}}">
 
                             <div class="btnIM">
               

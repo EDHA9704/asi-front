@@ -69,6 +69,11 @@ export class FundacionComponent implements OnInit {
       },
   };
   currentUser;
+  imageObj: File;
+imageUrl: string;
+imageObj2: File;
+imageUrl2: string;
+public stUpload = false;
   constructor(private _route:ActivatedRoute,
     private _router:Router, 
     private _mascotaService:MascotaService,/*private _usuarioService:UsuarioService ,*/
@@ -138,29 +143,36 @@ export class FundacionComponent implements OnInit {
     )
   }
   nuevaHI(){
+    
    /* $(document).ready(()=>{
       this.prob()
             
         });*/
     console.log(this.filesToUpload2);
     if((this.historia.titulo.length >= 4 && this.historia.titulo.length <= 25) && (this.historia.descripcion.length >= 15 && this.historia.titulo.length <= 1000) && (this.filesToUpload2 != undefined && this.filesToUpload2 != null)){
+      this._messageService.showInfo('Historia','Procesando')
+      this.stUpload = true;
       this._fundacionService.registerHistoria(this.historia,this.currentUser.usuario._id).subscribe(
         response=>{
           if(response.historia && response.n == '1'){
               
-  
-            this._uploadService.makeGileRequest(this.url+'subir-foto-historia/'+response.historia._id,[],this.filesToUpload2,'foto')
+            const imageForm = new FormData();
+            imageForm.append('image', this.imageObj2);
+            this._uploadService.imageUpload(imageForm,'subir-foto-historia/',response.historia._id).subscribe(res => {
+              this._messageService.showSuccess('Historia','Registro exitoso')
+                this.loadPage();
+                this.filesToUpload2 = undefined;
+                this.imL2 = false;
+                $("#exampleModal2").modal('hide')
+            });
+            /*this._uploadService.makeGileRequest(this.url+'subir-foto-historia/'+response.historia._id,[],this.filesToUpload2,'foto')
             .then((result:any)=>{
   
   
               if(result.n == '8' || result.n == '7' || result.n == '6' || result.n == '5' || result.n == '4' || result.n == '2' ){
                 
               }else if(result.n == '3'){
-                //form.reset();
-                $('#modalHI').modal('hide')
-                /*this.snackBar.open('Registro exitoso','Cerrar', {
-                  duration: 2000,
-                });*/
+     
                 this._messageService.showSuccess('Historia','Registro exitoso')
                 this.loadPage();
                 this.filesToUpload2 = undefined;
@@ -170,7 +182,7 @@ export class FundacionComponent implements OnInit {
                 console.log(response)
               }
              
-            });
+            });*/
            
           
         }
@@ -195,10 +207,13 @@ export class FundacionComponent implements OnInit {
   //para registro de mascota
   public filesToUpload2: Array<File>;
   urls2 = new Array<string>();
-  fileChangeEvent2(fileInput:any){
-    this.filesToUpload2 = <Array<File>>fileInput.target.files;
+  fileChangeEvent2(event: any){
+    const FILE = (event.target as HTMLInputElement).files[0];
+    this.imageObj2= FILE;
+    console.log(this.imageObj2)
+    this.filesToUpload2 = <Array<File>>event.target.files;
     
-     let files = <Array<File>>fileInput.target.files;
+     let files = <Array<File>>event.target.files;
     this.urls2 = [];
      if (files) {
       for (let file of files) {
@@ -241,15 +256,20 @@ export class FundacionComponent implements OnInit {
   }
   eliminarPortada(id,file){
     console.log(file)
-    this._fundacionService.eliminarLogo(id,file,'FP').subscribe(
-      response=>{
-       
-       this.loadPage();
+    if(this.portadasFundacion.length > 1){
+      this._fundacionService.eliminarLogo(id,file,'FP').subscribe(
+        response=>{
+          console.log(response)
+         this.loadPage();
+        }
+      ),
+      error=>{
+        console.log(<any>error)
       }
-    ),
-    error=>{
-      console.log(<any>error)
+    }else{
+      this._messageService.showError('Error','Debe quedar al menos una portada')
     }
+ 
   }
  
 
@@ -309,13 +329,33 @@ export class FundacionComponent implements OnInit {
     if(this.filesToUpload3 != undefined){
       this.advertenciaNewPor = true;
       this.statusNewPor = 'procesando';
-
+      this.stUpload = true;
+      this._messageService.showInfo('Portada','Procesando')
       this.portada.mensaje1 = this.mensaje1.value;
       this.portada.mensaje2 = this.mensaje2.value;
       this._fundacionService.registerPortada(this.portada, this.idF).subscribe(
         response =>{
           if(response.portada && response.portada._id && response.n == '1'){
-              this._uploadService.makeGileRequest(this.url+'subir-portada-fundacion/'+this.idF+'/'+response.portada._id,[],this.filesToUpload3,'foto')
+            const imageForm = new FormData();
+            imageForm.append('image', this.imageObj);
+            this._uploadService.imageUpload(imageForm,'subir-portada-fundacion/',+this.idF+'/'+response.portada._id).subscribe(res => {
+              this.imageUrl = res['image'];
+              this._messageService.showSuccess('Portada','Se subió la portada correctamente')
+              this.statusNewPor='success';
+              //this.mensajeNewPor = response.message;
+              this.loadPage()
+              $("#exampleModal").modal('hide')
+              $("#mdalPOR")[0].reset();
+             
+             
+              this.filesToUpload3 = undefined;
+              this.imL3 = false;
+              this.stUpload = true;
+             
+            });
+           
+            //this.portada.foto = result.foto;
+              /*this._uploadService.makeGileRequest(this.url+'subir-portada-fundacion/'+this.idF+'/'+response.portada._id,[],this.filesToUpload3,'foto')
               .then((result:any)=>{
                 //alert('si')
 
@@ -352,7 +392,7 @@ export class FundacionComponent implements OnInit {
                 //this.status = 'success';
                // $('#modalFundacion').modal('show');
               
-              });
+              });*/
 
              /* this.statusNewPor='success';
               this.mensajeNewPor = response.message;
@@ -404,10 +444,13 @@ export class FundacionComponent implements OnInit {
       //para registro de portada
       public filesToUpload3: Array<File>;
       urls3 = new Array<string>();
-      fileChangeEvent3(fileInput:any){
-        this.filesToUpload3 = <Array<File>>fileInput.target.files;
+      fileChangeEvent3(event: any){
+        const FILE = (event.target as HTMLInputElement).files[0];
+        this.imageObj = FILE;
+ 
+        this.filesToUpload3 = <Array<File>>event.target.files;
         
-         let files = <Array<File>>fileInput.target.files;
+         let files = <Array<File>>event.target.files;
         this.urls3 = [];
          if (files) {
           for (let file of files) {

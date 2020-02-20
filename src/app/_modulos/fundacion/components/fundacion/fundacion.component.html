@@ -7,7 +7,8 @@
         <div class="carousel-inner" *ngIf="portadasFundacion.length > 0">
           <div class="carousel-item"  *ngFor="let portada of portadasFundacion" [class.active]="portada.orden == 1">
     
-            <img src="{{url + 'obtener-portada-fundacion/' + portada.foto}}" alt="...">
+            <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+              portada.foto}}" alt="...">
             <div class="carousel-caption d-none d-md-block">
               <h5>{{portada.mensaje1}}</h5>
               <p>{{portada.mensaje2}}</p>
@@ -40,7 +41,7 @@
         </div>
 
         <!-- Modal a;adir portada-->
-        <div *ngIf="portadasFundacion.length >= 0" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div *ngIf="portadasFundacion.length >= 0" style="z-index: 2000 !important" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -107,7 +108,7 @@
       
               <div class="modal-footer">
                   <div class="btnsGuardarPortada">
-                      <button type="button" style="font-size: 1.5rem;" (click)="registrarPortada(registerPortada)" class="btn btn-primary btnRGA" [disabled]="filesToUpload3 == null || filesToUpload3 == undefined">Guardar</button>
+                      <button type="button" style="font-size: 1.5rem;" [disabled]="stUpload == true" (click)="registrarPortada(registerPortada)" class="btn btn-primary btnRGA" [disabled]="filesToUpload3 == null || filesToUpload3 == undefined">Guardar</button>
                       
                     </div>
               </div>
@@ -133,7 +134,8 @@
                         <div class="example-box" *ngFor="let p of portadasFundacion" cdkDrag>
     
                           <div class="imgPorOrden">
-                              <img src="{{url + 'obtener-portada-fundacion/' + p.foto}}" alt="..." >
+                              <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                p.foto}}" alt="..." >
                           </div>
                           <div class="btnEliminar">
                               <button class="btn" (click)="eliminarPortada(p._id, p.foto)"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -168,7 +170,8 @@
         <div class="fundacion-perfil-logo">
             <div class="fundacion-perfil-logo-img">
                 <div class="img">
-                    <img src="{{url + 'obtener-foto/' + usuarioFundacion.logo}}">
+                    <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                      usuarioFundacion.logo}}">
                 </div>
             </div>
         </div>
@@ -261,7 +264,7 @@
             
                         <div class="form-group col-md-12 btnsACP">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary btnRGA" [disabled]=!registerFormHI.form.valid>Guardar</button>
+                            <button type="submit" class="btn btn-primary btnRGA" [disabled]="!registerFormHI.form.valid || stUpload == true">Guardar</button>
                         </div>
         
                        
@@ -322,7 +325,8 @@
                 <div class="swiper-slide" *ngFor="let his of historiasF"><div class="card" >
                   <div class="imgHSI">
       
-                           <img src="{{url + 'obtener-foto-historia/' + his.foto}}" class="card-img-top" alt="...">
+                           <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            his.foto}}" class="card-img-top" alt="...">
       
                       </div>
                     <div class="card-body" *ngIf="currentUser">

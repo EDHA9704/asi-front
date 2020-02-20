@@ -14,7 +14,8 @@
     <div class="row">
         <div class="col-12 col-md-3 donacion-content">
             <div class="donacion-content-img">
-                <img src="{{url + 'obtener-foto-mascota/' + adopcion.mascota.fotos[0].name}}">
+                <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                  adopcion.mascota.fotos[0].name}}">
 
             </div>
 
@@ -90,7 +91,8 @@
                         <div class="donador-photo">
                             <div class="photo">
                                 <img *ngIf="!adopcion.adoptante.foto" class="img-fluid" src="../../../../assets/img/ab893f9074d536e3e940d61f0fc62b39-los-usuarios-firman-en-rojo-by-vexels.png">
-                                <img *ngIf="adopcion.adoptante.foto" class="img-fluid" src="{{url + 'obtener-foto/' + adopcion.adoptante.foto}}">
+                                <img *ngIf="adopcion.adoptante.foto" class="img-fluid" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                  adopcion.adoptante.foto}}">
                             </div>
                         </div>
                         <div class="adoptante-additional">

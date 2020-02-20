@@ -1,7 +1,8 @@
 <app-header></app-header>
 <section class="tituloPage" *ngIf="fundacion">
 <div class="tituloPage-logo">
-  <img src="{{url + 'obtener-foto/' + fundacion.logo}}">
+  <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+    fundacion.logo}}">
 </div>
   <div class="tituloPage-name">
     <h3>Donaciones</h3>
@@ -69,8 +70,10 @@
                             <p *ngIf="dona.tipo == 'Producto'">{{dona.nombreProducto}}</p>
                         </div>
                         <div class="card-body-title-photo" style="cursor: pointer;">
-                            <img (click)="verComprobante(dona.comprobante)" *ngIf="dona.comprobante" src="{{url + 'obtener-comprobante/' + dona.comprobante}}">
-                            <img (click)="verComprobante(dona.foto)" *ngIf="dona.foto" src="{{url + 'obtener-comprobante/' + dona.foto}}">
+                            <img (click)="verComprobante(dona.comprobante)" *ngIf="dona.comprobante" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                              dona.comprobante}}">
+                            <img (click)="verComprobante(dona.foto)" *ngIf="dona.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                              dona.foto}}">
                         </div>
                     </div>
                     <div class="card-body-subtitle">
@@ -183,7 +186,8 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                   <div class="imgModalCom">
-                      <img src="{{url + 'obtener-comprobante/' + imgCom}}">
+                      <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                        imgCom}}">
                   </div>
               
             </div>
@@ -321,7 +325,8 @@
               
                               <div class="usrsImg col-md-4">
                                 <div class="Img">
-                                  <img src="{{url + 'obtener-foto/' + userSelect.foto}}">
+                                  <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                    userSelect.foto}}">
                                 </div>
                   
                               </div>

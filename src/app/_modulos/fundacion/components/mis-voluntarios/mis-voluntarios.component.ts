@@ -21,7 +21,7 @@ export class MisVoluntariosComponent implements OnInit {
 
   public carga;
   public url;
-
+  imageObj: File;
   //variables para recoger lo que venga por la URL
   public idFun;
   public titu;
@@ -410,7 +410,7 @@ public nuevoRegistro = false;
   validarNM(op){
   
     if(op == 'ce'){
-      const cedula = $("#cedula2").val();
+      const cedula = $("#cedula2").val(); 
       this.usuario.cedula = cedula
       this._fundacionService.validarCedulaE(this.usuario).subscribe(
         response=>{
@@ -453,6 +453,8 @@ public nuevoRegistro = false;
   public filesToUpload: Array<File>;
   urls = new Array<string>();
   fileChangeEvent(fileInput:any){
+    const FILE = (event.target as HTMLInputElement).files[0];
+    this.imageObj= FILE;
     this.filesToUpload = <Array<File>>fileInput.target.files;
  
      let files = <Array<File>>fileInput.target.files;
@@ -502,7 +504,20 @@ public nuevoRegistro = false;
           response=>{
             if(response.usuario && response.n=='1'){
               if(this.filesToUpload != undefined){
-                this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
+                const imageForm = new FormData();
+                        imageForm.append('image', this.imageObj);
+                        this._uploadService.imageUpload(imageForm,'subir-foto-usuario/',response.usuario._id).subscribe(res => {
+                          this.actualizar = false;
+                          this.actualPage()
+                          this.imL = false;
+                                 this.imgUN = undefined;
+                                 stepper.selectedIndex = 0;
+        
+                          this._messageService.showSuccess('Voluntario','Actualizado exitosamente')
+                          
+                          $('#modalMascota').modal('hide')
+                        });
+                /*this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
                 .then((result:any)=>{
                  
                   
@@ -530,10 +545,11 @@ public nuevoRegistro = false;
                 }
     
     
-                });
+                });*/
               }else{
+                this.actualizar = false;
                 this.imL = false;
-                this.imgUN = undefined;
+                this.imgUN = '';
                   this.actualPage()
                   stepper.selectedIndex = 0;
 
@@ -631,7 +647,19 @@ public nuevoRegistro = false;
                     if(response.usuario && response.usuario._id){
                      
                       if(this.filesToUpload != undefined){
-                        this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
+
+                        const imageForm = new FormData();
+                        imageForm.append('image', this.imageObj);
+                        this._uploadService.imageUpload(imageForm,'subir-foto-usuario/',response.usuario._id).subscribe(res => {
+                          this._messageService.showSuccess('Exito','Voluntario registrado')
+                          this.resets()
+                         // this.obtVoluntarios(this.page)
+                         this.actualPage()
+                         this.imL = false;
+                         this.imgUN = undefined;
+                        });
+
+                        /*this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
                         .then((result:any)=>{
                          
                          
@@ -663,7 +691,7 @@ public nuevoRegistro = false;
                         }
             
             
-                        });
+                        });*/
                       }else{
                        
                         this.resets()
@@ -741,15 +769,19 @@ public nuevoRegistro = false;
   
   } 
   //desactivar o activar el estado de la mascota
-  eliminarVoluntarioEstado(usuario,id){
+  eliminarVoluntarioEstado(stepper: MatStepper,usuario,id){
     console.log(id)
     this._fundacionService.eliminarVoluntarioEstado(usuario,id).subscribe(
       response=>{
 
         if(response.usuario && response.n == '1'){
-          
+          this.actualizar = false;
+                this.imL = false;
+                this.imgUN = '';
+                  this.actualPage()
+                  stepper.selectedIndex = 0;
          
-          this.actualPage();
+   
           //this.obtVoluntarios(this.page)
           $('#editUsuario').modal('hide')
           this._messageService.showSuccess('Voluntario','El voluntario fue eliminado')
@@ -761,6 +793,8 @@ public nuevoRegistro = false;
         }
       }, 
       error=>{
+        this._messageService.showError('Error','No se pudo eliminar al voluntario')
+
         console.log(<any>error);
       }
     );

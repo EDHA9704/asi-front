@@ -19,6 +19,7 @@ declare var $:any
 export class MisMascotasComponent implements OnInit {
   @ViewChild('stepper', {static: true}) private myStepper: MatStepper;
   totalStepsCount: number;
+  imageObj: File;
   nombre = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(20),Validators.minLength(5)]);
   especie = new FormControl('', [Validators.required]);
   sexo = new FormControl('', [Validators.required]);
@@ -488,11 +489,13 @@ export class MisMascotasComponent implements OnInit {
    //para registro de mascota
    public filesToUpload2: Array<File>;
    urls2 = new Array<string>();
-   fileChangeEvent2(fileInput:any){
-     console.log(fileInput);
-     this.filesToUpload2 = <Array<File>>fileInput.target.files;
+   fileChangeEvent2(event:any){
+    const FILE = (event.target as HTMLInputElement).files[0];
+    this.imageObj= FILE;
+  
+     this.filesToUpload2 = <Array<File>>event.target.files;
      
-      let files = <Array<File>>fileInput.target.files;
+      let files = <Array<File>>event.target.files;
      this.urls2 = [];
       if (files) {
        for (let file of files) {
@@ -571,9 +574,18 @@ export class MisMascotasComponent implements OnInit {
           
          
            if(response.mascota && response.mascota._id && response.n == '1'){
-             
+            const imageForm = new FormData();
+            imageForm.append('image', this.imageObj);
+            this._uploadService.imageUpload(imageForm,'subir-foto-mascota-nueva/',response.mascota._id).subscribe(res => {
+              $('#modalMascota').modal('hide')
+                   this._messageService.showSuccess('Mascota','Registro exitoso')
+                   this.filesToUpload2 = undefined;
+                   this.imL2 = false;
+                  this.obtMascotas(this.idFun);
+                  this.cancelarReg(stepper)
+            });
          
-               this._uploadService.makeGileRequest2(this.url+'subir-foto-mascota-nueva/'+response.mascota._id,[],this.filesToUpload2,'foto')
+             /*  this._uploadService.makeGileRequest2(this.url+'subir-foto-mascota-nueva/'+response.mascota._id,[],this.filesToUpload2,'foto')
                .then((result:any)=>{
                  //alert('si')
                  if(result.n == '8' || result.n == '7' || result.n == '6' || result.n == '5' || result.n == '4' || result.n == '2' ){
@@ -597,7 +609,7 @@ export class MisMascotasComponent implements OnInit {
                   this.cancelarReg(stepper)
                  }
                 
-               });
+               });*/
               
              
            }else if(response.n == '5'){

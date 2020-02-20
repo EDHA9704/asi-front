@@ -87,8 +87,10 @@ aria-hidden="true">
     <div class="row">
         <div class="col-12 col-md-3 donacion-content">
             <div class="donacion-content-img">
-                <img *ngIf="donacionOB.estado == 'fundacion'" src="{{url + 'obtener-comprobante/' + donacionOB.comprobante}}">
-                <img *ngIf="donacionOB.estado != 'fundacion'" src="{{url + 'obtener-comprobante/' + donacionOB.foto}}">
+                <img *ngIf="donacionOB.estado == 'fundacion'" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    donacionOB.comprobante}}">
+                <img *ngIf="donacionOB.estado != 'fundacion'" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    donacionOB.foto}}">
             </div>
             
             <div class="donacion-content-datos">
@@ -136,13 +138,14 @@ aria-hidden="true">
                       </div>
                       <div class="donador-photo">
                         <div class="photo">
-                            <img src="{{url + 'obtener-foto/' + donacionOB.donanteR.foto}}">
+                            <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                donacionOB.donanteR.foto}}">
                         </div>
                       </div>
                   </div>
                 </mat-tab>
               
-                <mat-tab>
+                <mat-tab *ngIf="donacionOB.asignar == true">
                   <ng-template mat-tab-label>
                     <mat-icon class="example-tab-icon">room</mat-icon>
                     Dirección de retiro
@@ -167,7 +170,8 @@ aria-hidden="true">
                     </div>
                     <div class="retiro-mapa">
                       <div class="mapa">
-                          <img src="{{url + 'obtener-foto/' + donacionOB.donanteR.foto}}">
+                          <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            donacionOB.donanteR.foto}}">
                       </div>
                     </div>
                 </div>
@@ -195,7 +199,8 @@ aria-hidden="true">
                                                            <input *ngIf="donacionOB.donanteR._id != volun._id" required type="checkbox" name="checkbox" id="{{volun._id}}" value="{{volun._id}}">
                                                            <label *ngIf="volun.foto && donacionOB.donanteR._id != volun._id" for="{{volun._id}}">{{volun.nombres}} {{volun.apellidos}}
                                                                <div class="imgVol">
-                                                                   <img src="{{url + 'obtener-foto/' + volun.foto}}">
+                                                                   <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                                                    volun.foto}}">
                                                                </div>
                                                            </label>
                                                            <label *ngIf="!volun.foto && donacionOB.donanteR._id != volun._id" for="{{volun._id}}">{{volun.nombres}} {{volun.apellidos}}
@@ -239,7 +244,8 @@ aria-hidden="true">
                                                         <span *ngIf="volun.estadoD == '1'" style="color: red;">( No aceptó la solicitud)</span>
                                                         <span *ngIf="volun.estadoD == '2'">( Aceptó la solicitud)</span>
                                                            <div class="imgVol">
-                                                               <img src="{{url + 'obtener-foto/' + volun.foto}}">
+                                                               <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                                                volun.foto}}">
                                                            </div>
                                                        </label>
                                                        <span (click)="executeConfirmacion('delVol',volun._id)" *ngIf="volun.seleccionado == true" style="border: 1px solid #bf3b3b;
