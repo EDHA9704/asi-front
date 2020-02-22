@@ -166,7 +166,8 @@
         <div class="col-12 fundaciones">
           <div class="card">
             <div class="card-body">
-                <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fundacion.logo" src="{{url + 'obtener-foto/' + fundacion.logo}}">
+                <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                  fundacion.logo}}">
                 <img class="img-fluid rounded-circle w-50 mb-3" *ngIf="!fundacion.logo" src="../../../../assets/img/Captura2.png">
               <h3>{{fundacion.nombreFundacion}}</h3>
               <h5 class="hace">{{(fundacion.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
@@ -231,7 +232,7 @@
       </div>
       <div class="row" *ngIf="verTodas == 'no' && fundacion && advertencia == false">
           <div class="col-12 btnMasMascotas">
-              <button (click)="verTodasFundaciones()" >Ver todas las cuentas</button>
+              <button (click)="verTodasFundaciones()" style="font-size: 1.5rem;">Ver todas las cuentas</button>
             </div>
     
         </div>

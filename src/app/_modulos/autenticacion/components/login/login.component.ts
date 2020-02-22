@@ -188,13 +188,13 @@ imageUrl: string;
   //para fundaciones
 public filesToUpload2: Array<File>;
 urls2 = new Array<string>();
-fileChangeEvent2(/*fileInput:any*/event: Event){
+fileChangeEvent2(/*fileInput:any*/event: any){
   const FILE = (event.target as HTMLInputElement).files[0];
   this.imageObj = FILE;
   console.log(this.imageObj)
-  /*this.filesToUpload2 = <Array<File>>fileInput.target.files;
+  this.filesToUpload2 = <Array<File>>event.target.files;
   
-   let files = <Array<File>>fileInput.target.files;
+   let files = <Array<File>>event.target.files;
   this.urls2 = []; 
    if (files) {
     for (let file of files) {
@@ -209,7 +209,7 @@ fileChangeEvent2(/*fileInput:any*/event: Event){
   }
    if(this.filesToUpload2 != undefined){
     this.imL2 = false;
-  }*/
+  }
 }
 
 //registro fundacion

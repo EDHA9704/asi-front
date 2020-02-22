@@ -42,8 +42,8 @@
                                 <div class="notiS" *ngFor="let not of notificaciones" [class.activeNT]="not.estado == 0">
                                     <div class="contNot"  [routerLink]="['/admin/cuentas', not._id,not.fundacion._id]" *ngIf="not.tipo == 4">
                                         <div class="imgnotiS" *ngIf="not.tipo == 4">
-
-                                            <img *ngIf="not.fundacion.logo" src="{{url + 'obtener-foto/' + not.fundacion.logo}}">
+ 
+                                            <img *ngIf="not.fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.fundacion.logo}}">
                                             <img *ngIf="!not.fundacion.logo" src="../../../../assets/img/Captura2.png">
                                         </div>
                                       
