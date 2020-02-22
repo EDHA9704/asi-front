@@ -10,7 +10,8 @@ import { FundacionesComponent } from './components/fundaciones/fundaciones.compo
 import { TituloPageComponent } from './components/titulo-page/titulo-page.component';
 import {MatCardModule} from '@angular/material/card';
 import {MomentModule} from 'angular2-moment';
-import {HeaderHomeComponent} from './components/home-header/home-header.component'
+import {HeaderHomeComponent} from './components/home-header/home-header.component';
+import { NosotrosComponent } from './components/nosotros/nosotros.component'
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {HeaderHomeComponent} from './components/home-header/home-header.componen
     EmergenciasComponent,
     FundacionesComponent,
     TituloPageComponent,
-    HeaderHomeComponent
+    HeaderHomeComponent,
+    NosotrosComponent
     
   ],
   imports: [

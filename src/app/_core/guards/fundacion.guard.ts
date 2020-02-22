@@ -15,14 +15,11 @@ export class FundacionGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       const currentUser = this.authenticationService.currentUserValue;
-      console.log("hola GUARD FUNDACION")
-      console.log(next) 
+ console.log("GUARD FUND")
       if (currentUser) {
-        console.log("hola2") 
-        console.log(currentUser) 
+  
           // check if route is restricted by role
-          if (next.data.roles && next.data.roles.indexOf(currentUser.usuario.rol) === -1) {
-            console.log("ENTRO IF")
+          if (next.data[0].roles && next.data[0].roles.indexOf(currentUser.usuario.rol) === -1) {
               // role not authorised so redirect to home page
               this.router.navigate(['/home']);
               return false;
@@ -31,7 +28,7 @@ export class FundacionGuard implements CanActivate {
           // authorised so return true
           return true;
       }else if(!currentUser){
-        console.log("entroo")
+
         // not logged in so redirect to login page with the return url
       this.router.navigate(['/autenticacion'], { queryParams: { returnUrl: state.url } });
       return true;

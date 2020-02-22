@@ -140,7 +140,7 @@ export class HeaderComponent implements OnInit {
 })
   }
   redirectNosotros(nombre,id){
-    this._router.navigate([nombre,id]);
+    this._router.navigate(['/fundacion',nombre,id]);
     
   }
 }

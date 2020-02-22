@@ -338,6 +338,6 @@ export class FundacionesComponent implements OnInit {
         )
       }
 redirec(name,id){
-  this._router.navigate([name,id]);
+  this._router.navigate(['fundacion',name,id]);
 }
 }

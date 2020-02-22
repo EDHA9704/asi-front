@@ -21,27 +21,13 @@ export class HomeComponent implements OnInit {
      }
 
   ngOnInit() {
-    this.loading = true;
-    console.log("HOMEEEEE") 
-    $( document ).ready(()=> {
-      console.log( "ready!" );
-      this.toggle()
-  });
+  
+  
        /* this.userService.getById(this.currentUser.id).pipe(first()).subscribe(user => {
             this.loading = false;
             this.userFromApi = user;
         });*/
   }
 
-  toggle(){
-    const selectElement = (s:any) => document.querySelector(s)
-    selectElement('.open').addEventListener('click',()=>{
-      selectElement('.nav-list').classList.add('active')
-
-    })
-    selectElement('.close').addEventListener('click',()=>{
-      selectElement('.nav-list').classList.remove('active')
-
-    })
-  }
+ 
 }

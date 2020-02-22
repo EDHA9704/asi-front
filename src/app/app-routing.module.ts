@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './_modulos/home';
 import { AdminComponent } from './_modulos/admin';
 import { LoginComponent } from './_modulos/autenticacion';
-import { AuthGuard,AutenticacionGuard } from './_core';
+import { AuthGuard,AutenticacionGuard,AdminGuard} from './_core';
 
 import { Role } from './_models';
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
   },*/
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/home/nosotros',
     pathMatch: 'full'
   },
   {
@@ -25,15 +25,16 @@ const routes: Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path: ':name/:id',
+    path: 'fundacion/:name/:id',
     loadChildren: () => import('./_modulos/fundacion/fundacion.module').then(m => m.FundacionModule),
     //canLoad: [AutenticacionGuard]
-    data:['4']
+    data:[{roles:'4'}]
   },
   {
     path: 'admin',
     loadChildren: () => import('./_modulos/admin/admin.module').then(m => m.AdminModule),
-    //canLoad: [AutenticacionGuard]
+    canActivate:[AdminGuard],
+    data:[{roles:'1'}]
   },
   {
     path: 'perfil',
@@ -48,7 +49,7 @@ const routes: Routes = [
 
   },
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '/home/nosotros' }
 ];
 
 @NgModule({

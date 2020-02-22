@@ -13,22 +13,22 @@
                     <a style="cursor: pointer;"  (click)="redirectNosotros(name,idFun)"  class="nav-link">Nosotros</a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLinkActive]="['current']" [routerLink]="[name,idFun,'mascotas','todos','1']" class="nav-link">Mascotas</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'mascotas','todos','1']" class="nav-link">Mascotas</a>
                 </li>
                 <li class="nav-item" *ngIf="permission && permission == true">
-                    <a  [routerLinkActive]="['current']" [routerLink]="[name,idFun,'voluntarios','todos','1']" class="nav-link">Voluntarios</a>
+                    <a  [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'voluntarios','todos','1']" class="nav-link">Voluntarios</a>
                 </li>
                 <li class="nav-item" *ngIf="permission && permission == true">
-                    <a [routerLinkActive]="['current']" [routerLink]="[name,idFun,'emergencias','todos','1']" class="nav-link">Emergencias</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'emergencias','todos','1']" class="nav-link">Emergencias</a>
                 </li>
                 <li class="nav-item" *ngIf="permission && permission == true">
-                    <a [routerLinkActive]="['current']" [routerLink]="[name,idFun,'adopciones','todos','1']" class="nav-link">Adopciones</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'adopciones','todos','1']" class="nav-link">Adopciones</a>
                 </li>
                 <li class="nav-item" >
-                    <a [routerLinkActive]="['current']" [routerLink]="[name,idFun,'donaciones','todos','1']" class="nav-link">Donaciones</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'donaciones','todos','1']" class="nav-link">Donaciones</a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLinkActive]="['current']" [routerLink]="[name,idFun,'contactanos']" class="nav-link">Contactanos</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',name,idFun,'contactanos']" class="nav-link">Contactanos</a>
                 </li>
                
                 

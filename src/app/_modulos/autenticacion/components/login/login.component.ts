@@ -125,9 +125,9 @@ imageUrl: string;
         if(response.n == '4'){
         
           if(response.usuario.rol == '1'){
-            this.router.navigate(['admin']);
+            this.router.navigate(['/admin']);
            }else if(response.usuario.rol == '4'){
-            this.router.navigate([response.usuario.nombreFundacion,response.usuario._id]);
+            this.router.navigate(['/fundacion',response.usuario.nombreFundacion,response.usuario._id]);
            }else{
             this.router.navigate(['home']);
            }

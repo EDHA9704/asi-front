@@ -17,7 +17,8 @@ export class HeaderHomeComponent implements OnInit {
 
   ngOnInit() {
     $( document ).ready(()=> {
-      if(this.UrlTree.url == '/home'){
+      console.log("entoroo mennn **********")
+      if(this.UrlTree.url == '/home/nosotros'){
         $("#header").removeClass('darkHeader')
       }else{
         $("#header").addClass('darkHeader')

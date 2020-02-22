@@ -89,4 +89,52 @@ export class UserService {
       return this.http.post(environment.apiUrl+'cambiar-pass/'+id, params, {headers:headers});
       
     }
+    obtUsuariosRolSP(rol):Observable<any>{
+       let headers = new HttpHeaders().set('Content-Type','application/json')
+     
+       return this.http.get(environment.apiUrl+'usuariosSP/'+rol,{headers:headers});
+     }
+     eliminarFundacion(id):Observable<any>{
+      let headers = new HttpHeaders().set('Content-Type','application/json')
+      return this.http.delete(environment.apiUrl+'eliminar-fundacion/'+id, {headers:headers});
+      
+    }
+     //fundaciones no aprobadas
+ obtFundacionesNa(page=1):Observable<any>{
+  let headers = new HttpHeaders().set('Content-Type','application/json')
+  return this.http.get(environment.apiUrl+'obtener-fundaciones-na/'+page, {headers:headers});
+}
+obtFundacionNa(id):Observable<any>{
+  let headers = new HttpHeaders().set('Content-Type','application/json')
+  return this.http.get(environment.apiUrl+'obtener-fundacion-na/'+id, {headers:headers});
+}
+aprobarFundacion( usuario:UsuarioFundacion,id):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json')
+  
+  return this.http.put(environment.apiUrl+'aprobar-fundacion/'+id,params,{headers:headers});
+}
+enviarEmail(form):Observable<any>{
+  let params = JSON.stringify(form);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.post(environment.apiUrl+'enviar', params, {headers:headers});
+  
+}
+desaprobarFundacion(id):Observable<any>{
+  let headers = new HttpHeaders().set('Content-Type','application/json')
+  return this.http.delete(environment.apiUrl+'desaprobar-fundacion/'+id, {headers:headers});
+  
+}
+validarUsuarioF(usuario:UsuarioFundacion):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.post(environment.apiUrl+'validar-usuarioF', params, {headers:headers});
+  
+}
+registerFundacion(usuario:UsuarioFundacion,type):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.post(environment.apiUrl+'registrarFundacion/'+type, params, {headers:headers});
+  
+}
 }

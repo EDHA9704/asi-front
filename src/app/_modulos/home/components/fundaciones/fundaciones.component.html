@@ -31,9 +31,9 @@
                     <div class="card-header-tex">
                         <h5>Sector {{fund.sector}}</h5>
                     </div>
-                    <div class="card-header-icon" (click)="redirec(fund.nombreFundacion,fund._id)">
+                    <a class="card-header-icon" [routerLink]="['/fundacion',fund.nombreFundacion,fund._id]" target="_blank" >
                         <i class="fa fa-expand" aria-hidden="true"></i>
-                    </div>
+                    </a>
                 </div>
                 <div class="card-status">
                     <span>{{fund.telefono}} / {{fund.celular}}</span>
@@ -43,7 +43,7 @@
                         <div class="card-body-title-text">
                             <p>{{fund.nombreFundacion}}</p>
                         </div>
-                        <div class="card-body-title-photo" [routerLink]="['/fundacion',fund._id,'nosotros','all']">
+                        <div class="card-body-title-photo">
                             <img  src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
                                 fund.logo}}" class="d-block w-100" alt="mascota">
                         </div>
