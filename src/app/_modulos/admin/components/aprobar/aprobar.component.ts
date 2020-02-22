@@ -1,6 +1,6 @@
 import { Component, OnInit,DoCheck } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { UsuarioFundacion } from '../../../../_models/UsuarioFundacion';
+import { UsuarioFundacion } from '../../../../_models/usuarioFundacion';
 import { UserService, AuthenticationService,} from '../../../../_shared/services';
 import { element } from 'protractor';
 import {FormControl, Validators} from '@angular/forms';
