@@ -236,7 +236,7 @@ enviarEmailRF(stepper: MatStepper){
   console.log(this.usuarioFundacion)
 
 this.usuarioFundacion2 = this.usuarioFundacion;
-
+console.log(this.usuarioFundacion2)
 
   
  //if(this.filesToUpload2 != undefined && this.filesToUpload2.length > 0){
@@ -341,10 +341,11 @@ verificarCodigo(){
       //this.status = 'success';
       console.log(responseC.codigo)
 
- 
-      var fec = new Date(this.usuarioFundacion2.fechaFundacion);
-      var fechaFin = fec.toLocaleDateString();
-      this.usuarioFundacion2.fechaFundacion = fechaFin;
+     // console.log(this.usuarioFundacion2.fechaFundacion)
+      //var fec = new Date(this.usuarioFundacion2.fechaFundacion);
+      //var fechaFin = fec.toLocaleDateString();
+      //this.usuarioFundacion2.fechaFundacion = fechaFin;
+     // console.log(this.usuarioFundacion2.fechaFundacion)
   this.authenticationService.registerFundacion(this.usuarioFundacion2,'fund').subscribe(
     response =>{
 
@@ -366,50 +367,7 @@ verificarCodigo(){
 
                 }
               )
-          /*this._uploadService.makeGileRequest2(`${environment.apiUrl}subir-foto-fundacion/${response.usuario._id}`,[],this.filesToUpload2,'logo')
-          .then((result:any)=>{
-            if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
-              //this.status='error';
-              //this.mensaje = result.message;
-              this.loadingCodigo = false
-              $('#modalFundacion').modal('hide');
-              this._meesageService.showError('Registro','No se pudo registrar tus datos. Inténtalo de nuevo')
- 
-              this.authenticationService.borrarUsuario(response.usuario._id).subscribe(
-                resb=>{ 
-                },
-                errorb=>{
-            })
-            }else if(result.n == '3'){
-              this.loadingCodigo = false
-              $('#modalFundacion').modal('hide');
-              $('#modalFundacion2').modal('show');
-              this.limipiarForms()
-              this.authenticationService.eliminarCodigo(responseC.codigo._id).subscribe(
-                response=>{
-
-                },
-                error=>{
-
-                }
-              )
-              
-             // this.status='success';
-             
-              
-            }else{
-              this.loadingCodigo = false
-              this.limipiarForms()
-              $('#modalFundacion').modal('hide');
-              $('#modalFundacion2').modal('show');
-              //this.advertencia = true;
-              //this.status = 'error';
-              //this.mensaje = 'Algo salio mal al subir la foto.'
-            }
-
-
-
-          });*/
+         
        
       }else if(response.n == '4'|| response.n == '6'){
         this.loadingCodigo = false
