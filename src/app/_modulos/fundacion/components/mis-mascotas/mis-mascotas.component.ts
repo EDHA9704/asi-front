@@ -165,7 +165,7 @@ export class MisMascotasComponent implements OnInit {
       this.type= params['tipo'];
       this.idFun = params['id'];
       this.name= params['name'];
-      this.name= '/'+this.name;
+     // this.name= '/'+this.name;
       this.obtFundacion(this.idFun)
       console.log(this.type + '***'+this.name)
       let page = +params['page'];
@@ -358,7 +358,7 @@ export class MisMascotasComponent implements OnInit {
    
     this.bus = false;
     localStorage.removeItem('busquedaMascotasFnd');
-    this._router.navigate([this.name,this.idFun,'mascotas','todos','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'mascotas','todos','1']);
   }
   nuevoRegiistro(op){
     this.nuevoReg = op;
@@ -453,7 +453,7 @@ export class MisMascotasComponent implements OnInit {
       
     
    
-    this._router.navigate([this.name,this.idFun,'mascotas','busqueda','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'mascotas','busqueda','1']);
     
     
 

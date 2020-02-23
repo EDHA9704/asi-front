@@ -105,28 +105,28 @@
         <div class="col-12 col-sm-9">
             <div class="selectPages" >
                 <div class="pageAnt2">
-                    <a  [routerLink]="[name,idFun,'mascotas', type, '1']"
+                    <a  [routerLink]="['/fundacion',name,idFun,'mascotas', type, '1']"
                       class="btn btn-primary">
                       <i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
                   </div>
               <div class="pageAnt">
-                <button [disabled]="page == 1"  [routerLink]="[name,idFun,'mascotas', type, prev_pagee]"
+                <button [disabled]="page == 1"  [routerLink]="['/fundacion',name,idFun,'mascotas', type, prev_pagee]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-left" aria-hidden="true"></i></button>
               </div>
               <div class="pagess">
         
-               <a  [routerLink]="[name,idFun,'mascotas', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
+               <a  [routerLink]="['/fundacion',name,idFun,'mascotas', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
            
               </div>
               <div class="pageNex">
-                <button [disabled]="page == pages"  [routerLink]="[name,idFun,'mascotas', type, next_pagee]"
+                <button [disabled]="page == pages"  [routerLink]="['/fundacion',name,idFun,'mascotas', type, next_pagee]"
                 class="btn btn-primary">
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="pageNex2">
-                  <a  [routerLink]="[name,idFun,'mascotas', type, pages]"
+                  <a  [routerLink]="['/fundacion',name,idFun,'mascotas', type, pages]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                 </a>

@@ -73,7 +73,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
       this.type= params['tipo'];
       this.idFun = params['id'];
       this.name= params['name'];
-      this.name= '/'+this.name;
+      //this.name= '/'+this.name;
 
       this.obtFundacion(this.idFun);
 
@@ -152,7 +152,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
    
     //this.bus = false;
     localStorage.removeItem('busquedaAdopciones');
-    this._router.navigate([this.name,this.idFun,'adopciones','todos','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'adopciones','todos','1']);
   }
   verFoto(foto,op){
     
@@ -294,7 +294,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
     if(this.type == 'busqueda'){
       this.buscarAdopciones(this.page)
     }
-    this._router.navigate([this.name,this.idFun,'adopciones','busqueda','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'adopciones','busqueda','1']);
     
     
 

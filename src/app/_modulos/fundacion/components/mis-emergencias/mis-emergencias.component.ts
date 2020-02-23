@@ -86,7 +86,7 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
     this.type = tipo;
     this.idFun = params['id'];
     this.name= params['name'];
-    this.name= '/'+this.name;
+    //this.name= '/'+this.name;
     let page = +params['page'];
     this.page = page;
     this.obtFundacion(this.idFun)
@@ -261,7 +261,7 @@ cancelarBus(){
    
   this.bus = false;
   localStorage.removeItem('busquedaEmergencias2');
-  this._router.navigate([this.name,this.idFun,'emergencias','todos','1']);
+  this._router.navigate(['/fundacion',this.name,this.idFun,'emergencias','todos','1']);
 }
 
 filtroBSQD(option){
@@ -321,7 +321,7 @@ filtroBSQD(option){
   if(this.type == 'busqueda'){
     this.buscarEmergencias(this.page)
   }
-  this._router.navigate([this.name,this.idFun,'emergencias','busqueda','1']);
+  this._router.navigate(['/fundacion',this.name,this.idFun,'emergencias','busqueda','1']);
   
   
 

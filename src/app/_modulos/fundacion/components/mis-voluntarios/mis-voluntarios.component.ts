@@ -158,7 +158,7 @@ public nuevoRegistro = false;
     this._route.params.subscribe(params =>{
        this.type = params['tipo']
        this.name= params['name']
-       this.name = '/'+this.name
+       //this.name = '/'+this.name
        let page = +params['page'];
       console.log(page)
       this.idFun = params['id'];
@@ -233,7 +233,7 @@ public nuevoRegistro = false;
   cancelarBus(){
     this.filtroBTN = false;
     this.actualPage()
-    this._router.navigate([this.name,this.idFun,'voluntarios','todos','1'])
+    this._router.navigate(['/fundacion',this.name,this.idFun,'voluntarios','todos','1'])
 
   }
   obtnerVoluntariosByApellidos(){

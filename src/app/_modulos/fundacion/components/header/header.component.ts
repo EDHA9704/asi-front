@@ -70,7 +70,10 @@ export class HeaderComponent implements OnInit {
      
       this.id = params['id'];
       this.name = params['name'];
-      this.name = '/'+this.name
+      console.log("estoy aquiiiii *************")
+      console.log(this.name)
+      //this.name = this.name
+      //console.log(this.name)
       this.idFun = this.id; 
       if(this.currentUser && this.currentUser.usuario._id == this.id){
 

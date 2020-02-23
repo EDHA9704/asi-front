@@ -172,7 +172,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
       this.type = tipo;
       this.idFun = params['id'];
       this.name= params['name'];
-      this.name= '/'+this.name;
+      //this.name= '/'+this.name;
       this.obtFundacion(this.idFun)
       if(this.currentUser && this.currentUser.usuario && this.currentUser.usuario._id == this.idFun){
         this.validPermission = true;
@@ -358,14 +358,14 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
       this.buscarDonaciones(this.page)
     }
 
-    this._router.navigate([this.name,this.idFun,'donaciones','busqueda','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'donaciones','busqueda','1']);
     
     
 
   }
   cancelarBus(){ 
     localStorage.removeItem('busquedaDonaciones');
-    this._router.navigate([this.name,this.idFun,'donaciones','todos','1']);
+    this._router.navigate(['/fundacion',this.name,this.idFun,'donaciones','todos','1']);
   }
   verComprobante(comprobante){
     $('#modalComprobante').modal('show')

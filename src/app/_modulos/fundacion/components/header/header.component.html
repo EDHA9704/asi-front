@@ -50,8 +50,8 @@
                                 <div class="dropdown-divider"></div>
                                 <div id="divNotificacion" class="notificacion">
     
-                                    <p style="padding: 1rem 1rem;" *ngIf="notificaciones.length == 0">No existe notificaciones</p>
-                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',idFun,'actualizar-perfil','all']">actualiza tus datos</a></p>
+                                    <p style="padding: 1rem 1rem;" *ngIf="notificaciones.length == 0 ">No existe notificaciones</p>
+                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',name,idFun,'perfil']">actualiza tus datos</a></p>
     
                                     <div class="notiS" *ngFor="let not of notificaciones" [class.activeNT]="not.estado == 1">
                                         <!--NOTIFICACION TIPO EMERGENCIA-->
@@ -209,7 +209,7 @@
                                
                                 <div class="contentD">
                                         <button class="dropdown-item" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
-                                        <a class="dropdown-item"  [routerLink]="[name,idFun,'perfil']">Actualizar perfil</a>
+                                        <a class="dropdown-item"  [routerLink]="['/fundacion',name,idFun,'perfil']">Actualizar perfil</a>
                                 </div>
                                 
                             </div>
