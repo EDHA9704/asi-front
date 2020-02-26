@@ -261,7 +261,7 @@
                  </div>
                   
                   
-                    <a href="#">Olvidaste tu contraseña?</a>
+                    <a [routerLink]="['/autenticacion/recover']" style="color: #3bbfad; font-weight: bold; text-decoration: underline;">Olvidaste tu contraseña?</a>
                  
                     <button [disabled]="loading == true || !loginForm.valid" [class.disable]="loading == true || !loginForm.valid">Entrar</button>
                 </form>

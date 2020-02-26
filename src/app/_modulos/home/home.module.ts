@@ -11,7 +11,8 @@ import { TituloPageComponent } from './components/titulo-page/titulo-page.compon
 import {MatCardModule} from '@angular/material/card';
 import {MomentModule} from 'angular2-moment';
 import {HeaderHomeComponent} from './components/home-header/home-header.component';
-import { NosotrosComponent } from './components/nosotros/nosotros.component'
+import { NosotrosComponent } from './components/nosotros/nosotros.component';
+import { FooterComponent } from './components/footer/footer.component'
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NosotrosComponent } from './components/nosotros/nosotros.component'
     FundacionesComponent,
     TituloPageComponent,
     HeaderHomeComponent,
-    NosotrosComponent
+    NosotrosComponent,
+    FooterComponent
     
   ],
   imports: [

@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { AutenticacionRoutingModule } from './autenticacion-routing.module';
 import { LoginComponent } from './components/login/login.component';
+import { RecoverComponent} from './components/recover/recover.component';
+
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import {AngMaterialModule} from '../../_shared/ang-material/ang-material.module'
 import {MatStepperModule,MatInputModule,MatCheckboxModule,
   MatIconModule,MatSelectModule,MatButtonModule,MatMenuModule,
   MatExpansionModule,MatFormFieldModule,MatDatepickerModule,MatNativeDateModule} from '@angular/material'
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent,RecoverComponent],
   imports: [
     CommonModule,
     AutenticacionRoutingModule,

@@ -19,13 +19,14 @@ import { ContactanosComponent } from './components/contactanos/contactanos.compo
 
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
-import {HeaderComponent} from './components/header/header.component'
+import {HeaderComponent} from './components/header/header.component';
+import { FooterFundacionComponent } from './components/footer-fundacion/footer-fundacion.component'
 
 @NgModule({
   declarations: [FundacionComponent,SpinnerComponent, 
     MisMascotasComponent, MisEmergenciasComponent, 
     MisDonacionesComponent, MisAdopcionesComponent, 
-    MisVoluntariosComponent, ContactanosComponent, MiPerfilComponent,HeaderComponent],
+    MisVoluntariosComponent, ContactanosComponent, MiPerfilComponent,HeaderComponent, FooterFundacionComponent],
   imports: [
     CommonModule,
     FundacionRoutingModule,

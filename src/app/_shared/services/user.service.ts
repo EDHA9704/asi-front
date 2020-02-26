@@ -137,4 +137,26 @@ registerFundacion(usuario:UsuarioFundacion,type):Observable<any>{
   return this.http.post(environment.apiUrl+'registrarFundacion/'+type, params, {headers:headers});
   
 }
+obtUsuarioCorreo(usuario):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.post(environment.apiUrl+'obtener-usuario-em', params, {headers:headers});
+  
+  
+}
+enviarCodigoRecover(usuario:UsuarioFundacion,id):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.post(environment.apiUrl+'enviar-codigo-recover/'+id, params, {headers:headers});
+  
+}
+verificarCodigo(correo,cd,tipo):Observable<any>{
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.get(environment.apiUrl+'verificar-codigo/'+correo+'/'+cd+'/'+tipo, {headers:headers});
+}
+eliminarCodigo(id):Observable<any>{
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+  return this.http.delete(environment.apiUrl+'eliminar-codigo/'+id, {headers:headers});
+  
+}
 }
