@@ -485,7 +485,7 @@ header .titulo .lineTi{
 }
 .donacion-info-content{
 
-    .donador,.retiro{
+    .donador{
         padding: 2rem;
         display: flex;
         flex-wrap: wrap;
@@ -514,6 +514,22 @@ header .titulo .lineTi{
         }
     }
     .retiro{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .retiro-datos{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.5rem;
+            .info{
+                display: flex;
+            }
+        }
+        .retiro-mapa{
+            min-width: 80%;
+            height: 40em;
+        }
         span{
             min-width: 10rem !important;
             font-weight: bold;

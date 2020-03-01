@@ -8,6 +8,7 @@ export class Mascota{
         public tamanio:string,
         public esterilizado:string,
         public color:string,
+        public nombreFundacion:string,
         public anios:string,
         public raza:string,
         public especie:string,

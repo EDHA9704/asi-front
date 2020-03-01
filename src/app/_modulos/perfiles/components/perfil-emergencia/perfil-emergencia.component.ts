@@ -11,6 +11,7 @@ import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { AuthenticationService } from 'src/app/_shared/services';
 import { NotificacionService } from 'src/app/_shared/services/notificacion.service';
 import { FormControl, Validators } from '@angular/forms';
+declare var google:any;
 
 declare var $:any;
 @Component({
@@ -44,6 +45,16 @@ export class PerfilEmergenciaComponent implements OnInit {
   public optionConfirmacion=""
   public idFun;
   public permission = false
+
+  //location
+  map:any;
+  mapHtml:any;
+  contMap = 0
+  markerActualUserLocation:any;
+  donLatLng = {
+    lat:Number,
+    lng:Number
+  }
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _emergenciaService:EmergenciaService,
     private _userService:UserService,private _messageService:MessagesService,
@@ -169,6 +180,7 @@ export class PerfilEmergenciaComponent implements OnInit {
       response=>{
         if(response.emergencia){
           this.emergencia = response.emergencia;
+    
           console.log(this.emergencia);
           if(this.idFun != 'hom'){
             this.obtVoluntarios()
@@ -223,7 +235,7 @@ export class PerfilEmergenciaComponent implements OnInit {
      this.emergencia.fundacion = this.currentUser.usuario._id;
      this.emergencia.voluntarios = valoresCheck;
    
-     this._emergenciaService.nuevaAyuda(this.emergencia, idEmer).subscribe(
+     this._emergenciaService.nuevaAyuda(this.emergencia, idEmer,this.emergencia.responsable.rol).subscribe(
        response=>{
          console.log(response)
          if(response.emergencia && response.n == '1'){
@@ -366,11 +378,11 @@ export class PerfilEmergenciaComponent implements OnInit {
     }else if(tipo == 'aproVolun'){
 
       var tem = this.voluntariosAS.filter(x=> x.estadoD == 2)
-      if(tem.length == this.voluntariosAS.length){
+      if(tem.length >= 1){
         this.tituloAP = 'Aprobar emergencia'
         $("#modalAprobarNegar").modal('show')
       }else{
-        this._messageService.showError('Error','Todos los voluntarios seleccionados deben aceptar la solicitud')
+        this._messageService.showError('Error','Almenos un voluntario debe aprobar la solicitud')
       }
 
     }
@@ -478,4 +490,59 @@ export class PerfilEmergenciaComponent implements OnInit {
  )
 
   }
+  tabChanged(event){
+    
+    if(event == 1){
+
+     
+        if(this.contMap == 0){
+          this.contMap++
+            this.loadMap()
+
+        }
+      }
+  }
+  async loadMap(){
+   // const loading = await this.loadController.create()
+  //  loading.present()
+  // await this.currentLocationUser()
+
+  $( document ).ready(()=> {
+    const mapEle:HTMLElement = document.getElementById('mapcustom');
+ 
+  
+   console.log(mapEle)
+   this.mapHtml = mapEle;
+   console.log("bien")
+   this.donLatLng.lat = this.emergencia.direccion.latLng.lat
+   this.donLatLng.lng = this.emergencia.direccion.latLng.lng
+   console.log("bien2")
+   console.log(this.donLatLng)
+   this.map = new google.maps.Map(this.mapHtml,{
+     center:this.donLatLng,
+     zoom:12,
+   })
+   console.log("bien3")
+   google.maps.event.addListenerOnce(this.map,'idle',()=>{
+    //loading.dismiss();
+    console.log("bien4")
+    this.putMarker(this.map,this.donLatLng,'Hello')
+   })
+  });
+  }
+  putMarker(map,markerL,text){
+   
+      
+    this.markerActualUserLocation = new google.maps.Marker({
+      position:{
+        lat:markerL.lat,
+        lng:markerL.lng
+      },
+      draggable: false,
+      zoom:8,
+      map:map,
+      title:text
+    })
+  
+}
 }

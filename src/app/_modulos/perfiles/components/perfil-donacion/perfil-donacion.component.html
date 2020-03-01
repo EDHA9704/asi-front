@@ -115,7 +115,7 @@ aria-hidden="true">
             </div>
         </div>
         <div class="col-12 col-md-8 donacion-info-content">
-            <mat-tab-group>
+            <mat-tab-group (selectedIndexChange)="tabChanged($event)">
                 <mat-tab>
                   <ng-template mat-tab-label>
                     <mat-icon class="example-tab-icon">person_pin                    </mat-icon>
@@ -152,26 +152,25 @@ aria-hidden="true">
                   </ng-template>
                   <div class="retiro">
                     <div class="retiro-datos">
-                      <div class="info">
-                          <span>Sector:</span> <p> {{donacionOB.donanteR.nombres}} {{donacionOB.donanteR.apellidos}}</p>
-                      </div>
-                      <div class="info">
-                        <span>Barrio:</span><p>{{donacionOB.donanteR.telefono}}</p>
-                          </div>
-                          <div class="info">
-                            <span>Calle 1:</span><p>{{donacionOB.donanteR.celular}}</p>
-                              </div>
-                              <div class="info">
-                                <span>Calle 2:</span> <p>{{donacionOB.donanteR.correo}}</p>
-                                  </div>
-                                  <div class="info">
-                                    <span>Referencia:</span> <p>{{donacionOB.donanteR.correo}}</p>
-                                      </div>
+                        <div class="info">
+                            <span>Sector:</span>
+                            <p> {{donacionOB.sector}}</p>
+                        </div>
+                        <div class="info">
+                            <span>Ubicación:</span>
+                            <p>{{donacionOB.direccion.formmatedAddres}}</p>
+                        </div>
+                        <div class="info">
+                            <span>Referencia:</span>
+                            <p>{{donacionOB.referencia}}</p>
+                        </div>
+                      
+                 
                     </div>
-                    <div class="retiro-mapa">
-                      <div class="mapa">
-                          <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/map2.jpg">
-                      </div>
+
+                    <div class="retiro-mapa" >
+                        <div id="mapcustom" style="width: 100%; height: 100%;" >
+                        </div>
                     </div>
                 </div>
                 </mat-tab>
@@ -228,8 +227,7 @@ aria-hidden="true">
                     <p  *ngIf="donacionOB.estado == 4" style="text-align: justify !important;">
                         Esta donación fue asignada a voluntarios. Debes marcar la donación como aprobada para
                     que los voluntarios puedan ver la información del donador. Recuerda que dicha información
-                solo será visible a los voluntarios asignados, además solo podrás aprobar la donación si todos los voluntarios asignados
-            aceptaron la solicitud.</p>
+                solo será visible a los voluntarios asignados que aceptaron la solicitud. </p>
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-10">
                                 <form class="formulario needs-validation" #registerAyuda="ngForm" novalidate style="margin: 2rem 0;">
@@ -284,7 +282,7 @@ aria-hidden="true">
                         <div class="acciones-info" >
                                 <h5>Marcaste esta donación como Aprobada</h5>
                             </div>
-                           <div class="observacionesDonacion">
+                           <div class="observacionesDonacion" >
                                <div class="titulo">
                                    Observaciones
                                </div>

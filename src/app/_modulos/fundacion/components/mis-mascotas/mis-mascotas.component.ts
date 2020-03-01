@@ -513,9 +513,10 @@ export class MisMascotasComponent implements OnInit {
      }
    }
    registrarMascota(stepper: MatStepper){
-    this.mascota = new Mascota("","","","","","","","","","","","","","","","","","","");
+    this.mascota = new Mascota("","","","","","","","","","","","","","","","","","","","");
 
     this.mascota.nombre = this.nombre.value;
+    this.mascota.nombreFundacion = this.fundacion.nombreFundacion
     if(this.nuevoReg == 'f'){
       this.mascota.especie = 'Felino';
       this.mascota.vpp = this.ppy.value;

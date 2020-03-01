@@ -10,7 +10,7 @@
 </header>
 
 <div class="container" *ngIf="adopcion">
-
+ 
     <div class="row">
         <div class="col-12 col-md-3 donacion-content">
             <div class="donacion-content-img">
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="col-12 col-md-8 donacion-info-content">
-            <mat-tab-group>
+            <mat-tab-group (selectedIndexChange)="tabChanged($event)">
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <mat-icon class="example-tab-icon">person_pin</mat-icon>
@@ -106,9 +106,7 @@
                                 <div class="info">
                                     <span>Inmueble con cerramiento:</span>&nbsp;<p>{{adopcion.datosAdopcion.inmueble}}</p>
                                 </div>
-                                <div class="info">
-                                    <span>Dirección:</span>&nbsp;<p>{{adopcion.datosAdopcion.direccion}}</p>
-                                </div>
+                               
                             </div>
                             <div class="adoptante-domicilio">
                                 <div class="ti">
@@ -122,6 +120,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="direccion">
+                          <div class="dirform">
+                            <p style="font-weight: bolder;">Dirección</p><p>{{adopcion.datosAdopcion.direccion.formmatedAddres}}</p>
+                          </div>
+                          <div class="retiro-mapa" >
+                         
+                            <div id="mapcustom" style="width: 100%; height: 100%;" >
+                            </div>
+                        </div>
+                        </div>
+                        
                       
                     </div>
 

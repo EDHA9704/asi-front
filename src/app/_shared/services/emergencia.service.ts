@@ -52,11 +52,11 @@ aprobarEmergencia( body,id,rol):Observable<any>{
  
    return this._http.put(this.url+'aprobarEmergencia/'+id+'/'+rol,body,{headers:headers});
  }
-nuevaAyuda( emergencia:Emergencia,eid):Observable<any>{
+nuevaAyuda( emergencia:Emergencia,eid,rol):Observable<any>{
   let params = JSON.stringify(emergencia);
   let headers = new HttpHeaders().set('Content-Type','application/json')
   
-  return this._http.put(this.url+'nueva-ayuda/'+eid,params,{headers:headers});
+  return this._http.put(this.url+'nueva-ayuda/'+eid+'/'+rol,params,{headers:headers});
 }
 
 filtroEmergencias(filtro:any,page = 1):Observable<any>{

@@ -401,3 +401,19 @@ p,a,button,span{
         font-size: 1.5rem;
     }
 }
+
+.direccion{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .dirform{
+        width: 100%;
+        p{
+            font-size: 1.5rem;
+        }
+    }
+    .retiro-mapa{
+        min-width: 80%;
+        height: 40em;
+    }
+}

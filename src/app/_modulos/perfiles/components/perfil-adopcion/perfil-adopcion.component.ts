@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { FormControl, Validators } from '@angular/forms';
 import {environment} from '../../../../../environments/environment'
-
+declare var google:any;
 declare var $:any;
 @Component({
   selector: 'app-perfil-adopcion',
@@ -16,6 +16,15 @@ export class PerfilAdopcionComponent implements OnInit {
   public idFun;
   public url;
   public idm;
+    //location
+    map:any;
+    mapHtml:any;
+    contMap = 0
+    markerActualUserLocation:any;
+    donLatLng = {
+      lat:Number,
+      lng:Number
+    }
   aprobarNg = new FormControl('', []);
   descripcion = new FormControl('', [Validators.required,Validators.maxLength(500),Validators.minLength(25)]);
   getErrorMessage11() {
@@ -57,6 +66,7 @@ export class PerfilAdopcionComponent implements OnInit {
       response=>{
         if(response.adopcion && response.n == '1'){
           this.adopcion = response.adopcion;
+          this.loadMap()
           var ff = this.adopcion.adoptante.fechaNacimiento; 
           var fs = new Date(ff)
           var fn = fs.toLocaleDateString();
@@ -182,4 +192,60 @@ export class PerfilAdopcionComponent implements OnInit {
     return text;
   
   }
+
+  tabChanged(event){
+    
+    if(event == 0){
+
+     
+        if(this.contMap == 0){
+          this.contMap++
+            this.loadMap()
+
+        }
+      }
+  }
+  async loadMap(){
+    // const loading = await this.loadController.create()
+   //  loading.present()
+   // await this.currentLocationUser()
+ 
+   $( document ).ready(()=> {
+     const mapEle:HTMLElement = document.getElementById('mapcustom');
+  
+   
+    console.log(mapEle)
+    this.mapHtml = mapEle;
+    console.log("bien")
+    this.donLatLng.lat = this.adopcion.datosAdopcion.direccion.latLng.lat
+    this.donLatLng.lng = this.adopcion.datosAdopcion.direccion.latLng.lng
+    console.log("bien2")
+    console.log(this.donLatLng)
+    this.map = new google.maps.Map(this.mapHtml,{
+      center:this.donLatLng,
+      zoom:12,
+    })
+    console.log("bien3")
+    google.maps.event.addListenerOnce(this.map,'idle',()=>{
+     //loading.dismiss();
+     console.log("bien4")
+     this.putMarker(this.map,this.donLatLng,'Hello')
+    })
+   });
+   }
+   putMarker(map,markerL,text){
+    
+       
+     this.markerActualUserLocation = new google.maps.Marker({
+       position:{
+         lat:markerL.lat,
+         lng:markerL.lng
+       },
+       draggable: false,
+       zoom:8,
+       map:map,
+       title:text
+     })
+   
+ }
 }

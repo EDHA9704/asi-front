@@ -119,7 +119,7 @@ aria-hidden="true">
             </div>
         </div>
         <div class="col-12 col-md-8 donacion-info-content">
-            <mat-tab-group>
+            <mat-tab-group (selectedIndexChange)="tabChanged($event)">
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <mat-icon class="example-tab-icon">person_pin </mat-icon>
@@ -152,7 +152,7 @@ aria-hidden="true">
                         </div>
                     </div>
                 </mat-tab>
-                <mat-tab>
+                <mat-tab *ngIf="emergencia.direccion">
                     <ng-template mat-tab-label>
                         <mat-icon class="example-tab-icon">room</mat-icon>
                         Dirección
@@ -164,25 +164,21 @@ aria-hidden="true">
                                 <p> {{emergencia.direccionSector}}</p>
                             </div>
                             <div class="info">
-                                <span>Barrio:</span>
-                                <p>{{emergencia.barrio}}</p>
-                            </div>
-                            <div class="info">
-                                <span>Calle 1:</span>
-                                <p>{{emergencia.direccionCprincipal}}</p>
-                            </div>
-                            <div class="info">
-                                <span>Calle 2:</span>
-                                <p>{{emergencia.direccionCsecundaria}}</p>
+                                <span>Ubicación:</span>
+                                <p>{{emergencia.direccion.formmatedAddres}}</p>
                             </div>
                             <div class="info">
                                 <span>Referencia:</span>
                                 <p>{{emergencia.direccionReferencia}}</p>
                             </div>
+                            <div class="info">
+                                <span>Contacto extra:</span>
+                                <p>{{emergencia.contactoExtra}}</p>
+                            </div>
+                     
                         </div>
-                        <div class="retiro-mapa">
-                            <div class="mapa">
-                                <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/map2.jpg">
+                        <div class="retiro-mapa" >
+                            <div id="mapcustom" style="width: 100%; height: 100%;" >
                             </div>
                         </div>
                     </div>
@@ -230,9 +226,9 @@ aria-hidden="true">
                                     <div class="info" *ngIf="voluntariosAS.length > 0">
                                         <p *ngFor="let vl of voluntariosAS">{{vl.voluntarioC.nombres}} {{vl.voluntarioC.apellidos}} 
                                             
-                                            <span *ngIf="vl.estadoD == 'p'">( Aún no acepta la solicitud)</span>
-                                            <span *ngIf="vl.estadoD == 'no'">( No aceptó la solicitud)</span>
-                                            <span *ngIf="vl.estadoD == 'si'">( Aceptó la solicitud)</span>
+                                            <span *ngIf="vl.estadoD == '0'">( Aún no acepta la solicitud)</span>
+                                            <span *ngIf="vl.estadoD == '1'">( No aceptó la solicitud)</span>
+                                            <span *ngIf="vl.estadoD == '2'">( Aceptó la solicitud)</span>
                                         
                                         </p>
                                        
@@ -339,9 +335,8 @@ aria-hidden="true">
                         <div class="AYUDA" *ngIf="emergencia.estado == 1">
                             <p  *ngIf="emergencia.estado == 1" style="text-align: justify !important;">
                                 Esta emergencia fue asignada a voluntarios. Debes marcar la emergencia como aprobada para
-                            que los voluntarios puedan ver la información del usuario y de la dirección de la emergencia. Recuerda que dicha información
-                        solo será visible a los voluntarios asignados, además solo podrás aprobar la emergencia si todos los voluntarios asignados
-                    aceptaron la solicitud.</p>
+                            que los voluntarios puedan ver la información del usuario que publicó la emergencia. Recuerda que dicha información
+                        solo será visible a los voluntarios asignados que aceptaron la solicitud. </p>
                             <div class="row justify-content-center">
                                 <div class="col-12 col-md-10">
                                         <form class="formulario needs-validation" #registerAyuda="ngForm" novalidate style="margin: 2rem 0;">
