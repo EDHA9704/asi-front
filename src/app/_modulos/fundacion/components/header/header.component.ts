@@ -119,7 +119,8 @@ export class HeaderComponent implements OnInit {
       }
     )
   }
-  deleteOneSignal(id,signal){
+async  deleteOneSignal(id,signal){
+  this.signal =  await localStorage.getItem('idsignal')
     this._notificacionService.eliminarOneSignal(id,signal).subscribe(
       response=>{
         console.log(response)
