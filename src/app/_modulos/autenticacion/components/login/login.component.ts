@@ -12,6 +12,7 @@ import { Codigo } from 'src/app/_models/codigo';
 import { UploadService } from 'src/app/_shared/services/upload.service';
 declare var $:any;
 import { environment } from '../../../../../environments/environment';
+import { NotificacionService } from 'src/app/_shared/services/notificacion.service';
 
 @Component({
   selector: 'app-login',
@@ -60,7 +61,7 @@ imageUrl: string;
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private _meesageService:MessagesService,private _uploadService:UploadService) { 
+    private _meesageService:MessagesService,private _uploadService:UploadService,private _notificacionService:NotificacionService) { 
       this.usuarioFundacion = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
       this.usuarioFundacion2 = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
       this.mail = new Mail("","","","","","");
@@ -115,7 +116,7 @@ imageUrl: string;
               });
   }*/
   onSubmit(){
-    //var OneSignal = window['OneSignal'] || [];
+    var OneSignal = window['OneSignal'] || [];
     this.loading = true;
     this.error = ''
     this.authenticationService.login(this.loginForm.value,true).subscribe(
@@ -123,7 +124,22 @@ imageUrl: string;
       response=>{
         this.loading = false;
         if(response.n == '4'){
-        
+          OneSignal.getUserId().then((userId) =>{
+            console.log("User ID is", userId);
+            var device = { 
+              usuario:response.usuario._id,
+              onesgId:userId,
+              rol:response.usuario.rol
+            }
+            this._notificacionService.nuevaOneSignal(device).subscribe(
+              response=>{
+                console.log(response)
+              },
+              error=>{
+                console.log(<any>error)
+              }
+            )
+          });
           if(response.usuario.rol == '1'){
             this.router.navigate(['/admin']);
            }else if(response.usuario.rol == '4'){
