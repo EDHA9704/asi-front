@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   public mensaje;
   public url
   public idFun
+  private signal:any;
   constructor(private _route:ActivatedRoute,private authenticationService: AuthenticationService,
     private _notificacionService:NotificacionService,
     private _router:Router) { 
@@ -31,11 +32,14 @@ export class HeaderComponent implements OnInit {
     this.cargaN = true;
     this.page = 1;
     this.url = environment.apiUrl;
+    
     console.log(this.currentUser)
   }
 
   ngOnInit() {
     this.loadPage()
+    this.signal =  localStorage.getItem('idsignal')
+    console.log(this.signal)
     if(this.currentUser){
       $(document).ready(()=>{
         this.finSc()
@@ -115,8 +119,25 @@ export class HeaderComponent implements OnInit {
       }
     )
   }
+  deleteOneSignal(id,signal){
+    this._notificacionService.eliminarOneSignal(id,signal).subscribe(
+      response=>{
+        console.log(response)
+        localStorage.removeItem('idsignal');
+
+      },
+      error=>{
+        console.log(<any>error)
+      }
+    )
+  }
   cerrarSesion(){
+    if(this.currentUser.usuario && this.signal && this.signal != null && this.signal != ''){
+      this.deleteOneSignal(this.currentUser.usuario._id,this.signal)
+    }
+   
     this.authenticationService.logout()
+
    /* localStorage.clear();
     this.currentUser = this.authenticationService.currentUserValue;
     //this.identity = null;

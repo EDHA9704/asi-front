@@ -131,6 +131,7 @@ imageUrl: string;
               onesgId:userId,
               rol:response.usuario.rol
             }
+            localStorage.setItem('idsignal', JSON.stringify(userId));
             this._notificacionService.nuevaOneSignal(device).subscribe(
               response=>{
                 console.log(response)

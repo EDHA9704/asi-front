@@ -57,13 +57,13 @@
                                         <!--NOTIFICACION TIPO EMERGENCIA-->
                                         <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun,not.emergencia._id]" *ngIf="not.tipo == 2">
                                             <div class="imgnotiS" *ngIf="not.voluntario">
-    
-                                                <img *ngIf="not.voluntario.foto" src="{{url + 'obtener-foto/' + not.voluntario.foto}}">
+     
+                                                <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
                                                 <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
                                             </div>
                                             <div class="imgnotiS" *ngIf="not.ciudadano">
     
-                                                <img *ngIf="not.ciudadano.foto" src="{{url + 'obtener-foto/' + not.ciudadano.foto}}">
+                                                <img *ngIf="not.ciudadano.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.ciudadano.foto}}">
                                                 <img *ngIf="!not.ciudadano.foto" src="../../../../assets/img/Captura2.png">
                                             </div>
                                             <div class="textnotiS" >
@@ -73,7 +73,7 @@
                                          
                                     
                                             <div class="imgnotiS2" >
-                                                    <img *ngIf="not.tipo == 'emergencia' && not.emergencia.fotoMascota" src="{{url + 'obtener-imagen-emergencia/' + not.emergencia.fotoMascota}}">
+                                                    <img *ngIf="not.tipo == 'emergencia' && not.emergencia.fotoMascota" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.emergencia.fotoMascota}}">
                                                     <img *ngIf="!not.emergencia.fotoMascota" src="../../../../assets/img/Captura2.png">
                                             </div>
                                            
@@ -82,12 +82,12 @@
                                         <div class="contNot"  (click)="brake.emit('hola')" *ngIf="not.tipo == 1 ">
                                             <div class="imgnotiS" *ngIf="not.voluntario">
     
-                                                <img *ngIf="not.voluntario.foto" src="{{url + 'obtener-foto/' + not.voluntario.foto}}">
+                                                <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
                                                 <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
                                             </div>
                                             <div class="imgnotiS" *ngIf="not.ciudadano">
     
-                                                <img *ngIf="not.ciudadano.foto" src="{{url + 'obtener-foto/' + not.ciudadano.foto}}">
+                                                <img *ngIf="not.ciudadano.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.ciudadano.foto}}">
                                                 <img *ngIf="!not.ciudadano.foto" src="../../../../assets/img/Captura2.png">
                                             </div>
                                             <div class="textnotiS">
@@ -99,7 +99,7 @@
                                     
                                             <div class="imgnotiS2" >
                                                 
-                                                    <img *ngIf="not.mascota.fotos.length > 0" src="{{url + 'obtener-foto-mascota/' + not.mascota.fotos[0].name}}">
+                                                    <img *ngIf="not.mascota.fotos.length > 0" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.mascota.fotos[0].name}}">
                                                     <img *ngIf="not.mascota.fotos.length == 0" src="../../../../assets/img/Captura2.png">
                                             </div>
                                         </div>
@@ -107,7 +107,7 @@
                                         <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun, not.emergencia._id]" *ngIf="not.tipo == 5 || not.tipo == 6">
                                             <div class="imgnotiS">
     
-                                                    <img *ngIf="not.fundacion.logo" src="{{url + 'obtener-foto/' + not.fundacion.logo}}">
+                                                    <img *ngIf="not.fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.fundacion.logo}}">
                                                     <img *ngIf="!not.fundacion.logo" src="../../../../assets/img/Captura2.png">
                                                 </div>
                                            
@@ -116,7 +116,7 @@
                                                 <p *ngIf="not.tipo == 6">Marcaste como atentida una emergencia de tipo Urgente</p>
                                             </div>
                                             <div class="imgnotiS2" >
-                                                    <img *ngIf=" not.emergencia.fotoMascota != null" src="{{url + 'obtener-imagen-emergencia/' + not.emergencia.fotoMascota}}">
+                                                    <img *ngIf=" not.emergencia.fotoMascota != null" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.emergencia.fotoMascota}}">
                                                     <img *ngIf="not.emergencia.fotoMascota == null" src="../../../../assets/img/Captura2.png">
                                             </div>
                                           
@@ -125,7 +125,7 @@
                                         <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun, not.emergencia._id]" *ngIf="not.tipo == 7 || not.tipo == 8">
                                             <div class="imgnotiS">
     
-                                                    <img *ngIf="not.voluntario.foto" src="{{url + 'obtener-foto/' + not.voluntario.foto}}">
+                                                    <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
                                                     <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
                                                 </div>
                                         
@@ -134,7 +134,7 @@
                                                 <p *ngIf="not.tipo == 8">{{not.voluntario.nombres}} {{not.voluntario.apellidos}} no atenderá la emergencia asignada</p>
                                             </div>
                                             <div class="imgnotiS2" >
-                                                    <img *ngIf="not.emergencia.fotoMascota != null" src="{{url + 'obtener-imagen-emergencia/' + not.emergencia.fotoMascota}}">
+                                                    <img *ngIf="not.emergencia.fotoMascota != null" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.emergencia.fotoMascota}}">
                                                     <img *ngIf="not.emergencia.fotoMascota == null" src="../../../../assets/img/Captura2.png">
                                             </div>
                                         
@@ -143,13 +143,13 @@
                                          <div class="contNot"   *ngIf="not.tipo == 3">
                                             <div class="imgnotiS" *ngIf="not.voluntario">
     
-                                                    <img *ngIf="not.voluntario.foto" src="{{url + 'obtener-foto/' + not.voluntario.foto}}">
+                                                    <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
                                                     <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
                                                     
                                                 </div>
                                                 <div class="imgnotiS" *ngIf="not.ciudadano">
     
-                                                    <img *ngIf="not.ciudadano.foto" src="{{url + 'obtener-foto/' + not.ciudadano.foto}}">
+                                                    <img *ngIf="not.ciudadano.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.ciudadano.foto}}">
                                                     <img *ngIf="!not.ciudadano.foto" src="../../../../assets/img/Captura2.png">
                                                     
                                                 </div>
@@ -158,8 +158,8 @@
                                                 <p *ngIf="not.ciudadano">{{not.ciudadano.nombres}} {{not.ciudadano.apellidos}} realizó una nueva donación</p>
                                             </div>
                                             <div class="imgnotiS2" >
-                                                    <img *ngIf="not.donacion.comprobante" src="{{url + 'obtener-comprobante/' + not.donacion.comprobante}}">
-                                                    <img *ngIf="not.donacion.foto" src="{{url + 'obtener-comprobante/' + not.donacion.foto}}">
+                                                    <img *ngIf="not.donacion.comprobante" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.donacion.comprobante}}">
+                                                    <img *ngIf="not.donacion.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.donacion.foto}}">
                                             </div>
                                         
                                         </div>
@@ -167,7 +167,7 @@
                                                           <div class="contNot"   *ngIf="not.tipo == 13 || not.tipo == 14">
                                                             <div class="imgnotiS" *ngIf="not.voluntario">
                     
-                                                                    <img *ngIf="not.voluntario.foto" src="{{url + 'obtener-foto/' + not.voluntario.foto}}">
+                                                                    <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
                                                                     <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
                                                                     
                                                                 </div>
@@ -176,8 +176,8 @@
                                                                 <p *ngIf="not.voluntario">{{not.voluntario.nombres}} {{not.voluntario.apellidos}} aprobó la donación asignada</p>
                                                             </div>
                                                             <div class="imgnotiS2" >
-                                                                    <img *ngIf="not.donacion && not.donacion.comprobante" src="{{url + 'obtener-comprobante/' + not.donacion.comprobante}}">
-                                                                    <img *ngIf="not.donacion && not.donacion.foto" src="{{url + 'obtener-comprobante/' + not.donacion.foto}}">
+                                                                    <img *ngIf="not.donacion && not.donacion.comprobante" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.donacion.comprobante}}">
+                                                                    <img *ngIf="not.donacion && not.donacion.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.donacion.foto}}">
                                                             </div>
                                                         
                                                         </div>
