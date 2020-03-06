@@ -112,6 +112,7 @@ export class PerfilDonacionComponent implements OnInit {
       
       },
       error=>{
+        this._router.navigate(['**']);  
         console.log(<any>error)
 
       }

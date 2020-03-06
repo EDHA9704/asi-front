@@ -117,7 +117,7 @@ export class MisMascotasComponent implements OnInit {
             '';
   }
   public fundacion:UsuarioFundacion;
-  constructor(private _route:ActivatedRoute,private _mascotaService:MascotaService,
+  constructor(private _route:ActivatedRoute,private router: Router,private _mascotaService:MascotaService,
     private _router:Router,private _messageService:MessagesService,private authenticationService: AuthenticationService,
     private _uploadService:UploadService,private _userService:UserService) { 
       this.currentUser = this.authenticationService.currentUserValue;
@@ -227,9 +227,10 @@ export class MisMascotasComponent implements OnInit {
         
         this.carga == false
         this.fundacion = response.usuario;
-        
+         
       },
       error=>{
+        this.router.navigate(['**']);  
         console.log(<any>error);
       }
     )

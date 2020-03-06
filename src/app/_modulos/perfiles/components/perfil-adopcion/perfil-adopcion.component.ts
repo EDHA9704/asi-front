@@ -84,6 +84,7 @@ export class PerfilAdopcionComponent implements OnInit {
         
       },
       error=>{
+        this._router.navigate(['**']);  
         if((error.error.n == '3') || (error.error.n == '2')){
           this._messageService.showError('Error',error.error.message)
         }else{

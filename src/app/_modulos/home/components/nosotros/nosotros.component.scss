@@ -225,6 +225,7 @@ nav{
      url('../../../../../assets/img/testimonials-bg.jpg') center no-repeat;
      background-size: cover;
      position: relative;
+     
 }
 .testimonials::before{
     content: "";
@@ -241,8 +242,8 @@ nav{
     color: #fafafa;
     position: absolute;
     top: 55%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+   // left: 50%;
+    transform: translate(0%,-50%);
     text-align: center;
 }
 .testimonial-text-box{

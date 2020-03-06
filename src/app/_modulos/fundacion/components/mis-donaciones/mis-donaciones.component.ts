@@ -136,7 +136,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
   }
   imageObj: File;
   constructor(private _route:ActivatedRoute,
-    private _router:Router,private _uploadService:UploadService,
+    private _router:Router,private _uploadService:UploadService,private router: Router,
     private _donacionService:DonacionService,
     private _userService:UserService,private _messageService:MessagesService,private authenticationService: AuthenticationService) { 
     this.url = environment.apiUrl;
@@ -232,6 +232,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
         
       },
       error=>{
+        this.router.navigate(['**']);  
         console.log(<any>error);
       }
     )

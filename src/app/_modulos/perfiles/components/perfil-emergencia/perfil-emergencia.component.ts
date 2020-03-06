@@ -210,6 +210,7 @@ export class PerfilEmergenciaComponent implements OnInit {
         }
       },
       error=>{
+        this._router.navigate(['**']);  
         this._messageService.showError('Error','No se pudo obtener la emergenca, inténtalo de nuevo')
 
         console.log(<any>error)

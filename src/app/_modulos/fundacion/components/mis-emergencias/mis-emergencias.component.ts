@@ -41,7 +41,7 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
   public currentUser;
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _emergenciaService:EmergenciaService,
-    private _userService:UserService,private authenticationService: AuthenticationService) { 
+    private _userService:UserService,private router: Router,private authenticationService: AuthenticationService) { 
     this.filtroBSQ = this._emergenciaService.obtFiltro();
     this.url = environment.apiUrl;
     this.page = 1;
@@ -151,6 +151,7 @@ obtFundacion(id){
       
     },
     error=>{
+      this.router.navigate(['**']);  
       console.log(<any>error);
     }
   )

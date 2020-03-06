@@ -1,5 +1,5 @@
-<app-header ></app-header>
-<header id="header">
+<app-header *ngIf="donacionOB"></app-header>
+<header id="header" *ngIf="donacionOB">
 
     <div class="titulo">
       <h3>Solicitud de Donación</h3>

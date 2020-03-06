@@ -9,7 +9,7 @@
       <span class="lineTi"></span>
     </div>
   </section>
-<section class="main">
+<section class="main"  *ngIf="fundacion">
     <div class="row content-grid">
         <div class="col-12 col-sm-3 content-grid-filtros">
             <div class="btnRGM" *ngIf="currentUser">
@@ -404,4 +404,4 @@
       </div>
     </div>
   </div>
-  <app-footer-fundacion></app-footer-fundacion>
+  <app-footer-fundacion  *ngIf="fundacion"></app-footer-fundacion>

@@ -5,7 +5,7 @@ import { HomeComponent } from './_modulos/home';
 import { AdminComponent } from './_modulos/admin';
 import { LoginComponent } from './_modulos/autenticacion';
 import { AuthGuard,AutenticacionGuard,AdminGuard} from './_core';
-
+import {NotFoundComponent} from './_shared/components/not-found/not-found.component'
 import { Role } from './_models';
 const routes: Routes = [
   /*{
@@ -48,8 +48,12 @@ const routes: Routes = [
     canActivate:[AuthGuard]
 
   },
+  {
+    path: 'not-found',
+    component: NotFoundComponent
+  },
   // otherwise redirect to home
-  { path: '**', redirectTo: '/home/nosotros' }
+  { path: '**', redirectTo: '/not-found' }
 ];
 
 @NgModule({

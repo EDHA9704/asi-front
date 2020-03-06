@@ -142,6 +142,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         
       },
       error=>{
+        this._router.navigate(['**']);  
         console.log(<any>error);
       }
     )

@@ -1,4 +1,4 @@
-<app-header ></app-header>
+<app-header *ngIf="fundacion"></app-header >
 <section class="tituloPage" *ngIf="fundacion">
   <div class="tituloPage-logo">
     <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
@@ -9,7 +9,7 @@
       <span class="lineTi"></span>
     </div>
   </section>
-<section class="main">
+<section class="main" *ngIf="fundacion">
     <div class="row content-grid">
         <div class="col-12 col-sm-3 content-grid-filtros">
             <div class="btnRGM btn-group dropright" *ngIf="currentUser">
@@ -454,4 +454,4 @@
       </div>
     </div>
   </div>
-  <app-footer-fundacion></app-footer-fundacion>
+  <app-footer-fundacion *ngIf="fundacion"></app-footer-fundacion>

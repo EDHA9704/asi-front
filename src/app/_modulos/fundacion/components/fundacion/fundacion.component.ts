@@ -74,12 +74,13 @@ imageUrl: string;
 imageObj2: File;
 imageUrl2: string;
 public stUpload = false;
+public carga = false;
   constructor(private _route:ActivatedRoute,
     private _router:Router, 
     private _mascotaService:MascotaService,/*private _usuarioService:UsuarioService ,*/
     private _uploadService:UploadService, 
     private authenticationService: AuthenticationService,private userService:UserService,
-    private _fundacionService:FundacionService,private _messageService:MessagesService) {
+    private _fundacionService:FundacionService,private router: Router,private _messageService:MessagesService) {
       this.url = environment.apiUrl;
       this.currentUser = this.authenticationService.currentUserValue;
       console.log(this.currentUser)
@@ -136,9 +137,10 @@ public stUpload = false;
                 
             });*/
         this.usuarioFundacion = response.usuario;
+        this.carga = true
       },
       error=>{
-
+        this.router.navigate(['**']);  
       }
     )
   }
@@ -467,4 +469,4 @@ public stUpload = false;
           this.imL3 = false;
         }
       }
-}
+} 

@@ -1,6 +1,6 @@
 <app-spinner></app-spinner>
-<app-header ></app-header>
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" *ngIf="portadasFundacion" style="position: relative;">
+<app-header *ngIf="carga == true"></app-header >
+    <div  id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" *ngIf="portadasFundacion && carga == true" style="position: relative;">
         <ol class="carousel-indicators">
           <li data-target="#carouselExampleIndicators" *ngFor="let i of hh" (click)="deslizarESPortada(i.numero)"></li>
         </ol>
@@ -186,7 +186,7 @@
     </section>
   
    
-    <div class="container" *ngIf="usuarioFundacion">
+    <div  class="container" *ngIf="usuarioFundacion">
     
        <!-- <div class="row">
             <div class="col-12" style="padding-right: 0 !important;">
@@ -277,7 +277,7 @@
         
     </div>
     
-    <div class="bgimg-4" *ngIf="usuarioFundacion">
+    <div  class="bgimg-4" *ngIf="usuarioFundacion">
     
         <div class="mision">
           <h5>Misión</h5>
@@ -290,7 +290,7 @@
             <p>{{usuarioFundacion.vision}}</p>
           </div>
       </div>
-      <div class="bgimg-1" *ngIf="usuarioFundacion">
+      <div  class="bgimg-1" *ngIf="usuarioFundacion">
     
           <div class="mision">
             <h5>Misión</h5>
@@ -299,7 +299,7 @@
           </div>
          
         </div>
-        <div class="bgimg-2" *ngIf="usuarioFundacion">
+        <div  class="bgimg-2" *ngIf="usuarioFundacion">
     
             <div class="vision">
                 <h5>Visión</h5>
@@ -309,7 +309,7 @@
           </div>
           
          
-      <div class="historias">
+      <div *ngIf="usuarioFundacion"  class="historias">
         <div class="ti3" *ngIf="currentUser && historiasF">
         <h5 class="ti2">Historias inspiradoras</h5>
         <button *ngIf="currentUser.usuario._id == idF && historiasF.length < 7"  type="button" class="btn " data-toggle="modal" data-target="#modalHI" ><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
@@ -365,4 +365,4 @@
       </div>
 
 
-      <app-footer-fundacion></app-footer-fundacion>
+      <app-footer-fundacion *ngIf="usuarioFundacion"></app-footer-fundacion>

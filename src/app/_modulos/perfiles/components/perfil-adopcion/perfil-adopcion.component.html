@@ -1,5 +1,5 @@
-<app-header ></app-header>
-<header id="header">
+<app-header *ngIf="adopcion"></app-header >
+<header id="header" *ngIf="adopcion">
 
     <div class="titulo">
         <h3>Solicitud de adopción</h3>

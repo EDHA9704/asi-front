@@ -177,7 +177,7 @@ especie = new FormControl('', [Validators.required]);
        },
        error=>{
          var errorMessage = <any>error;
-           
+         this._router.navigate(['**']);  
            console.log(errorMessage)
            if(errorMessage != null && error.error.n == '2'){
              this.mensaje = 'La mascota ya no existe en el sistema.';
