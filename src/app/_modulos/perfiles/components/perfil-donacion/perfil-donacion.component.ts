@@ -510,7 +510,7 @@ export class PerfilDonacionComponent implements OnInit {
       
     }else if(tipo == 'aproVolun'){
 
-      var tem = this.voluntariosAS.filter(x=> x.estadoD == 2)
+      var tem = this.voluntariosAS.filter(x=> x.estadoD == 1)
       if(tem.length >= 1){
         this.tituloAP = 'Aprobar donación'
         $("#modalAprobarNegar").modal('show')

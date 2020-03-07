@@ -226,8 +226,8 @@ aria-hidden="true">
                                         <p *ngFor="let vl of voluntariosAS">{{vl.voluntarioC.nombres}} {{vl.voluntarioC.apellidos}} 
                                             
                                             <span *ngIf="vl.estadoD == '0'">( Aún no acepta la solicitud)</span>
-                                            <span *ngIf="vl.estadoD == '1'">( No aceptó la solicitud)</span>
-                                            <span *ngIf="vl.estadoD == '2'">( Aceptó la solicitud)</span>
+                                            <span *ngIf="vl.estadoD == '2'">( No aceptó la solicitud)</span>
+                                            <span *ngIf="vl.estadoD == '1'">( Aceptó la solicitud)</span>
                                         
                                         </p>
                                        
@@ -265,9 +265,9 @@ aria-hidden="true">
                                 <div class="info" *ngIf="voluntariosAS.length > 0">
                                     <p *ngFor="let vl of voluntariosAS">{{vl.voluntarioC.nombres}} {{vl.voluntarioC.apellidos}} 
                                         
-                                        <span *ngIf="vl.estadoD == 'p'">( Aún no acepta la solicitud)</span>
-                                        <span *ngIf="vl.estadoD == 'no'">( No aceptó la solicitud)</span>
-                                        <span *ngIf="vl.estadoD == 'si'">( Aceptó la solicitud)</span>
+                                        <span *ngIf="vl.estadoD == '0'">( Aún no acepta la solicitud)</span>
+                                        <span *ngIf="vl.estadoD == '2'">( No aceptó la solicitud)</span>
+                                        <span *ngIf="vl.estadoD == '1'">( Aceptó la solicitud)</span>
                                     
                                     </p>
                                    
@@ -346,8 +346,8 @@ aria-hidden="true">
                                                                <label *ngIf="volun.foto &&  emergencia.responsable._id != volun._id" for="{{volun._id}}" class="voluntarioLabelCheck">
                                                                 <span>{{volun.nombres}} {{volun.apellidos}} </span>
                                                                 <span *ngIf="volun.estadoD == '0'">( Pendiente)</span>
-                                                                <span *ngIf="volun.estadoD == '1'" style="color: red;">( No aceptó la solicitud)</span>
-                                                                <span *ngIf="volun.estadoD == '2'">( Aceptó la solicitud)</span>
+                                                                <span *ngIf="volun.estadoD == '2'" style="color: red;">( No aceptó la solicitud)</span>
+                                                                <span *ngIf="volun.estadoD == '1'">( Aceptó la solicitud)</span>
                                                                    <div class="imgVol">
                                                                        <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
                                                                         volun.foto}}">

@@ -378,7 +378,7 @@ export class PerfilEmergenciaComponent implements OnInit {
       $("#modalAprobarNegar").modal('show')
     }else if(tipo == 'aproVolun'){
 
-      var tem = this.voluntariosAS.filter(x=> x.estadoD == 2)
+      var tem = this.voluntariosAS.filter(x=> x.estadoD == 1)
       if(tem.length >= 1){
         this.tituloAP = 'Aprobar emergencia'
         $("#modalAprobarNegar").modal('show')
