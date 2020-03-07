@@ -13,7 +13,7 @@ const routes: Routes = [
     component: PerfilMascotaComponent
   },
   {
-    path: 'emergencia/:idE/:id',
+    path: 'emergencia/:idE',
     component: PerfilEmergenciaComponent
   },
   {

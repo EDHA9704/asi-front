@@ -42,7 +42,7 @@
                     <div class="card-header-tex">
                         <h5>Publicado: {{(emerg.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
                     </div>
-                    <div class="card-header-icon" [routerLink]="['/perfil','emergencia',emerg._id,currentUser.usuario._id]">
+                    <div class="card-header-icon" [routerLink]="['/perfil','emergencia',emerg._id]">
                         <i class="fa fa-expand" aria-hidden="true"></i>
                     </div>
                 </div>

@@ -74,10 +74,10 @@ export class PerfilEmergenciaComponent implements OnInit {
     $('#modalAyudarEmergencia').modal('hide');
     this._route.params.subscribe(params =>{
       let id = params['idE'];
-     this.idFun = params['id'];
+    // this.idFun = params['id'];
      this.idEm = id;
 
-     if(this.currentUser && this.currentUser.usuario._id == this.idFun){
+     if(this.currentUser && this.currentUser.usuario.rol == '4'){
       this.permission = true;
     }else{
       this.permission = false;
