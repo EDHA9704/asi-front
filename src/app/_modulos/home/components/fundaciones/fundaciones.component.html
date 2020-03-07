@@ -1,4 +1,4 @@
-<app-home-header></app-home-header>
+
 <app-titulo-page [titulo]="titulo" [descripcion]="descripcion" [img]="img"></app-titulo-page>
 
 <section class="main">
@@ -31,7 +31,7 @@
                     <div class="card-header-tex">
                         <h5>Sector {{fund.sector}}</h5>
                     </div>
-                    <a class="card-header-icon" [routerLink]="['/fundacion',fund.nombreFundacion,fund._id]" target="_blank" >
+                    <a class="card-header-icon" [routerLink]="['/fundacion',fund._id]" target="_blank" >
                         <i class="fa fa-expand" aria-hidden="true"></i>
                     </a>
                 </div>

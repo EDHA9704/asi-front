@@ -133,6 +133,8 @@ public nuevoRegistro = false;
   }
   public currentUser;
   public fundacion:UsuarioFundacion;
+  keyUrl
+  fullUrl:string
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _fundacionService:FundacionService,
     private _userService:UserService,
@@ -143,6 +145,9 @@ public nuevoRegistro = false;
       this.page = 1;
       this.carga = true;
       this.filtroBTN = false;
+      this.fullUrl = this._router.url.toString()
+      this.keyUrl = this.fullUrl.split('/')
+      
      }
 
   ngOnInit() {
@@ -161,7 +166,7 @@ public nuevoRegistro = false;
        //this.name = '/'+this.name
        let page = +params['page'];
       console.log(page)
-      this.idFun = params['id'];
+      this.idFun = this.keyUrl[2]
       this.obtFundacion(this.idFun)
          this.page = page;
       

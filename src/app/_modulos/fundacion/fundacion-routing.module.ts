@@ -9,46 +9,64 @@ import { MisAdopcionesComponent} from './components/mis-adopciones/mis-adopcione
 import { MisDonacionesComponent } from './components/mis-donaciones/mis-donaciones.component';
 import { ContactanosComponent } from './components/contactanos/contactanos.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
+import { NosotrosComponent} from './components/nosotros/nosotros.component';
+
 import { FundacionGuard } from '../../_core';
 
 const routes: Routes = [
   {
     path: '',
     component: FundacionComponent,
+    children:[
+      {
+        path: '',
+        redirectTo: 'nosotros',
+       
+      },
+      {
+        path: 'nosotros',
+        component: NosotrosComponent
+      },
+      {
+        path: 'mascotas/:tipo/:page',
+        component: MisMascotasComponent,
+    
+      },
+      {
+        path: 'voluntarios/:tipo/:page',
+        component: MisVoluntariosComponent,
+        canActivate:[FundacionGuard],
+        data:[{roles:'4'}]
+      },
+      {
+        path: 'emergencias/:tipo/:page',
+        component: MisEmergenciasComponent,
+        canActivate:[FundacionGuard],
+        data:[{roles:'4'}]
+      },
+      {
+        path: 'adopciones/:tipo/:page',
+        component: MisAdopcionesComponent,
+        canActivate:[FundacionGuard],
+        data:[{roles:'4'}]
+      },
+      {
+        path: 'donaciones/:tipo/:page',
+        component: MisDonacionesComponent,
+      },
+      {
+        path: 'contactanos',
+        component: ContactanosComponent,
+      },
+      {
+        path: 'perfil',
+        component: MiPerfilComponent,
+        canActivate:[FundacionGuard],
+        data:[{roles:'4'}]
+      }
+    ]
   },
-  {
-    path: 'mascotas/:tipo/:page',
-    component: MisMascotasComponent,
-
-  },
-  {
-    path: 'voluntarios/:tipo/:page',
-    component: MisVoluntariosComponent,
-    canActivate:[FundacionGuard]
-  },
-  {
-    path: 'emergencias/:tipo/:page',
-    component: MisEmergenciasComponent,
-    canActivate:[FundacionGuard]
-  },
-  {
-    path: 'adopciones/:tipo/:page',
-    component: MisAdopcionesComponent,
-    canActivate:[FundacionGuard]
-  },
-  {
-    path: 'donaciones/:tipo/:page',
-    component: MisDonacionesComponent,
-  },
-  {
-    path: 'contactanos',
-    component: ContactanosComponent,
-  },
-  {
-    path: 'perfil',
-    component: MiPerfilComponent,
-    canActivate:[FundacionGuard]
-  }
+  
 
   
  

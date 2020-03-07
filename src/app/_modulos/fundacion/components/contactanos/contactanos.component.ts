@@ -14,10 +14,14 @@ export class ContactanosComponent implements OnInit {
   public url;
   public currentUser
   public fundacion:UsuarioFundacion;
+  keyUrl
+  fullUrl:string
   constructor(private authenticationService: AuthenticationService,private _route:ActivatedRoute,
     private _router:Router,private _userService:UserService) { 
     this.currentUser = this.authenticationService.currentUserValue;
     this.url = environment.apiUrl;
+    this.fullUrl = this._router.url.toString()
+      this.keyUrl = this.fullUrl.split('/')
   }
 
   ngOnInit() {
@@ -25,7 +29,7 @@ export class ContactanosComponent implements OnInit {
   }
   loadPage(){
     this._route.params.subscribe(params =>{
-      this.idFun = params['id'];
+      this.idFun =  this.keyUrl[2]
      
       this.obtFundacion(this.idFun);
       

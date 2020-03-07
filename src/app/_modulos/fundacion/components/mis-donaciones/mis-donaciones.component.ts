@@ -31,7 +31,7 @@ public total;
 public pages;
 public itemsPerPage;
 public idFun
-public name
+
 public tipoFL = ["Todos","Económica","Producto"];
 public filtroBTN;
 public select;
@@ -135,11 +135,15 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
             '';
   }
   imageObj: File;
+  keyUrl
+  fullUrl:string
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _uploadService:UploadService,private router: Router,
     private _donacionService:DonacionService,
     private _userService:UserService,private _messageService:MessagesService,private authenticationService: AuthenticationService) { 
     this.url = environment.apiUrl;
+    this.fullUrl = this.router.url.toString()
+    this.keyUrl = this.fullUrl.split('/')
     this.page = 1;
     this.carga = true;
     this.imgCom ='';
@@ -168,11 +172,11 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
     this.type = '';
     this.pagesSelec = []
     this._route.params.subscribe(params =>{
+     
       let tipo = params['tipo'];
       this.type = tipo;
-      this.idFun = params['id'];
-      this.name= params['name'];
-      //this.name= '/'+this.name;
+      this.idFun = this.keyUrl[2]
+
       this.obtFundacion(this.idFun)
       if(this.currentUser && this.currentUser.usuario && this.currentUser.usuario._id == this.idFun){
         this.validPermission = true;
@@ -359,14 +363,14 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
       this.buscarDonaciones(this.page)
     }
 
-    this._router.navigate(['/fundacion',this.name,this.idFun,'donaciones','busqueda','1']);
+    this._router.navigate(['/fundacion',this.idFun,'donaciones','busqueda','1']);
     
     
 
   }
   cancelarBus(){ 
     localStorage.removeItem('busquedaDonaciones');
-    this._router.navigate(['/fundacion',this.name,this.idFun,'donaciones','todos','1']);
+    this._router.navigate(['/fundacion',this.idFun,'donaciones','todos','1']);
   }
   verComprobante(comprobante){
     $('#modalComprobante').modal('show')

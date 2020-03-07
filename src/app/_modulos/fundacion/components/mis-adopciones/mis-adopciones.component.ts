@@ -37,13 +37,16 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
   public type;
   public pagesSelec;
   public estados = ["Todos","0","1","2"];
-  public name
+
   public currentUser;
+  keyUrl
+  fullUrl:string
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _adopcionService:AdopcionService,private _userService:UserService,private authenticationService: AuthenticationService) {
       this.filtroBSQ = this._adopcionService.obtFiltro();
       this.currentUser = this.authenticationService.currentUserValue;
-
+      this.fullUrl = this._router.url.toString()
+      this.keyUrl = this.fullUrl.split('/')
       this.url = environment.apiUrl;
       this.page = 1;
       this.carga = true;
@@ -70,10 +73,10 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
     this.type = '';
     this.pagesSelec = []
     this._route.params.subscribe(params =>{
+     
       this.type= params['tipo'];
-      this.idFun = params['id'];
-      this.name= params['name'];
-      //this.name= '/'+this.name;
+      this.idFun = this.keyUrl[2]
+   
 
       this.obtFundacion(this.idFun);
 
@@ -153,7 +156,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
    
     //this.bus = false;
     localStorage.removeItem('busquedaAdopciones');
-    this._router.navigate(['/fundacion',this.name,this.idFun,'adopciones','todos','1']);
+    this._router.navigate(['/fundacion',this.idFun,'adopciones','todos','1']);
   }
   verFoto(foto,op){
     
@@ -295,7 +298,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
     if(this.type == 'busqueda'){
       this.buscarAdopciones(this.page)
     }
-    this._router.navigate(['/fundacion',this.name,this.idFun,'adopciones','busqueda','1']);
+    this._router.navigate(['/fundacion',this.idFun,'adopciones','busqueda','1']);
     
     
 

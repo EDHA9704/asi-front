@@ -78,10 +78,12 @@ export class HeaderComponent implements OnInit {
       console.log(this.name)
       //this.name = this.name
       //console.log(this.name)
-      this.idFun = this.id; 
-      if(this.currentUser && this.currentUser.usuario._id == this.id){
-
+      
+      if(this.currentUser && this.currentUser.usuario.rol == '4'){
+        this.idFun =this.currentUser.usuario._id
         this.permission = true;
+    }else{
+
     }
     })
   }
@@ -165,7 +167,7 @@ async  deleteOneSignal(id,signal){
 })
   }
   redirectNosotros(nombre,id){
-    this._router.navigate(['/fundacion',nombre,id]); 
+    this._router.navigate(['/fundacion',id]); 
     
   }
 }

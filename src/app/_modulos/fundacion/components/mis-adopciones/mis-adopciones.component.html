@@ -1,4 +1,4 @@
-<app-header ></app-header>
+
 <section class="tituloPage" *ngIf="fundacion">
   <div class="tituloPage-logo">
     <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
@@ -49,7 +49,7 @@
                     <div class="card-header-tex">
                         <h5> Solicitadodo: {{(adop.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
                     </div>
-                    <div class="card-header-icon" [routerLink]="['/perfil','adopcion',adop._id,currentUser.usuario._id]">
+                    <div class="card-header-icon" [routerLink]="['/perfil','adopcion',currentUser.usuario._id,adop._id]">
                         <i class="fa fa-expand" aria-hidden="true"></i>
                     </div>
                 </div>
@@ -98,28 +98,28 @@
         <div class="col-12 col-sm-9">
             <div class="selectPages" >
                 <div class="pageAnt2">
-                    <a  [routerLink]="['/fundacion',name,idFun,'adopciones', type, '1']"
+                    <a  [routerLink]="['/fundacion',idFun,'adopciones', type, '1']"
                       class="btn btn-primary">
                       <i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
                   </div>
               <div class="pageAnt">
-                <button [disabled]="page == 1"  [routerLink]="['/fundacion',name,idFun,'adopciones', type, prev_page]"
+                <button [disabled]="page == 1"  [routerLink]="['/fundacion',idFun,'adopciones', type, prev_page]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-left" aria-hidden="true"></i></button>
               </div>
               <div class="pagess">
         
-               <a  [routerLink]="['/fundacion',name,idFun,'adopciones', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
+               <a  [routerLink]="['/fundacion',idFun,'adopciones', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
            
               </div>
               <div class="pageNex">
-                <button [disabled]="page == pages"  [routerLink]="['/fundacion',name,idFun,'adopciones', type, next_page]"
+                <button [disabled]="page == pages"  [routerLink]="['/fundacion',idFun,'adopciones', type, next_page]"
                 class="btn btn-primary">
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="pageNex2">
-                  <a  [routerLink]="['/fundacion',name,idFun,'adopciones', type, pages]"
+                  <a  [routerLink]="['/fundacion',idFun,'adopciones', type, pages]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                 </a>

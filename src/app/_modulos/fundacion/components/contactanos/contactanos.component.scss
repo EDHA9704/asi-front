@@ -154,6 +154,7 @@ header .descripcionPes .imgIcon .imgI img{
 /*--MAIN, FILTROS Y MASCOTAS--*/
 
 .main{
+    min-height: 25em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -774,11 +775,19 @@ padding-bottom: 10px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    span{
+        width: 10%;
+    }
+    p{
+        width: 85%;
+        word-wrap: break-word;
+    }
 }
 
 .datosContactos ul li p{
     margin: 0;
     margin-left: 10px;
+    text-align: start;
 }
 
 .social-icons{

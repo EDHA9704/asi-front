@@ -182,7 +182,7 @@ export class PerfilEmergenciaComponent implements OnInit {
           this.emergencia = response.emergencia;
     
           console.log(this.emergencia);
-          if(this.idFun != 'hom'){
+          if(this.permission == true){
             this.obtVoluntarios()
             if(this.emergencia.ayuda){
               response.emergencia.ayuda.voluntarios.forEach(vol => {

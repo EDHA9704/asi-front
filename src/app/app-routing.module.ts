@@ -13,19 +13,20 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard]
   },*/
-  {
+  {path: '', loadChildren: () => import('./_modulos/layout/layout.module').then(m => m.LayoutModule),},
+  /*{
     path: '',
     redirectTo: '/home/nosotros',
     pathMatch: 'full'
-  },
-  {
+  },*/
+ /* {
     path: 'home',
     loadChildren: () => import('./_modulos/home/home.module').then(m => m.HomeModule),
     canLoad: [AutenticacionGuard],
     canActivate:[AuthGuard]
   },
   {
-    path: 'fundacion/:name/:id',
+    path: 'fundacion/:id',
     loadChildren: () => import('./_modulos/fundacion/fundacion.module').then(m => m.FundacionModule),
     //canLoad: [AutenticacionGuard]
     data:[{roles:'4'}]
@@ -40,7 +41,7 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./_modulos/perfiles/perfiles.module').then(m => m.PerfilesModule),
     //canLoad: [AutenticacionGuard]
-  },
+  },*/
   {
     path: 'autenticacion',
     loadChildren: () => import('./_modulos/autenticacion/autenticacion.module').then(m => m.AutenticacionModule),

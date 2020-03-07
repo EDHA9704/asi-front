@@ -9,7 +9,7 @@ import { PerfilEmergenciaComponent } from './components/perfil-emergencia/perfil
 const routes: Routes = [
 
   {
-    path: 'mascota/:name/:mascota/:idM/:id',
+    path: 'mascota/:id/:mascota/:idM',
     component: PerfilMascotaComponent
   },
   {
@@ -17,11 +17,11 @@ const routes: Routes = [
     component: PerfilEmergenciaComponent
   },
   {
-    path: 'donacion/:idD/:id',
+    path: 'donacion/:id/:idD',
     component: PerfilDonacionComponent
   },
   {
-    path: 'adopcion/:idA/:id',
+    path: 'adopcion/:id/:idA/',
     component: PerfilAdopcionComponent
   },
 

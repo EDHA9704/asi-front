@@ -438,7 +438,7 @@ console.log(this.filtroBSQ)
 
   }
   redirectMascota(nombre,name,id,idr){
-    this._router.navigate(['/perfil/mascota',name,nombre,id,idr]);
+    this._router.navigate(['/perfil/mascota',idr,nombre,id]);
     
   }
 }

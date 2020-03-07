@@ -144,9 +144,9 @@ imageUrl: string;
           if(response.usuario.rol == '1'){
             this.router.navigate(['/admin']);
            }else if(response.usuario.rol == '4'){
-            this.router.navigate(['/fundacion',response.usuario.nombreFundacion,response.usuario._id]);
+            this.router.navigate(['/fundacion',response.usuario._id]);
            }else{
-            this.router.navigate(['home']);
+            this.router.navigate(['/home']);
            }
           
         }

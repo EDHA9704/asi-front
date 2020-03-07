@@ -15,11 +15,11 @@ const routes: Routes = [
     children:[
       {
         path: '',
-        redirectTo: '/home/nosotros',
-        pathMatch: 'full'
+        redirectTo: 'inicio',
+      
       },
       {
-        path: 'nosotros',
+        path: 'inicio',
         component: NosotrosComponent
       },
        {

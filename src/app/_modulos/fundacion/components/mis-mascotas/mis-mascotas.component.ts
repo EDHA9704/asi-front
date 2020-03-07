@@ -35,7 +35,7 @@ export class MisMascotasComponent implements OnInit {
   mul = new FormControl('', []);
   bro = new FormControl('', []);
   ant = new FormControl('', []);
-  public name;
+
   public taman = ["Todos","Pequeño","Mediano","Grande"];
   public sexoo = ["Todos","Macho","Hembra"];
   public edadd = ["Todos","Cachorro","Joven","Adulto"];
@@ -117,11 +117,15 @@ export class MisMascotasComponent implements OnInit {
             '';
   }
   public fundacion:UsuarioFundacion;
+  keyUrl
+  fullUrl:string
+
   constructor(private _route:ActivatedRoute,private router: Router,private _mascotaService:MascotaService,
     private _router:Router,private _messageService:MessagesService,private authenticationService: AuthenticationService,
     private _uploadService:UploadService,private _userService:UserService) { 
       this.currentUser = this.authenticationService.currentUserValue;
-
+      this.fullUrl = this.router.url.toString()
+      this.keyUrl = this.fullUrl.split('/')
       this.url = environment.apiUrl;
       this.page = 1;
       this.carga = true;
@@ -161,13 +165,12 @@ export class MisMascotasComponent implements OnInit {
     this.type = '';
     this.pagesSelec = [];
     this._route.params.subscribe(params =>{
-
+     
       this.type= params['tipo'];
-      this.idFun = params['id'];
-      this.name= params['name'];
-     // this.name= '/'+this.name;
+      this.idFun =this.keyUrl[2]
+
       this.obtFundacion(this.idFun)
-      console.log(this.type + '***'+this.name)
+
       let page = +params['page'];
           this.page = page;
           console.log(page)
@@ -359,7 +362,7 @@ export class MisMascotasComponent implements OnInit {
    
     this.bus = false;
     localStorage.removeItem('busquedaMascotasFnd');
-    this._router.navigate(['/fundacion',this.name,this.idFun,'mascotas','todos','1']);
+    this._router.navigate(['/fundacion',this.idFun,'mascotas','todos','1']);
   }
   nuevoRegiistro(op){
     this.nuevoReg = op;
@@ -454,7 +457,7 @@ export class MisMascotasComponent implements OnInit {
       
     
    
-    this._router.navigate(['/fundacion',this.name,this.idFun,'mascotas','busqueda','1']);
+    this._router.navigate(['/fundacion',this.idFun,'mascotas','busqueda','1']);
     
     
 
@@ -671,8 +674,8 @@ $("#descripcion").keyup(()=>{
   
   }
 
-  redirectMascota(nombre,name,id,idr){
-    this._router.navigate(['/perfil/mascota',name,nombre,id,idr]);
+  redirectMascota(nombre,id,idr){
+    this._router.navigate(['/perfil/mascota/',idr,nombre,id]); 
     
   }
  public croppedImage

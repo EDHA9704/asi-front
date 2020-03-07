@@ -79,7 +79,7 @@ export class AuthenticationService {
         localStorage.removeItem('identity');
 
         this.currentUserSubject.next(null);
-        this._router.navigate(['/home']);
+        this._router.navigate(['/autenticacion']);
     }
 
 

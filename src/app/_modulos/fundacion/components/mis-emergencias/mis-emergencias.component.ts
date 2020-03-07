@@ -37,13 +37,18 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
   public url
   public select
   public idFun
-  public name
+
   public currentUser;
+  keyUrl
+  fullUrl:string
+
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _emergenciaService:EmergenciaService,
     private _userService:UserService,private router: Router,private authenticationService: AuthenticationService) { 
     this.filtroBSQ = this._emergenciaService.obtFiltro();
     this.url = environment.apiUrl;
+    this.fullUrl = this.router.url.toString()
+    this.keyUrl = this.fullUrl.split('/')
     this.page = 1;
     this.bus = false;
     this.itemsEmer = 0;
@@ -82,11 +87,12 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
    //this.statusAyuda = null;
   // $('#modalAyudarEmergencia').modal('hide')
   this._route.params.subscribe(params =>{
+    
     let tipo = params['tipo'];
     this.type = tipo;
-    this.idFun = params['id'];
-    this.name= params['name'];
-    //this.name= '/'+this.name;
+    
+    this.idFun = this.keyUrl[2]
+
     let page = +params['page'];
     this.page = page;
     this.obtFundacion(this.idFun)
@@ -262,7 +268,7 @@ cancelarBus(){
    
   this.bus = false;
   localStorage.removeItem('busquedaEmergencias2');
-  this._router.navigate(['/fundacion',this.name,this.idFun,'emergencias','todos','1']);
+  this._router.navigate(['/fundacion',this.idFun,'emergencias','todos','1']);
 }
 
 filtroBSQD(option){
@@ -322,7 +328,7 @@ filtroBSQD(option){
   if(this.type == 'busqueda'){
     this.buscarEmergencias(this.page)
   }
-  this._router.navigate(['/fundacion',this.name,this.idFun,'emergencias','busqueda','1']);
+  this._router.navigate(['/fundacion',this.idFun,'emergencias','busqueda','1']);
   
   
 

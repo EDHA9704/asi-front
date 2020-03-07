@@ -66,7 +66,7 @@ export class PerfilDonacionComponent implements OnInit {
  
   ngOnInit() {
     this._route.params.subscribe(params =>{
-      console.log("ENTRO")
+      console.log("ENTRO",params)
       this.id = params['idD'];
       this.idFun = params['id']
       this.obtenerDonacion(this.id)

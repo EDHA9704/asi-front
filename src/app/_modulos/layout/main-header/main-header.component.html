@@ -1,7 +1,12 @@
-<header id="header" class="darkHeader">
+<header id="header" class="transparentHeader">
     <div class="container">
         <nav>
-           
+            <div class="nav-brand">
+                <a [routerLink]="['/']" >
+                    <img src="../../../../../assets//img/Captura2.png">
+                </a>
+                
+            </div>
             <div class="menu-icons open">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </div>
@@ -9,31 +14,26 @@
                 <div class="menu-icons close">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
                 </div>
-                <li class="nav-item">
-                    <a style="cursor: pointer;"  (click)="redirectNosotros(name,idFun)"  class="nav-link">Nosotros</a>
+                <li class="nav-item" *ngFor = "let link of mainLinks">
+                    <a [routerLinkActive]="['current']"   routerLink="/{{link.root}}" (click)="styleHeader()"  class="nav-link">{{link.name}}</a>
+                </li>
+                <!--<li class="nav-item" >
+                    <a [routerLinkActive]="['current']"   routerLink="/home/nosotros"  class="nav-link">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'mascotas','todos','1']" class="nav-link">Mascotas</a>
-                </li>
-                <li class="nav-item" *ngIf="permission && permission == true">
-                    <a  [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'voluntarios','todos','1']" class="nav-link">Voluntarios</a>
-                </li>
-                <li class="nav-item" *ngIf="permission && permission == true">
-                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'emergencias','todos','1']" class="nav-link">Emergencias</a>
-                </li>
-                <li class="nav-item" *ngIf="permission && permission == true">
-                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'adopciones','todos','1']" class="nav-link">Adopciones</a>
-                </li>
-                <li class="nav-item" >
-                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'donaciones','todos','1']" class="nav-link">Donaciones</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/home/mascotas','todos','1']" class="nav-link">Mascotas</a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLinkActive]="['current']" [routerLink]="['/fundacion',idFun,'contactanos']" class="nav-link">Contactanos</a>
+                    <a [routerLinkActive]="['current']" [routerLink]="['/home/fundaciones','todos','1']" class="nav-link">Fundaciones</a>
                 </li>
-               
-                
+                <li class="nav-item">
+                    <a [routerLinkActive]="['current']" [routerLink]="['/home/emergencias','todos','1']" class="nav-link">Emergencias</a>
+                </li>-->
+                <li class="nav-item login" *ngIf="!currentUser">
+                    <a [routerLinkActive]="['current']" [routerLink]="['/autenticacion']" class="nav-link"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
+                </li>
             </ul>
-            <ul class="nav-list2">
+            <ul class="nav-list2" *ngIf="currentUser && currentUser.usuario.rol == '4'">
                 <li class="nav-item" *ngIf="currentUser">
                     <div class="btn-group dropNAV"> 
                         <button (click)="obtallnotificaciones(1);" type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true"
@@ -51,7 +51,7 @@
                                 <div id="divNotificacion" class="notificacion">
     
                                     <p style="padding: 1rem 1rem;" *ngIf="notificaciones.length == 0 ">No existe notificaciones</p>
-                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',name,idFun,'perfil']">actualiza tus datos</a></p>
+                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',idFun,'perfil']">actualiza tus datos</a></p>
     
                                     <div class="notiS" *ngFor="let not of notificaciones" [class.activeNT]="not.estado == 1">
                                         <!--NOTIFICACION TIPO EMERGENCIA-->
@@ -195,9 +195,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="nav-item login" *ngIf="!currentUser">
-                    <a  [routerLinkActive]="['current']" [routerLink]="['/autenticacion']" class="nav-link"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
-                </li>
+            
                 <li class="nav-item no" *ngIf="currentUser">
                     <div class="btn-group opciones">
                         <button type="button" class="btn btn-secondary btnDROPOP" data-toggle="dropdown" aria-haspopup="true"
@@ -209,7 +207,75 @@
                                
                                 <div class="contentD">
                                         <button class="dropdown-item" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
-                                        <a class="dropdown-item"  [routerLink]="['/fundacion',name,idFun,'perfil']">Actualizar perfil</a>
+                                        <a class="dropdown-item"  [routerLink]="['/fundacion',idFun,'perfil']">Actualizar perfil</a>
+                                </div>
+                                
+                            </div>
+    
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav-list2" *ngIf="currentUser && currentUser.usuario.rol == '1'">
+                <li class="nav-item" *ngIf="currentUser">
+                    <div class="btn-group dropNAV"> 
+                        <button (click)="obtallnotificaciones2(1);" type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-bell" aria-hidden="true"></i> <span class="badge badge-light"></span>
+                        </button>
+                        <div class="dropdown-menu DROP dropdown-menu-right" id="dropNOTIF">
+                            <div class="containerNotifi">
+                                <div class="titulo">
+                                    <h4>Notificaciones</h4>
+                                 
+                                </div>
+    
+                                <div class="dropdown-divider"></div>
+                                <div id="divNotificacion" class="notificacion">
+                                    <p style="padding: 1rem 1rem;" *ngIf="notificaciones.length == 0">No existe notificaciones</p>
+                                <div class="notiS" *ngFor="let not of notificaciones" [class.activeNT]="not.estado == 0">
+                                    <div class="contNot"  [routerLink]="['/admin/cuentas', not._id,not.fundacion._id]" *ngIf="not.tipo == 4">
+                                        <div class="imgnotiS" *ngIf="not.tipo == 4">
+ 
+                                            <img *ngIf="not.fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.fundacion.logo}}">
+                                            <img *ngIf="!not.fundacion.logo" src="../../../../assets/img/Captura2.png">
+                                        </div>
+                                      
+                                        <div class="textnotiS">
+                                            <p>La fundación: {{not.fundacion.nombreFundacion}} solicitó unirse a la plataforma</p>
+                                        </div>
+                                     
+                                
+                                        
+                                       
+                                    </div>
+
+                                </div>
+
+                            </div>
+                                <div class="carga" *ngIf="cargaN == true">
+                                        <div class="spinner-border text-primary" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                              </div>
+                                </div>
+                              
+                            </div>
+    
+                        </div>
+                    </div>
+                </li>
+               
+                <li class="nav-item no" *ngIf="currentUser">
+                    <div class="btn-group opciones">
+                        <button type="button" class="btn btn-secondary btnDROPOP" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" id="dropNOTIF" >
+                            <div class="containerNotifi">
+                               
+                                <div class="contentD">
+                                        <button class="dropdown-item" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
                                 </div>
                                 
                             </div>
