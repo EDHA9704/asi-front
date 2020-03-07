@@ -130,9 +130,33 @@ export class MainHeaderComponent implements OnInit {
       if(this.keyUrl[1] == 'fundacion'){
         idKey = this.keyUrl[2]
       }else if(this.keyUrl[1] == 'perfil'){
+
         idKey = this.keyUrl[3]
       }
-      if(this.currentUser.usuario._id == idKey){
+      if(this.keyUrl[2] != 'emergencia'){
+        if(this.currentUser.usuario._id == idKey){
+          this.permission = true;
+          this.mainLinks = [
+            {name:'Nosotros',root:'/fundacion/'+this.currentUser.usuario._id+'/nosotros'},
+            {name:'Mascotas',root:'/fundacion/'+this.currentUser.usuario._id+'/mascotas/todos/1'},
+            {name:'Emergencias',root:'/fundacion/'+this.currentUser.usuario._id+'/emergencias/todos/1'},
+            {name:'Donaciones',root:'/fundacion/'+this.currentUser.usuario._id+'/donaciones/todos/1'},
+            {name:'Adopciones',root:'/fundacion/'+this.currentUser.usuario._id+'/adopciones/todos/1'},
+            {name:'Voluntarios',root:'/fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
+            {name:'Contactanos',root:'/fundacion/'+this.currentUser.usuario._id+'/contactanos'},
+          ]
+        }else{
+          this.permission = false;
+          this.mainLinks = [
+            {name:'Nosotros',root:'/fundacion/'+this.keyUrl[2]+'/nosotros'},
+            {name:'Mascotas',root:'/fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
+           
+            {name:'Donaciones',root:'/fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
+           
+            {name:'Contactanos',root:'/fundacion/'+this.keyUrl[2]+'/contactanos'},
+          ]
+        }
+      }else{
         this.permission = true;
         this.mainLinks = [
           {name:'Nosotros',root:'/fundacion/'+this.currentUser.usuario._id+'/nosotros'},
@@ -143,17 +167,8 @@ export class MainHeaderComponent implements OnInit {
           {name:'Voluntarios',root:'/fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
           {name:'Contactanos',root:'/fundacion/'+this.currentUser.usuario._id+'/contactanos'},
         ]
-      }else{
-        this.permission = false;
-        this.mainLinks = [
-          {name:'Nosotros',root:'/fundacion/'+this.keyUrl[2]+'/nosotros'},
-          {name:'Mascotas',root:'/fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
-         
-          {name:'Donaciones',root:'/fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
-         
-          {name:'Contactanos',root:'/fundacion/'+this.keyUrl[2]+'/contactanos'},
-        ]
       }
+
 
 
     }else if(this.currentUser && this.currentUser.usuario.rol == '1'){
