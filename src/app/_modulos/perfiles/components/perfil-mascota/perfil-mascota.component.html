@@ -27,7 +27,7 @@
   <img [src]="croppedImage" />
 </div>
 <div class="actionsCropImage" *ngIf="imageReady == 'ok'">
-  <button class="btn" (click)="subirFoto()">Guardar</button>
+  <button class="btn" (click)="subirFoto()" [disabled]="subiendoImage == true">Guardar</button>
   <button class="btn">Cancelar</button>
 </div>
 </div>

@@ -8,7 +8,7 @@ import {environment} from '../../../../../environments/environment'
 import { FormControl, Validators } from '@angular/forms';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 declare var $:any;
-import { ImageCroppedEvent } from 'ngx-image-cropper/public-api';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { UploadService } from 'src/app/_shared/services/upload.service';
 @Component({
   selector: 'app-perfil-mascota',
@@ -65,13 +65,15 @@ especie = new FormControl('', [Validators.required]);
   meses = new FormControl('', [Validators.required]);
   descripcion = new FormControl('', [Validators.required,Validators.maxLength(500),Validators.minLength(25),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ : ; , . -]+$')]);
   ppy = new FormControl('', []);
-  mul = new FormControl('', []);
+  mul = new FormControl('', []); 
   bro = new FormControl('', []);
   ant = new FormControl('', []);
   ant2 = new FormControl('', []);
 
   ppy2 = new FormControl('', []);
-
+  imageObj: File;
+  imageUrl: string;
+  public subiendoImage:any = false;
   getErrorMessage() {
     return this.especie.hasError('required') ? 'Especie requerida' :  
             '';
@@ -358,9 +360,11 @@ $("#descripcion").keyup(()=>{
   //para registro de mascota
 
 
-  imageCropped(event: ImageCroppedEvent) {
+  imageCropped(event: any) {
       this.croppedImage = event.base64;
       console.log(event)
+      const FILE = event.file;
+      this.imageObj = FILE;
   }
   imageLoaded() {
    // this.imageReady= 'ok';
@@ -376,11 +380,23 @@ $("#descripcion").keyup(()=>{
       // show message
   }
   subirFoto(){
+    this.subiendoImage = true
     var body = {
       image:this.croppedImage,
       name:this.nameCropFoto
     }
-    this._mascotaService.registerFotoMascota(body,this.idM).subscribe(
+    const imageForm = new FormData();
+        imageForm.append('image', this.imageObj);
+        this._uploadService.imageUpload(imageForm,'subir-foto-mascota/',this.idM).subscribe(res => {
+          this.imageUrl = res['image'];
+          this.obtMascota(this.idM)
+          this.subiendoImage =false
+          this.croppedImage = ''
+          this.imageReady = ''
+          this._messageService.showSuccess('Mascota','Imagen guardada.')
+  
+        });
+   /*this._mascotaService.registerFotoMascota(body,this.idM).subscribe(
       response=>{
         this.obtMascota(this.idM)
         console.log(response)
@@ -394,7 +410,7 @@ $("#descripcion").keyup(()=>{
         console.log(<any>error)
       }
     )
-  
+  */
   }
   //establecer como foto principal de la mascota
  fotoPrincipalMascota(id,idfoto){
