@@ -264,6 +264,7 @@ export class MainHeaderComponent implements OnInit {
         }
       },
       error=>{
+        this.notificaciones = []
         this.cargaN = false;    
         console.log(<any>error)
       }
