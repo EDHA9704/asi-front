@@ -173,19 +173,62 @@ nav{
 }
 .activities-grid{
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(25rem,1fr));
+    grid-template-columns: repeat(auto-fit,minmax(40rem,1fr));
     grid-gap: 2.5rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 .activities-grid-item{
     height: 40rem;
-    padding: 5rem;
+    padding: 2rem;
     position: relative;
+    max-width: 25em;
+    margin: 1em;
     color: #fafafa;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    cursor: pointer;
+    justify-content: flex-start;
+   
     z-index: 1;
+    font-size: 1.6em;
+    .iconsRedirect{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .redirect{
+            display: none;
+            box-shadow: 1px 3px 1px -1px #141013;
+            background: white;
+            padding: .1em;
+            border-radius: 5px;
+        }
+    }
+    .btnCrds{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        a{
+            font-size: .9em;
+            font-weight: bolder;
+            box-shadow: 0px 0px 9px 0px #fff;
+        }
+        
+    }
+}
+.star-gazing{
+    ul{
+        padding: 1em;
+    list-style: disc !important;
+    overflow: auto;
+    }
 }
 .activities-grid-item::before{
     content: "";
@@ -225,6 +268,16 @@ nav{
      url('../../../../../assets/img/testimonials-bg.jpg') center no-repeat;
      background-size: cover;
      position: relative;
+     display: flex;
+     justify-content: center;
+     .contactsSofr{
+        position: absolute; bottom: 0;
+        p{
+            font-size: 3em;
+            color: white;
+            font-weight: bolder;
+        }
+        }
      
 }
 .testimonials::before{
@@ -241,7 +294,7 @@ nav{
     width: 100%;
     color: #fafafa;
     position: absolute;
-    top: 55%;
+    top: 60%;
    // left: 50%;
     transform: translate(0%,-50%);
     text-align: center;
@@ -265,8 +318,11 @@ nav{
     display: flex;
     flex-direction: row;
     justify-content: center;
+    h1{
+        font-size: 2em !important;
+    }
     .testimonial-customer{
-        margin: 0 1em;
+        margin: 0 2em;
     }
 }
 .testimonial-customer img{
@@ -355,6 +411,16 @@ nav{
 
 /*Media queries--*/
 
+@media screen and (max-width:425px){
+    .btnCrds{
+       display: none !important;
+    }
+}
+@media screen and (max-width:425px){
+    .redirect{
+       display: block !important;
+    }
+}
 @media screen and (min-width:350px){
     .main-message{
         transform: translateY(40%);

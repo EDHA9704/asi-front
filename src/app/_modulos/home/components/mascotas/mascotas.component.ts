@@ -5,6 +5,9 @@ import { MascotaService } from 'src/app/_shared/services/mascota.service';
 import { environment } from '../../../../../environments/environment';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgxUiLoaderService} from 'ngx-ui-loader'; // Import NgxUiLoaderService
+import {SPINNER}  from 'ngx-ui-loader';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 declare var $:any
 @Component({
   selector: 'app-mascotas',
@@ -13,11 +16,11 @@ declare var $:any
 })
 export class MascotasComponent implements OnInit {
   titulo = 'Mascotas'
-  descripcion = 'Uno de nuestros objetivos es encontrar hogares definitivos para aquellos animales que rescatamos de las calles,'+
-  'asegurándoles una nueva oportunidad de vida, con familias responsables que asuman el compromiso de velar por su'+
+  descripcion = 'Uno de nuestros objetivos es encontrar hogares definitivos para aquellos animales que son rescatados de las calles,'+
+  ' asegurándoles una nueva oportunidad de vida, con familias responsables que asuman el compromiso de velar por su'+
   'bienestar.'
   img = "iconohuouse.jpg"
-
+  descripcion2 = 'Mascotas registradas por las fundaciones.'
   public taman = ["Todos","Pequeño","Mediano","Grande"];
   public sexo = ["Todos","Macho","Hembra"];
   public edad = ["Todos","Cachorro","Joven","Adulto"];
@@ -47,7 +50,9 @@ export class MascotasComponent implements OnInit {
   public filtroBTN;
   public fl
   public bus
-  constructor(private _mascotaService:MascotaService,private _router:Router,private _route:ActivatedRoute) { 
+  public loading = true;
+  constructor(private _mascotaService:MascotaService,private _router:Router,
+    private _route:ActivatedRoute,private ngxService: NgxUiLoaderService,private _comunicationService:CommunicationService) { 
     this.fil = this._mascotaService.obtFiltro();
     this.filtroBSQ = this._mascotaService.obtFiltro();
     this.url = environment.apiUrl;
@@ -55,6 +60,9 @@ export class MascotasComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this._comunicationService.perfilFundacionSelec('')
+ 
     //this.obtMascotas(this.page)
     this.loadPage()
     $(document).ready(()=>{
@@ -82,6 +90,8 @@ export class MascotasComponent implements OnInit {
     
   }
   obtMascotas(page,adding=false){
+    //this.ngxService.startLoader('loader-01');
+   
     this.mascotas = []
     this.status = 'procesando';
     this.pagesSelec = [];
@@ -102,12 +112,11 @@ export class MascotasComponent implements OnInit {
           response.mascotas.forEach(ms => {
             var tem =  ms.fotos.filter(ph => ph.estado == 'activo' );
             this.mascotas.push({ms:ms,photo:tem[0]})
-            
           });
-          console.log(this.mascotas)
-          
-         
-          
+
+          this.loading = false;
+            $(".content-grid-cards").addClass('visible')
+
           for (let i = 1; i <= this.pages; i++) {
             this.pagesSelec.push(i)
             
@@ -136,6 +145,7 @@ export class MascotasComponent implements OnInit {
         this.status = 'error';  
         this.carga = false;
         this.advertencia = true;
+        this.loading = false;
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
         console.log(errorMessage)
@@ -267,7 +277,8 @@ console.log(this.filtroBSQ)
           }
           this.itemsMSC = this.mascotas.length;
           this.status ='success';
-         
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
           console.log(this.mascotas)
           //this.obtFotos(response.mascotas._id, page);
           if(page > this.pages){
@@ -279,6 +290,7 @@ console.log(this.filtroBSQ)
         this.carga = false;
         this.total = 0;
         this.advertencia =true;
+        this.loading = false;
         this.status = 'error';  
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
@@ -438,7 +450,7 @@ console.log(this.filtroBSQ)
 
   }
   redirectMascota(nombre,name,id,idr){
-    this._router.navigate(['/perfil/mascota',idr,nombre,id]);
+    this._router.navigate(['perfil/mascota',idr,'home',nombre,id]);
     
   }
 }

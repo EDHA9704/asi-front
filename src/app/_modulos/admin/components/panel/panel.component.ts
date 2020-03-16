@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-panel',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PanelComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ngxService: NgxUiLoaderService) {
+    this.ngxService.startLoader('loader-02');
+   }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.ngxService.stopLoader('loader-02');
+    }, 2000);
   }
 
 }

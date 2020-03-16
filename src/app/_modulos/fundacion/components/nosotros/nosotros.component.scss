@@ -1,5 +1,5 @@
 .container{
-    margin-top: 5rem;
+    margin-top: 0rem;
     font-family: 'Exo', sans-serif;
 }
 h5,h4,h3,h2,h1{
@@ -14,25 +14,168 @@ p,a,button{
     width: 100%;
 }
 
+/*-----SI NO HAY PORTADAS--------*/
+.hero{
+    width: 100%;
+    height: 75vh !important;
+    background: linear-gradient(135deg, rgba(24, 113, 131, 0.89) 0%, rgba(56, 129, 149, 0.4) 100%), url('../../../../../assets/img/4586.jpg') center no-repeat;
+    background-size: cover;
+    position: relative !important;
+}
+.hero:before{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 4.7rem;
+    background: url('../../../../../assets/img/wave-small.png');
+    background-size: cover;
+    z-index: 1 !important;
+}
+.main-message{
+    width: 100%;
+    display: flex;
+    font-family: 'Righteous', cursive;
+    flex-direction: column;
+    max-width: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    color: #fafafa;
+    transform: translateY(20%);
+    .mssg{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.main-message h3{
+    font-size: 2.6rem;
+}
+.main-message h1{
+   
+    font-size: 5rem;
+    margin: 1rem 0;
+}
+.btns{
+    background-color: #3bbfa0;
+    border-radius: 2rem;
+    color: #fafafa;
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2.5rem;
+    text-transform: uppercase;
+}
+.btns:hover{
+    background-color: #ce587b;
+}
+/*Media queries--*/
+
+@media screen and (min-width:350px){
+    .main-message{
+        transform: translateY(40%);
+    }
+}
+
+@media screen and (max-width:470px){
+    .hero::before{
+        height: 9.4rem;
+        background: url("../../../../../assets/img/wave-medium.png");
+        background-size: cover;
+    }
+    .carousel-caption{
+        bottom: 5%;
+        width: 100%;
+        display: block !important;
+    }
+    .textimonials::before{
+        height: 9.4rem;
+        background: url("../../../../../assets/img/wave-medium-reversed.png");
+        background-size: cover;
+    }
+}
+@media screen and (min-width:470px){
+    .hero::before{
+        height: 9.4rem;
+        background: url("../../../../../assets/img/wave-medium.png");
+        background-size: cover;
+    }
+    .carousel-caption{
+        bottom: 5%;
+        width: 100%;
+        display: block !important;
+    }
+    .textimonials::before{
+        height: 9.4rem;
+        background: url("../../../../../assets/img/wave-medium-reversed.png");
+        background-size: cover;
+    }
+}
+@media screen and (min-width:950px){
+    .hero::before{
+        height: 11.7rem;
+        background: url('../../../../../assets/img/wave-large.png');
+        background-size: cover;
+    }
+    .carousel-caption{
+        bottom: 10%;
+        width: 100%;
+        display: block !important;
+    }
+    .testimonials::before{
+        height: 16.7rem;
+        background: url('../../../../../assets/img/wave-large-reversed.png');
+        background-size: cover;
+    }
+}
+
+@media screen and (min-width:1200px){
+    .hero{
+        height: 75vh;
+        
+    }
+    .carousel-caption{
+        bottom: 0%;
+        width: 65%;
+    }
+}
+@media screen and (min-width:1400px){
+    .hero::before{
+        height: 20.7rem;
+        background: url('../../../../../assets/img/wave-large.png');
+        background-size: cover;
+    }
+    .carousel-caption{
+        bottom: 11%;
+        width: 65%;
+    }
+}
 /*-----portadas----*/
 
 .carousel-caption {
     position: absolute;
     right: 15%;
-    top: 5%;
-    max-width: 24rem;
+    
+    
+    height: -webkit-max-content;
+    height: -moz-max-content;
     height: max-content;
     background: #00000094;
-    left: 1%;
-    z-index: 10;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    left: 0%;
+    z-index: 0;
+    min-height: 9em;
+    padding:15px;
     color: #fff;
     text-align: center;
     p{
         max-width: 100%;
         word-wrap: break-word;
+        text-align: start;
+        font-size: 1.5em;
     }
+}
+.modal{
+    z-index: 2000;
 }
 .carousel{
     height: 500px;
@@ -107,8 +250,8 @@ p,a,button{
 }
 .btnConfigPor{
     position: absolute;
-    z-index: 1;
-    bottom: 5%;
+    z-index: 0;
+    top: 18%;
     right: 2%;
     display: flex;
     flex-direction: row;
@@ -520,6 +663,7 @@ p,a,button{
 swiper{
     .card-body{
         overflow: auto;
+        font-size: .9em;
 
     }
     .card-body::-webkit-scrollbar {
@@ -797,4 +941,27 @@ padding-bottom: 10px;
     .fundacion-pefil-datos{
         width: 70% !important;
     }
+  }
+
+  .info-add{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      padding-top: 1em;
+      i{
+          font-size: 2em;
+          color: #535353;
+      }
+      .iconinf{
+          width: 6%;
+
+      }
+      .txtinf{
+          width: 75%;
+          p,a{
+              margin: 0;
+                color: #535353;
+          }
+      }
   }

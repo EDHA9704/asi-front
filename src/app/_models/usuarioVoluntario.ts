@@ -14,6 +14,7 @@ export class UsuarioVoluntario{
         public password:string,
         public telefono:string,
         public celular:string,
-        public foto:string 
+        public foto:string ,
+        public direccionMap:string
     ){}
 }

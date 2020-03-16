@@ -95,6 +95,10 @@ img{
             grid-template-columns: repeat(auto-fit,minmax(25rem,1fr));
             grid-gap: 2.5rem;
             padding: 0 6rem;
+            width: 100%;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
             mat-card{
                 padding: 0; 
                 box-shadow: 0px 0px 5px #444;
@@ -103,8 +107,17 @@ img{
                 .card-header{
                     display: flex;
                     justify-content: space-between;
+                    align-items: center;
                     .card-header-tex{
                         max-width: 70%;
+                    }
+                    button{
+                        background: #3bbfad;
+                        color: white;
+                        border: 0;
+                        border-radius: 4px;
+                        box-shadow: 1px 1px 4px 1px #444;
+                        min-height: 2.5em;
                     }
                     h5{
                         font-size: 2rem;
@@ -115,7 +128,7 @@ img{
                         cursor: pointer;
                         i{
                             font-size: 1.5rem;
-                            color: #555;
+                            color: white;
                         }
                     }
                    
@@ -150,7 +163,7 @@ img{
                         }
                     }
                     .card-body-subtitle{
-                        padding: 3rem 0;
+                        padding: 2rem 0;
                         span{
                             font-size: 1.7rem;
                             font-weight: bold;
@@ -185,7 +198,20 @@ img{
                 }
               }
         }
-
+        .visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 1s linear;
+          }
+    }
+}
+.custom-cards{
+    position: relative; 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .spinn{
+        position: absolute;
     }
 }
 #modalComprobante .modal-body{
@@ -396,7 +422,7 @@ padding-bottom: 10px;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 8rem 0 4rem 0;
+    padding: 8rem 0 0rem 0;
     .tituloPage-logo{
        width: 7rem;
        height: 7rem;
@@ -426,3 +452,27 @@ padding-bottom: 10px;
        }
     }
 }
+@media only screen and (max-width:400px){
+   
+    .content-grid-cards{
+        padding: 0 !important;
+    }
+    
+  }
+  .vacunasMSC{
+      display: flex;
+      flex-direction: column;
+      .titulovac{
+          h5{
+              font-size: 1.5em;
+          }
+      }
+      .content-vacunas{
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          mat-checkbox{
+              margin: 0 1em;
+          }
+      }
+  }

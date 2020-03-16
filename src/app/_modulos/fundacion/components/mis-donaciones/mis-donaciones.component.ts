@@ -56,7 +56,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
   cedula = new FormControl('', [Validators.required,Validators.maxLength(10),Validators.minLength(10)]);
   telefono = new FormControl('', [Validators.required,Validators.maxLength(9),Validators.minLength(9),Validators.pattern('[0-9]*$')]);
   celular = new FormControl('', [Validators.required,Validators.maxLength(10),Validators.minLength(10),Validators.pattern('[0-9]*$')]);
-  direccion = new FormControl('', [Validators.required,Validators.maxLength(300),Validators.minLength(15)]);
+  direccion = new FormControl('', [Validators.required,Validators.maxLength(300),Validators.minLength(5)]);
   correo = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]);
 
   cantidad = new FormControl('', [Validators.required,Validators.maxLength(10), Validators.pattern('[0-9]*$')]);
@@ -137,6 +137,8 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
   imageObj: File;
   keyUrl
   fullUrl:string
+  public loading = true;
+  public advertencia;
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _uploadService:UploadService,private router: Router,
     private _donacionService:DonacionService,
@@ -155,18 +157,21 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
 
   ngOnInit() {
     this.actualPage2();
-    $(document).ready(()=>{
-     $("#tamDrop").change(()=>{
- 
-       this.select = $("#tamDrop").val();
-       this.filtroBSQD(this.select)
-   });
- 
- 
- }); 
+    this.changeFiltros()
   }
   ngDoCheck(){
       this.filtroBSQ = this._donacionService.obtFiltroDonacion();
+  }
+  changeFiltros(){
+    $(document).ready(()=>{
+      $("#tamDrop").change(()=>{
+  
+        this.select = $("#tamDrop").val();
+        this.filtroBSQD(this.select)
+    });
+  
+  
+  }); 
   }
   actualPage2(){
     this.type = '';
@@ -175,6 +180,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
      
       let tipo = params['tipo'];
       this.type = tipo;
+      console.log(this.keyUrl)
       this.idFun = this.keyUrl[2]
 
       this.obtFundacion(this.idFun)
@@ -203,7 +209,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
             this.filtroBTN = true;
             //devolver listado de usuarios
             console.log(this.filtroBSQ)
-            this.buscarDonaciones(page)
+           
             $(document).ready(()=>{
             this.filtroBSQ.forEach(elem => {
               if(elem.tipo == 'tipo'){
@@ -218,7 +224,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
           });
             this.filtroBTN = false;
             //devolver listado de usuarios
-            this.obtDonaciones(page);
+            
           }
       }
   
@@ -233,7 +239,15 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
         
         this.carga == false
         this.fundacion = response.usuario;
-        
+        if(this.currentUser && this.currentUser.usuario._id == this.idFun){
+          if(this.type == 'busqueda'){
+            this.buscarDonaciones(this.page)
+          }else{
+            this.obtDonaciones(this.page);
+          }
+        }
+       
+        this.changeFiltros()
       },
       error=>{
         this.router.navigate(['**']);  
@@ -244,7 +258,9 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
 
   }
   obtDonaciones(page){
+    this.loading = true;
     this.pagesSelec = []
+    this.donaciones = []
     this._donacionService.obtDonaciones(this.idFun,page).subscribe(
       response =>{
         this.carga = false;
@@ -257,11 +273,19 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
             this.pagesSelec.push(i)
             
           }
-         
+          this.advertencia = false;
+          this.loading = false;
+         $(document).ready(()=>{
+         $(".content-grid-cards").addClass('visible')
+         })
         
       },
       error=>{
+        this.donaciones = []
         this.carga = false;
+      
+        this.loading = false;
+        this.advertencia = true;
         var errorMessage = <any>error;
           console.log(errorMessage)
          
@@ -279,7 +303,9 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
     )
   }
   buscarDonaciones(page,adding=false){
+    this.loading = true;
    this.pagesSelec = []
+   this.donaciones = []
     this._donacionService.filtroDonaciones(this.idFun,this.filtroBSQ,page).subscribe(
       response=>{
         this.carga = false;
@@ -294,7 +320,11 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
           this.pages = response.pages;
           this.itemsPerPage = response.itemsPerPage;
           this.donaciones = response.donaciones;
-         
+          this.advertencia = false;
+          this.loading = false;
+         $(document).ready(()=>{
+         $(".content-grid-cards").addClass('visible')
+         })
           for (let i = 1; i <= this.pages; i++) {
             this.pagesSelec.push(i)
             
@@ -305,6 +335,9 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
       },
       error=>{
         this.donaciones = []
+       
+        this.loading = false;
+        this.advertencia =true;
         this.carga = false;
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
@@ -509,6 +542,7 @@ eliminarSeleccion(){
   fileChangeEvent2(event:any){
     const FILE = (event.target as HTMLInputElement).files[0];
     this.imageObj= FILE;
+    if(this.imageObj.type ==  "image/jpeg" || this.imageObj.type ==  "image/png" || this.imageObj.type ==  "image/jpg"){
     this.filesToUpload2 = <Array<File>>event.target.files;
     
      let files = <Array<File>>event.target.files;
@@ -527,6 +561,12 @@ eliminarSeleccion(){
      if(this.filesToUpload2 != undefined){
       this.imL2 = false;
     }
+  }else{
+    this.filesToUpload2 = undefined;
+    this.imL2 = false;
+    this.imgUN2 = undefined;
+     this._messageService.showError('Error','Solo se permite subir fotos.')
+  }
   }
 
  async registrarDonacion(stepper: MatStepper){

@@ -41,6 +41,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
   public currentUser;
   keyUrl
   fullUrl:string
+  public loading = true;
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _adopcionService:AdopcionService,private _userService:UserService,private authenticationService: AuthenticationService) {
       this.filtroBSQ = this._adopcionService.obtFiltro();
@@ -54,6 +55,14 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
 
      ngOnInit() {
       this.actualPage2();
+      this.changeFiltros()
+    }
+    ngDoCheck(){
+    
+      this.filtroBSQ = this._adopcionService.obtFiltro();
+  
+    } 
+    changeFiltros(){
       $(document).ready(()=>{
         $("#tamDrop").change(()=>{
   
@@ -63,13 +72,8 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
   
     });
     }
-    ngDoCheck(){
-    
-      this.filtroBSQ = this._adopcionService.obtFiltro();
-  
-    } 
   actualPage2(){
-
+    this.loading =true;
     this.type = '';
     this.pagesSelec = []
     this._route.params.subscribe(params =>{
@@ -104,7 +108,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         this.filtroBTN = true;
         //devolver listado de usuarios
         console.log(this.filtroBSQ)
-        this.buscarAdopciones(page)
+        
         $(document).ready(()=>{
         this.filtroBSQ.forEach(elem => {
           if(elem.tipo == 'tam'){
@@ -127,7 +131,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         console.log("entroN")
         this.filtroBTN = false;
         //devolver listado de adopciones
-        this.obtAdopciones(page);      }
+         }
       
 
       
@@ -142,7 +146,12 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         
         this.carga == false
         this.fundacion = response.usuario;
-        
+        if(this.type == 'busqueda'){
+          this.buscarAdopciones(this.page)
+        }else{
+          this.obtAdopciones(this.page);    
+        }
+        this.changeFiltros()
       },
       error=>{
         this._router.navigate(['**']);  
@@ -169,9 +178,10 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
 
   obtAdopciones(page){
     this.pagesSelec = []
+    this.adopciones = []
     this._adopcionService.obtAdopciones(page,this.idFun).subscribe(
       response =>{
-        this.advertencia = false;
+       
         this.carga = false;
         this.adopciones = response.adopciones;
         console.log(this.adopciones)
@@ -182,11 +192,16 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
             this.pagesSelec.push(i)
             
           }
-
+          this.advertencia =false;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
+         
+       
         
       },
       error=>{
         this.carga = false;
+        this.loading = false;
         this.advertencia = true;
         console.log(<any>error)
         var errorMessage = <any>error;
@@ -216,8 +231,7 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
           
 
           $(".carga").fadeOut("slow");
-         
-          this.advertencia = false;
+      
          // this.fotos = response.fot;
           this.total = response.total;
           this.pages = response.pages;
@@ -230,14 +244,15 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
             this.pagesSelec.push(i)
             
           }
-          //this.obtFotos(response.mascotas._id, page);
-          if(page > this.pages){
-            this._router.navigate[('/login')]
-          }
+          this.advertencia =false;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
+         
         }
       },
       error=>{
         this.carga = false;
+        this.loading = false;
         this.advertencia =true;
         this.status = 'error';
         $(".carga").fadeOut("slow");
@@ -302,5 +317,9 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
     
     
 
+  }
+  redirectAdopcion(idr,id){
+    this._router.navigate(['/perfil/adopcion/',idr,id]); 
+    
   }
 }

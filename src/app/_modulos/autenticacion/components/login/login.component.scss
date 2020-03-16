@@ -331,3 +331,11 @@ mat-horizontal-stepper{
 		font-size: 12px;
 	}
 }
+.direc{
+	display: flex;
+    flex-direction: column;
+	padding: 3em 0;
+	p{
+		font-size: 1.5rem;
+	}
+}

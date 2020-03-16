@@ -178,9 +178,18 @@ p ,a, button{
   }
 
   #team .fundaciones{
+      margin-top: 2em;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s 2s, opacity 2s linear;
+  }
+  .visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition: opacity 1s linear !important;
   }
   #team .yes i{
     color: #3bbfad;

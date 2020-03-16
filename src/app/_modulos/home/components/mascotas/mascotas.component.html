@@ -1,7 +1,10 @@
 
-<app-titulo-page [titulo]="titulo" [descripcion]="descripcion" [img]="img"></app-titulo-page>
+<app-titulo-page [titulo]="titulo" [descripcion]="descripcion" [descripcion2]="descripcion2" [img]="img"></app-titulo-page>
 
 <section class="main">
+
+       
+
     <div class="row content-grid">
         <div class="col-12 col-sm-3 content-grid-filtros">
             <form>
@@ -29,7 +32,7 @@
                         </select>
                       </div>
           
-                <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Ver todos</button>
+                <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Limpiar filtros <i class="fa fa-times-circle" aria-hidden="true"></i></button>
              
               </form>
               <div class="container dividerTi" *ngIf="carga == false">
@@ -38,53 +41,58 @@
                 
               </div>
         </div>
-        <div class="col-12 col-sm-9 content-grid-cards">
-            <mat-card *ngFor="let mascota of mascotas">
-                <div class="card-header">
-                    <div class="card-header-tex">
-                        <h5>{{mascota.ms.responsable.nombreFundacion}}</h5>
-                    </div>
-                    <div class="card-header-icon" (click)="redirectMascota(mascota.ms.nombre,'home',mascota.ms._id,mascota.ms.responsable._id)">
-                        <i class="fa fa-expand" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <div class="card-status">
-                    <span>{{mascota.ms.sexo}}</span>
-                </div>
-                <div class="card-body">
-                    <div class="card-body-title">
-                        <div class="card-body-title-text">
-                            <p>{{mascota.ms.nombre}}</p>
+        <div class="col-12 col-sm-9" style="position: relative; flex-direction: column; display: flex;align-items: center;">
+            <app-loading-custom style="position: absolute;" *ngIf="loading == true"></app-loading-custom>
+           <app-empty-element *ngIf="advertencia == true" [foto]="'mascotas.png'" [mensaje]="'No se encontro mascotas.'"></app-empty-element>
+            <div class=" content-grid-cards">
+                <mat-card *ngFor="let mascota of mascotas" class="custom-card">
+                    <div class="card-header">
+                        <div class="card-header-tex">
+                            <h5>{{mascota.ms.responsable.nombreFundacion}}</h5>
                         </div>
-                        <div class="card-body-title-photo">
-                            <img (click)="verFoto(mascota.photo.name)" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
-                                mascota.photo.name}}" class="d-block w-100" alt="mascota">
-                        </div>
+                        <button type="button" class="card-header-icon"  (click)="redirectMascota(mascota.ms.nombre,'home',mascota.ms._id,mascota.ms.responsable._id)">
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                        </button> 
                     </div>
-                    <div class="card-body-subtitle">
-                        <p><span>Raza: </span> {{mascota.ms.raza}}</p>
+                    <div class="card-status">
+                        <span>{{mascota.ms.sexo}}</span>
                     </div>
-                    <div class="card-footer">
-                        <div class="card-footer-title">
-                             <span>Edad</span>
+                    <div class="card-body">
+                        <div class="card-body-title">
+                            <div class="card-body-title-text">
+                                <p>{{mascota.ms.nombre}}</p>
+                            </div>
+                            <div class="card-body-title-photo">
+                                <img (click)="verFoto(mascota.photo.name)" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                    mascota.photo.name}}" class="d-block w-100" alt="mascota">
+                            </div>
                         </div>
-                        <div class="card-footer-text">
-                            <p >{{mascota.ms.edadT}} 
-                          
-                                <span *ngIf="mascota.ms.anios > 1 && mascota.ms.meses > 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} años y {{mascota.meses}} meses)</span>
-                                <span *ngIf="mascota.ms.anios > 1 && mascota.ms.meses == 0" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} años)</span>
-                                <span *ngIf="mascota.ms.anios == 0 && mascota.ms.meses > 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.meses}} meses)</span>
-                                
-                                <span *ngIf="mascota.ms.anios == 1 && mascota.ms.meses == 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} año y {{mascota.meses}} mes)</span>
-                                <span *ngIf="mascota.ms.anios == 1 && mascota.ms.meses == 0" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} año)</span>
-                                <span *ngIf="mascota.ms.anios == 0 && mascota.ms.meses == 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.meses}} mes)</span>
+                        <div class="card-body-subtitle">
+                            <p><span>Raza: </span> {{mascota.ms.raza}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-footer-title">
+                                 <span>Edad</span>
+                            </div>
+                            <div class="card-footer-text">
+                                <p >{{mascota.ms.edadT}} 
                               
-                              </p>
+                                    <span *ngIf="mascota.ms.anios > 1 && mascota.ms.meses > 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} años y {{mascota.meses}} meses)</span>
+                                    <span *ngIf="mascota.ms.anios > 1 && mascota.ms.meses == 0" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} años)</span>
+                                    <span *ngIf="mascota.ms.anios == 0 && mascota.ms.meses > 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.meses}} meses)</span>
+                                    
+                                    <span *ngIf="mascota.ms.anios == 1 && mascota.ms.meses == 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} año y {{mascota.meses}} mes)</span>
+                                    <span *ngIf="mascota.ms.anios == 1 && mascota.ms.meses == 0" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.anios}} año)</span>
+                                    <span *ngIf="mascota.ms.anios == 0 && mascota.ms.meses == 1" class="text-muted" style="text-transform: initial; font-size: .7rem;">({{mascota.ms.meses}} mes)</span>
+                                  
+                                  </p>
+                            </div>
                         </div>
+    
                     </div>
-
-                </div>
-            </mat-card>
+                </mat-card>
+            </div>
+        
         </div>
         <div class="col-12 col-sm-3"></div>
         <div class="col-12 col-sm-9">
@@ -148,4 +156,3 @@
   
   </div>
 
-  <app-footer></app-footer>

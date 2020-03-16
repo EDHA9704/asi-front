@@ -28,32 +28,37 @@ $asi-front-theme: mat-light-theme($asi-front-primary, $asi-front-accent, $asi-fr
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%;  font-size: 10px; }
+html, body { height: 100%;  font-size: 10px; overflow-x: hidden; }
 body { margin: 0;  }
-html::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 8px;     /* Tamaño del scroll en vertical */
     height: 8px;    /* Tamaño del scroll en horizontal */
     
 }
-html::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 4px;
 }
 
 /* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
-html::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
     background: #3bbfad;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 /* Cambiamos el fondo cuando esté en active */
-html::-webkit-scrollbar-thumb:active {
+*::-webkit-scrollbar-thumb:active {
     background-color: #999999;
 }
+*::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
 h1{
     font-family: 'Righteous', cursive;
 }
-p{
+p,li{
     font-family: 'Exo',sans-serif;
    
 }

@@ -3,7 +3,8 @@ import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthenticationService } from 'src/app/_shared/services';
 import { NotificacionService } from 'src/app/_shared/services/notificacion.service';
 import { environment } from '../../../../environments/environment';
-declare var $:any;
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
+import $ from "jquery";
 @Component({
   selector: 'app-main-header',
   templateUrl: './main-header.component.html',
@@ -20,16 +21,18 @@ export class MainHeaderComponent implements OnInit {
   public status;
   public mensaje;
   private signal:any;
+  public photoFF :any;
   linksHome = [
-    {name:'Inicio',root:'/home/inicio'},
-    {name:'Mascotas',root:'/home/mascotas/todos/1'},
-    {name:'Fundaciones',root:'/home/fundaciones/todos/1'},
-    {name:'Emergencias',root:'/home/emergencias/todos/1'},
+    {name:'Inicio',root:'home/inicio'},
+    {name:'Fundaciones',root:'home/fundaciones/todos/1'},
+    {name:'Mascotas',root:'home/mascotas/todos/1'},
+    
+    {name:'Emergencias',root:'home/emergencias/todos/1'},
   ]
   linksAdmin = [
-    {name:'Panel de usuarios',root:'/admin/usuarios'},
-    {name:'Aprobar cuentas',root:'/admin/cuentas/all/1'},
-    {name:'Registrar fundación',root:'/admin/fundacion-reg'}
+    {name:'Panel de usuarios',root:'admin/usuarios'},
+    {name:'Aprobar cuentas',root:'admin/cuentas/all/1'},
+    {name:'Registrar fundación',root:'admin/fundacion-reg'}
   ]
   linksFundacionesSN:any[]= []
   linksFundacionesa:any[]= []
@@ -38,23 +41,35 @@ export class MainHeaderComponent implements OnInit {
   fullUrl:string
   permission:any
   public url
+  public fundacionSelec:any
   constructor(public router: Router,private authenticationService: AuthenticationService,
-    private _notificacionService:NotificacionService) {
+    private _notificacionService:NotificacionService,private _communicationService:CommunicationService) {
     this.fullUrl = this.router.url.toString()
     this.keyUrl = this.fullUrl.split('/')
-    this.cargaN = true;
+    //this.cargaN = true;
     this.page = 1;
     this.url = environment.apiUrl;
    }
 
   ngOnInit() {
-    console.log(this.currentUser)
-    
-    this.getLinks()
-  $( document ).ready(()=> {
-  this.styleHeader()
+    this._communicationService.fundacionSelec.subscribe(res=>{
+      
+      this.photoFF  = res
+      this.getLinks()
+      this.styleHeader()
+      $(window).scroll(function() {
+        var height = $(window).scrollTop();
+        console.log(height)
+        if(height > 100) {
+          $('#header').addClass('active');
+        } else {
+          $('#header').removeClass('active');
+        }
+      });
+    })
     this.toggle()
-});
+
+   
   }
   toggle(){
     const selectElement = (s:any) => document.querySelector(s)
@@ -73,52 +88,96 @@ export class MainHeaderComponent implements OnInit {
     $( document ).ready(()=> {
       this.fullUrl = this.router.url.toString()
     this.keyUrl = this.fullUrl.split('/')
-      if(this.keyUrl[1] == 'home' && this.keyUrl[2] == 'inicio'){
-        $("#header").addClass('transparentHeader')
-        $("#header").removeClass('greenHeader')
+    console.log("ENTRO EN STYLES")
+
+    if(this.keyUrl[1] == 'home' && this.keyUrl[2] == 'inicio'){
+      $("#header").addClass('transparentHeader')
+      $("#header").removeClass('greenHeader')
+      $("#header a").removeClass('nav-link-custom')
+    }else if(this.keyUrl[1] == 'home' && this.keyUrl[2] != 'inicio'){
+      $("#header").addClass('greenHeader')
+        $("#header").removeClass('darkHeader')
+        $("#header").removeClass('transparentHeader')
         $("#header a").removeClass('nav-link-custom')
-      }else if(this.keyUrl[1] == 'fundacion' ){
-        
-        $("#header a").addClass('nav-link-custom')
+    }
+
+      if(this.keyUrl[1] == 'fundacion' ){
+          
+        $("#header a").addClass('nav-link-custom') 
         $("#header").addClass('darkHeader')
         $("#header").removeClass('transparentHeader')
       }
-      
-      else if(this.currentUser && this.keyUrl[1] == 'perfil')
-        {
+
+      if(this.currentUser && this.keyUrl[1] == 'admin'){
           $("#header").removeClass('greenHeader')
           $("#header").addClass('darkHeader')
           $("#header").removeClass('transparentHeader')
           $("#header a").addClass('nav-link-custom')
         }
-        else if(this.currentUser && this.keyUrl[1] == 'admin'){
-          $("#header").removeClass('greenHeader')
-          $("#header").addClass('darkHeader')
-          $("#header").removeClass('transparentHeader')
-          $("#header a").addClass('nav-link-custom')
-        }else{
+        
+        if(this.keyUrl[1] == 'perfil' && this.keyUrl[4] == 'home'){
         $("#header").addClass('greenHeader')
         $("#header").removeClass('darkHeader')
         $("#header").removeClass('transparentHeader')
         $("#header a").removeClass('nav-link-custom')
+      }else if(this.keyUrl[1] == 'perfil' && this.keyUrl[4] == 'fund'){
+        $("#header").removeClass('greenHeader')
+        $("#header").addClass('darkHeader')
+        $("#header").removeClass('transparentHeader')
+        $("#header a").addClass('nav-link-custom')
+      }else if(!this.currentUser && this.keyUrl[1] == 'perfil' && this.keyUrl[2] != 'mascota'){
+        
+        $("#header").addClass('greenHeader')
+        $("#header").removeClass('darkHeader')
+        $("#header").removeClass('transparentHeader')
+        $("#header a").removeClass('nav-link-custom')
+      }else if(this.currentUser && this.keyUrl[1] == 'perfil' && this.keyUrl[2] != 'mascota'){
+        $("#header").removeClass('greenHeader')
+        $("#header").addClass('darkHeader')
+        $("#header").removeClass('transparentHeader')
+        $("#header a").addClass('nav-link-custom')
       }
+      
   });
   }
-  getLinks(){
+ async getLinks(){
+
     var idKey = ''
     this.fullUrl = this.router.url.toString()
     this.keyUrl = this.fullUrl.split('/')
     if(!this.currentUser && this.keyUrl[1] == 'home') {this.mainLinks = this.linksHome}
     else if(!this.currentUser && this.keyUrl[1] == 'fundacion'){
+      
       this.permission = false;
       this.mainLinks = [
-        {name:'Nosotros',root:'/fundacion/'+this.keyUrl[2]+'/nosotros'},
-        {name:'Mascotas',root:'/fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
+        {name:'Nosotros',root:'fundacion/'+this.keyUrl[2]+'/nosotros'},
+        {name:'Mascotas',root:'fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
        
-        {name:'Donaciones',root:'/fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
+        {name:'Donaciones',root:'fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
        
-        {name:'Contactanos',root:'/fundacion/'+this.keyUrl[2]+'/contactanos'},
+        {name:'Contactanos',root:'fundacion/'+this.keyUrl[2]+'/contactanos'},
       ]
+    }else if(!this.currentUser && this.keyUrl[1] == 'perfil'){
+      
+      
+      this.permission = false;
+      if(this.keyUrl[2] == 'mascota' && this.keyUrl[4] == 'fund'){
+        this.mainLinks = [
+          {name:'Nosotros',root:'fundacion/'+this.keyUrl[3]+'/nosotros'},
+          {name:'Mascotas',root:'fundacion/'+this.keyUrl[3]+'/mascotas/todos/1'},
+         
+          {name:'Donaciones',root:'fundacion/'+this.keyUrl[3]+'/donaciones/todos/1'},
+         
+          {name:'Contactanos',root:'fundacion/'+this.keyUrl[3]+'/contactanos'},
+        ]
+      }else if(this.keyUrl[2] == 'mascota' && this.keyUrl[4] == 'home'){
+        this.mainLinks = this.linksHome
+      }
+      
+      if(this.keyUrl[2] != 'mascota'){
+        this.mainLinks = this.linksHome
+      }
+     
     }
 
 
@@ -137,35 +196,35 @@ export class MainHeaderComponent implements OnInit {
         if(this.currentUser.usuario._id == idKey){
           this.permission = true;
           this.mainLinks = [
-            {name:'Nosotros',root:'/fundacion/'+this.currentUser.usuario._id+'/nosotros'},
-            {name:'Mascotas',root:'/fundacion/'+this.currentUser.usuario._id+'/mascotas/todos/1'},
-            {name:'Emergencias',root:'/fundacion/'+this.currentUser.usuario._id+'/emergencias/todos/1'},
-            {name:'Donaciones',root:'/fundacion/'+this.currentUser.usuario._id+'/donaciones/todos/1'},
-            {name:'Adopciones',root:'/fundacion/'+this.currentUser.usuario._id+'/adopciones/todos/1'},
-            {name:'Voluntarios',root:'/fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
-            {name:'Contactanos',root:'/fundacion/'+this.currentUser.usuario._id+'/contactanos'},
+            {name:'Nosotros',root:'fundacion/'+this.currentUser.usuario._id+'/nosotros'},
+            {name:'Mascotas',root:'fundacion/'+this.currentUser.usuario._id+'/mascotas/todos/1'},
+            {name:'Emergencias',root:'fundacion/'+this.currentUser.usuario._id+'/emergencias/todos/1'},
+            {name:'Donaciones',root:'fundacion/'+this.currentUser.usuario._id+'/donaciones/todos/1'},
+            {name:'Adopciones',root:'fundacion/'+this.currentUser.usuario._id+'/adopciones/todos/1'},
+            {name:'Voluntarios',root:'fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
+            {name:'Contactanos',root:'fundacion/'+this.currentUser.usuario._id+'/contactanos'},
           ]
         }else{
           this.permission = false;
           this.mainLinks = [
-            {name:'Nosotros',root:'/fundacion/'+this.keyUrl[2]+'/nosotros'},
-            {name:'Mascotas',root:'/fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
+            {name:'Nosotros',root:'fundacion/'+this.keyUrl[2]+'/nosotros'},
+            {name:'Mascotas',root:'fundacion/'+this.keyUrl[2]+'/mascotas/todos/1'},
            
-            {name:'Donaciones',root:'/fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
+            {name:'Donaciones',root:'fundacion/'+this.keyUrl[2]+'/donaciones/todos/1'},
            
-            {name:'Contactanos',root:'/fundacion/'+this.keyUrl[2]+'/contactanos'},
+            {name:'Contactanos',root:'fundacion/'+this.keyUrl[2]+'/contactanos'},
           ]
         }
       }else{
         this.permission = true;
         this.mainLinks = [
-          {name:'Nosotros',root:'/fundacion/'+this.currentUser.usuario._id+'/nosotros'},
-          {name:'Mascotas',root:'/fundacion/'+this.currentUser.usuario._id+'/mascotas/todos/1'},
-          {name:'Emergencias',root:'/fundacion/'+this.currentUser.usuario._id+'/emergencias/todos/1'},
-          {name:'Donaciones',root:'/fundacion/'+this.currentUser.usuario._id+'/donaciones/todos/1'},
-          {name:'Adopciones',root:'/fundacion/'+this.currentUser.usuario._id+'/adopciones/todos/1'},
-          {name:'Voluntarios',root:'/fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
-          {name:'Contactanos',root:'/fundacion/'+this.currentUser.usuario._id+'/contactanos'},
+          {name:'Nosotros',root:'fundacion/'+this.currentUser.usuario._id+'/nosotros'},
+          {name:'Mascotas',root:'fundacion/'+this.currentUser.usuario._id+'/mascotas/todos/1'},
+          {name:'Emergencias',root:'fundacion/'+this.currentUser.usuario._id+'/emergencias/todos/1'},
+          {name:'Donaciones',root:'fundacion/'+this.currentUser.usuario._id+'/donaciones/todos/1'},
+          {name:'Adopciones',root:'fundacion/'+this.currentUser.usuario._id+'/adopciones/todos/1'},
+          {name:'Voluntarios',root:'fundacion/'+this.currentUser.usuario._id+'/voluntarios/todos/1'},
+          {name:'Contactanos',root:'fundacion/'+this.currentUser.usuario._id+'/contactanos'},
         ]
       }
 

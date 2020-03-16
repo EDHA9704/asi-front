@@ -160,7 +160,7 @@ export class AprobarComponent implements OnInit {
                 this.fundacionesNA.push(e)
             
             });
-          
+            $(".fundaciones").addClass('visible')
              
             if (page > this.pages) {
               console.log("AQUIIentro")
@@ -427,7 +427,7 @@ export class AprobarComponent implements OnInit {
   }
   procesoCuenta(op,user){
     console.log(user)
-    this.fundacion2 = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0);
+    this.fundacion2 = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0);
     if(op == 'yes'){
       this.fundacion2 = user;
       this.aprobarC = true;

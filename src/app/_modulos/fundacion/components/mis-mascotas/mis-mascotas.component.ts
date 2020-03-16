@@ -20,7 +20,8 @@ export class MisMascotasComponent implements OnInit {
   @ViewChild('stepper', {static: true}) private myStepper: MatStepper;
   totalStepsCount: number;
   imageObj: File;
-  nombre = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(20),Validators.minLength(5)]);
+  nombre = new FormControl('', [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(20),Validators.minLength(3)]);
+  otherVacunas = new FormControl('', [ Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ 0-9 ; : . , -]*$'), Validators.maxLength(50),Validators.minLength(2)]);
   especie = new FormControl('', [Validators.required]);
   sexo = new FormControl('', [Validators.required]);
   raza = new FormControl('', [Validators.required]);
@@ -66,12 +67,19 @@ export class MisMascotasComponent implements OnInit {
   public imgUN2:any;
   public imL2 = false;
   public mascota:Mascota;
-
+  public loading = true;
+  public advertencia
   getErrorMessage() {
     return this.nombre.hasError('required') ? 'El nombre es requerido' :
             this.nombre.hasError('pattern') ? 'No se acepta: símbolos, caracteres especiales, números':
             this.nombre.hasError('maxlength') ? 'Máximo 20 caracteres':
             this.nombre.hasError('minlength') ? 'Mínimo 5 caracteres':
+            '';
+  }
+  getErrorMessageOTHER() {
+    return this.otherVacunas.hasError('pattern') ? 'No se acepta: símbolos, caracteres especiales, números':
+            this.otherVacunas.hasError('maxlength') ? 'Máximo 50 caracteres':
+            this.otherVacunas.hasError('minlength') ? 'Mínimo 2 caracteres':
             '';
   }
   getErrorMessage2() {
@@ -137,29 +145,36 @@ export class MisMascotasComponent implements OnInit {
     }
 
   ngOnInit() {
+    console.log("entro MASC")
     this.actualPage2();
     $(document).ready(()=>{
       this.prob()
             
         });
+   
+      this.changeFiltro()
+
+  
+  }
+
+  changeFiltro(){
     $(document).ready(()=>{
-      $("#tamDrop").change(()=>{
+    $("#tamDrop").change(()=>{
 
-        this.select = $("#tamDrop").val();
-        this.filtroBSQD(this.select)
-    });
-    $("#sexoDrop").change(()=>{
-
-      this.select = $("#sexoDrop").val();
+      this.select = $("#tamDrop").val();
       this.filtroBSQD(this.select)
   });
-  $("#edadDrop").change(()=>{
+  $("#sexoDrop").change(()=>{
 
-    this.select = $("#edadDrop").val();
+    this.select = $("#sexoDrop").val();
     this.filtroBSQD(this.select)
 });
+$("#edadDrop").change(()=>{
 
-  });  
+  this.select = $("#edadDrop").val();
+  this.filtroBSQD(this.select)
+});
+});  
   }
   actualPage2(){
     this.type = '';
@@ -194,7 +209,7 @@ export class MisMascotasComponent implements OnInit {
           this.filtroBTN = true;
           //devolver listado de usuarios
           console.log("entroB")
-          this.buscarMascotas(page)
+          
           $(document).ready(()=>{
           this.filtroBSQ.forEach(elem => {
             if(elem.tipo == 'tam'){
@@ -217,7 +232,8 @@ export class MisMascotasComponent implements OnInit {
           console.log("entroN")
           this.filtroBTN = false;
           //devolver listado de usuarios
-          this.obtMascotas(page);
+          this.loading = true
+          
         }
     });
     
@@ -230,10 +246,15 @@ export class MisMascotasComponent implements OnInit {
         
         this.carga == false
         this.fundacion = response.usuario;
-         
+        this.changeFiltro()
+        if(this.type == 'busqueda'){
+          this.buscarMascotas(this.page)
+        }else{
+          this.obtMascotas(this.page);
+        }
       },
       error=>{
-        this.router.navigate(['**']);  
+        //this.router.navigate(['**']);  
         console.log(<any>error);
       }
     )
@@ -241,62 +262,72 @@ export class MisMascotasComponent implements OnInit {
   
   }
   obtMascotas(page,adding=false){
-    this.pagesSelec = []
-    this.mascotas = []
-    this._mascotaService.obtMisMascotas(this.idFun,page).subscribe(
-        response=>{
-          this.carga = false;
-          if(response.mascotas && response.n == '1'){
-
-            $('.conL').fadeOut('fast');
-           
-            this.total= response.total;
-            this.pages = response.pages;
-            this.itemsPerPage = response.itemsPerPage;
-            response.mascotas.forEach(ms => {
-              var tem =  ms.fotos.filter(ph => ph.estado == 'activo' );
-              this.mascotas.push({ms:ms,photo:tem[0]})
-              
-            });
-            for (let i = 1; i <= this.pages; i++) {
-              this.pagesSelec.push(i)
-              
-            }
-            this.itemsMSC = this.mascotas.length;
-            this.mensaje = response.message;
-           
+    if(this.fundacion){
+      this.loading = true
+      this.pagesSelec = []
+      this.mascotas = []
+      this._mascotaService.obtMisMascotas(this.idFun,page).subscribe(
+          response=>{
+            console.log(response)
+            this.carga = false;
+            if(response.mascotas && response.n == '1'){
   
-          }else{
-          //this.status = 'error';
-          }
-        },
-        error=>{
-         
-
-          //this.status = 'error';  
-        this.carga = false;
-       // this.advertencia = true;
-          var errorMessage = <any>error;
-          
-          //this.status = 'error';
-          if(errorMessage != null && error.error.n == '2'){
-           
-            this.mensaje = 'Lo sentimos, '+error.error.message;
-          }else if(errorMessage != null && error.error.n == '3'){
-           
-            this.mensaje = error.error.message;
-          }else{
+              $('.conL').fadeOut('fast');
+             
+              this.total= response.total;
+              this.pages = response.pages;
+              this.itemsPerPage = response.itemsPerPage;
+              response.mascotas.forEach(ms => {
+                var tem =  ms.fotos.filter(ph => ph.estado == 'activo' );
+                this.mascotas.push({ms:ms,photo:tem[0]})
+                
+              });
+              this.loading = false;
+              $(document).ready(()=>{
+              $(".content-grid-cards").addClass('visible')
+              })
+              for (let i = 1; i <= this.pages; i++) {
+                this.pagesSelec.push(i)
+                
+              }
+              this.advertencia =false;
+              
+              this.itemsMSC = this.mascotas.length;
+              this.mensaje = response.message;
+             
+    
+            }else{
+            //this.status = 'error';
+            }
+          },
+          error=>{
+            this.mascotas = []
+           console.log(<any>error)
+            this.loading = false;
+            //this.status = 'error';  
+          this.carga = false;
+           this.advertencia = true;
+            var errorMessage = <any>error;
             
-            this.mensaje = 'Algo salio mal.'
+            //this.status = 'error';
+            if(errorMessage != null && error.error.n == '2'){
+             
+              this.mensaje = 'Lo sentimos, '+error.error.message;
+            }else if(errorMessage != null && error.error.n == '3'){
+             
+              this.mensaje = error.error.message;
+            }else{
+              
+              this.mensaje = 'Algo salio mal.'
+            }
           }
-        }
-      )
-     
+        )
    
-
-
+    }
+  
   }
   buscarMascotas(page,adding=false){
+    this.loading = true;
     console.log("ENTROBUSQUDA")
     this.pagesSelec = []
     this.mascotas = []
@@ -319,6 +350,9 @@ export class MisMascotasComponent implements OnInit {
             this.pagesSelec.push(i)
             
           }
+          this.advertencia =false;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
           this.itemsMSC = this.mascotas.length;
        
           //this.obtFotos(response.mascotas._id, page);
@@ -328,11 +362,14 @@ export class MisMascotasComponent implements OnInit {
         }
       },
       error=>{
+        this.mascotas = []
         this.carga = false;
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
        console.log(<any>error)
-        
+       this.loading = false;
+       this.advertencia = true;
+      
         if(errorMessage != null && errorMessage.error.n == '2'){
           this.mensaje = 'Lo sentimos, '+error.error.message;
           this.mascotas = null;
@@ -496,7 +533,7 @@ export class MisMascotasComponent implements OnInit {
    fileChangeEvent2(event:any){
     const FILE = (event.target as HTMLInputElement).files[0];
     this.imageObj= FILE;
-  
+    if(this.imageObj.type ==  "image/jpeg" || this.imageObj.type ==  "image/png" || this.imageObj.type ==  "image/jpg"){
      this.filesToUpload2 = <Array<File>>event.target.files;
      
       let files = <Array<File>>event.target.files;
@@ -515,9 +552,15 @@ export class MisMascotasComponent implements OnInit {
       if(this.filesToUpload2 != undefined){
        this.imL2 = false;
      }
+    }else{
+      this.filesToUpload2 = undefined;
+     this.imL2 = false;
+     this.imgUN2 = undefined;
+      this._messageService.showError('Error','Solo se permite subir fotos.')
+    }
    }
    registrarMascota(stepper: MatStepper){
-    this.mascota = new Mascota("","","","","","","","","","","","","","","","","","","","");
+    this.mascota = new Mascota("","","","","","","","","","","","","","","","","","","","","");
 
     this.mascota.nombre = this.nombre.value;
     this.mascota.nombreFundacion = this.fundacion.nombreFundacion
@@ -542,7 +585,7 @@ export class MisMascotasComponent implements OnInit {
     this.mascota.anios = this.anios.value;
     this.mascota.meses = this.meses.value;
     this.mascota.descripcion = this.descripcion.value;
-  
+    this.mascota.otherVacunas = this.otherVacunas.value;
 
     if(
 
@@ -655,6 +698,10 @@ export class MisMascotasComponent implements OnInit {
          
       this.nombre.setValue(this.limpiarCampo(this.nombre.value));
 }); 
+$("#vacunas").keyup(()=>{
+         
+  this.otherVacunas.setValue(this.limpiarCampo(this.otherVacunas.value));
+}); 
 $("#descripcion").keyup(()=>{
          
   this.descripcion.setValue(this.limpiarCampo(this.descripcion.value));
@@ -675,7 +722,7 @@ $("#descripcion").keyup(()=>{
   }
 
   redirectMascota(nombre,id,idr){
-    this._router.navigate(['/perfil/mascota/',idr,nombre,id]); 
+    this._router.navigate(['/perfil/mascota/',idr,'fund',nombre,id]); 
     
   }
  public croppedImage

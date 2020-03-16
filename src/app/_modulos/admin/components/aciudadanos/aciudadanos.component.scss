@@ -13,6 +13,21 @@
     width: 100%;
     position: relative;
 }
+.btnVlidFoto{
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem;
+}
+
+.btnVlidFoto button:nth-child(1){
+    background: #3bbfad;
+    border: 1px solid #3bbfad;
+    margin-right: 10px;
+}
+.btnVlidFoto button:nth-child(2){
+   
+    margin-right: 10px;
+}
 .containerLoad{
     
     height: 12%;

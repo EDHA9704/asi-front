@@ -65,11 +65,7 @@
     </div>
   </div>
 
-<div class="containerLoad" *ngIf="carga == true">
-    <div class="loading">
-        <span>Cargando...</span>
-      </div>
-</div>
+
 
 
 <section class="team" id="team">
@@ -81,72 +77,79 @@
     </div>
     
     <!--TODAS LAS FUNDACIONES POR APROBAR-->
-    <div class="row" *ngIf="verTodas == 'si'">
-      <div class="col-12 fundaciones">
-        <div class="card" *ngFor="let fund of fundacionesNA">
-          <div class="card-body">
-              <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fund.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
-                fund.logo}}">
-              <img class="img-fluid rounded-circle w-50 mb-3" *ngIf="!fund.logo" src="../../../../assets/img/Captura2.png">
-            <h3 matTooltip="Nombre">{{fund.nombreFundacion}}</h3>
-            <h5 class="hace">{{(fund.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
-            <div class="info">
-              <div class="item">
-                <div class="icon">
-                    <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-                </div>
-                  <p> Fundada el {{fund.fechaFundacion}}</p>
-              </div>
-              <div class="item">
-                <div class="icon">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                </div>
-                  <p matTooltip="Representante"> {{fund.representante}}</p>
-              </div>
-              <div class="item">
+    <div class="row" *ngIf="verTodas == 'si'" style="display: flex;
+    flex-direction: column;
+    align-items: center;">
+      <app-loading-custom style="position: absolute; " *ngIf="carga == true" ></app-loading-custom>
+
+      <div class="col-12 ">
+        <div class="fundaciones">
+          <div class="card" *ngFor="let fund of fundacionesNA">
+            <div class="card-body">
+                <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fund.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                  fund.logo}}">
+                <img class="img-fluid rounded-circle w-50 mb-3" *ngIf="!fund.logo" src="../../../../assets/img/Captura2.png">
+              <h3 matTooltip="Nombre">{{fund.nombreFundacion}}</h3>
+              <h5 class="hace">{{(fund.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
+              <div class="info">
+                <div class="item">
                   <div class="icon">
-                      <i class="fa fa-envelope" aria-hidden="true"></i>
+                      <i class="fa fa-birthday-cake" aria-hidden="true"></i>
                   </div>
-                    <p matTooltip="Correo"> {{fund.correo}}</p>
+                    <p> Fundada el {{fund.fechaFundacion}}</p>
                 </div>
-               
-              <div class="item">
-                <div class="icon">
-                    <i class="fa fa-phone-square" aria-hidden="true"></i>
-                </div>
-                  <p matTooltip="Teléfono"> {{fund.telefono}}</p>
-              </div>
-              <div class="item">
-                <div class="icon">
-                    <i class="fa fa-phone-square" aria-hidden="true"></i>
-                </div>
-                  <p matTooltip="Celular"> {{fund.celular}}</p>
-              </div>
-              <div class="item">
+                <div class="item">
                   <div class="icon">
-                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                      <i class="fa fa-user" aria-hidden="true"></i>
                   </div>
-                    <p matTooltip="Dirección"> Sector {{fund.sector}}, barrio {{fund.barrio}}, calle principal {{fund.calleP}},
-                      calle secundaria {{fund.calleS}}
-                    </p>
+                    <p matTooltip="Representante"> {{fund.representante}}</p>
                 </div>
-            </div>
-            
-            
-          </div>
-          <div class="card-footer justify-content-center" >
-              <div class="p-1">
-                <a style="cursor: pointer;" (click)="procesoCuenta('yes',fund)" class="yes" matTooltip="Aprobar cuenta">
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                </a>
+                <div class="item">
+                    <div class="icon">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </div>
+                      <p matTooltip="Correo"> {{fund.correo}}</p>
+                  </div>
+                 
+                <div class="item">
+                  <div class="icon">
+                      <i class="fa fa-phone-square" aria-hidden="true"></i>
+                  </div>
+                    <p matTooltip="Teléfono"> {{fund.telefono}}</p>
+                </div>
+                <div class="item">
+                  <div class="icon">
+                      <i class="fa fa-phone-square" aria-hidden="true"></i>
+                  </div>
+                    <p matTooltip="Celular"> {{fund.celular}}</p>
+                </div>
+                <div class="item">
+                    <div class="icon">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </div>
+                      <p matTooltip="Dirección"> Sector {{fund.sector}}, barrio {{fund.barrio}}, calle principal {{fund.calleP}},
+                        calle secundaria {{fund.calleS}}
+                      </p>
+                  </div>
               </div>
               
-                <div class="p-1">
-                    <a style="cursor: pointer;" (click)="procesoCuenta('no',fund)" class="no" matTooltip="Negar cuenta">
-                        <i class="fa fa-times" aria-hidden="true"></i>                    </a>
-                  </div>
+              
             </div>
+            <div class="card-footer justify-content-center" >
+                <div class="p-1">
+                  <a style="cursor: pointer;" (click)="procesoCuenta('yes',fund)" class="yes" matTooltip="Aprobar cuenta">
+                      <i class="fa fa-check" aria-hidden="true"></i>
+                  </a>
+                </div>
+                
+                  <div class="p-1">
+                      <a style="cursor: pointer;" (click)="procesoCuenta('no',fund)" class="no" matTooltip="Negar cuenta">
+                          <i class="fa fa-times" aria-hidden="true"></i>                    </a>
+                    </div>
+              </div>
+          </div>
         </div>
+        
       </div>
     </div>
         <div class="row pp" *ngIf="carga == false && advertencia == false && verTodas == 'si' ">

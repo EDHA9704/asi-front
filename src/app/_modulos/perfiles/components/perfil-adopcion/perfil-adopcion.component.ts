@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { FormControl, Validators } from '@angular/forms';
 import {environment} from '../../../../../environments/environment'
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 declare var google:any;
 declare var $:any;
 @Component({
@@ -34,8 +36,11 @@ export class PerfilAdopcionComponent implements OnInit {
             '';
   }
   constructor(private _route:ActivatedRoute,
-    private _router:Router, private _adopcionService:AdopcionService,private _messageService:MessagesService) { 
+    private _router:Router, private _adopcionService:AdopcionService,
+    private _messageService:MessagesService,private _comunicationService:CommunicationService,private ngxService: NgxUiLoaderService) { 
+      this.ngxService.startLoader('loader-02');
       this.url = environment.apiUrl;
+      
     }
  
   ngOnInit() {
@@ -50,7 +55,7 @@ export class PerfilAdopcionComponent implements OnInit {
       let id = params['idA'];
       this.idm = id;
      
-      this.idFun = params['id']
+      this.idFun = params['id'] 
          this.obtAdopcion(id);
 
 
@@ -66,6 +71,8 @@ export class PerfilAdopcionComponent implements OnInit {
       response=>{
         if(response.adopcion && response.n == '1'){
           this.adopcion = response.adopcion;
+          this.ngxService.stopLoader('loader-02');
+          this._comunicationService.perfilFundacionSelec(this.adopcion.fundacion.logo)
           this.loadMap()
           var ff = this.adopcion.adoptante.fechaNacimiento; 
           var fs = new Date(ff)

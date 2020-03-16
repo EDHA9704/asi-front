@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/_shared/services';
 import { environment } from '../../../../../environments/environment';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 
 declare var $:any;
 @Component({
@@ -11,8 +12,9 @@ declare var $:any;
 })
 export class FundacionesComponent implements OnInit {
   titulo = 'Fundaciones'
-  descripcion = 'Mediante la unión de las fundaciones y ciudadanía es posible que decenas de perros y gatos callejeros,'+
+  descripcion = 'Mediante la unión de las fundaciones y ciudadanía es posible que decenas de perros y gatos callejeros, '+
   'encuentren familias que les brinden amor y protección, una vez finalizado su proceso de recuperación.'
+  descripcion2 = 'Fundaciones registradas en el sistema.'
   img = "depositphotos_147298583-stock-illustration-lovers-union-icon.jpg"
   public type;
  
@@ -36,7 +38,9 @@ export class FundacionesComponent implements OnInit {
   public status;
   public url;
   public select
-  constructor(private _route:ActivatedRoute,private _usuarioService:UserService,private _router:Router) { 
+  public loading = true;
+  constructor(private _route:ActivatedRoute,private _usuarioService:UserService,
+    private _router:Router,private _comunicationService:CommunicationService) { 
       this.carga = true;
       this.busqueda = false;
       this.advertencia = false;
@@ -44,6 +48,7 @@ export class FundacionesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._comunicationService.perfilFundacionSelec('')
     this.url = environment.apiUrl;
     this.page = 1;
     $(document).ready(()=>{
@@ -124,6 +129,7 @@ export class FundacionesComponent implements OnInit {
 
   obtnerFundacionesByNombre(){
     this.fundaciones = []
+    this.loading = true
     const nombre = $("#bsFunNombre").val();
    
     const resultado = document.querySelector('#busquedaUsers');
@@ -139,22 +145,13 @@ export class FundacionesComponent implements OnInit {
             this.fundaciones = response.usuarios;
             this.itemsFund = this.fundaciones.length;
             this.total = this.fundaciones.length;
-            if(this.fundaciones.length > 3 ){
-              $('#bsFN').addClass('cloBus')
-            }else{
-              $('#bsFN').removeClass('cloBus')
-            }
-            $('.clothes-pics figure').each(function(i){
-          
-              setTimeout(function(){
-                $('.clothes-pics figure').eq(i).addClass('is-showing');
-              }, 150 * (i+1));
-            });
-            
+            this.loading = false;
+            $(".content-grid-cards").addClass('visible')
 
           }
         },
         error=>{
+          console.log(<any>error)
           this.carga = false;
           $(".carga").fadeOut("slow");
           var errorMessage = <any>error;
@@ -212,7 +209,8 @@ export class FundacionesComponent implements OnInit {
           this.itemsFund = this.fundaciones.length * page;
           this.advertencia = false;
           this.status ='success';
-         
+          this.loading = false;
+            $(".content-grid-cards").addClass('visible')
           if(page > this.pages){
             this._router.navigate(['/fundaciones/todos/1'])
           }
@@ -289,6 +287,7 @@ export class FundacionesComponent implements OnInit {
     console.log("ENTROBUSQUEDA")
     this.pagesSelec = []
     this.fundaciones = []
+    this.loading = true;
         this._usuarioService.filtroFundaciones(this.filtroBSQ,page).subscribe(
           response=>{
            
@@ -308,6 +307,8 @@ export class FundacionesComponent implements OnInit {
               this.advertencia = false;
               this.status ='success';
               //this.obtFotos(response.mascotas._id, page);
+              this.loading = false;
+              $(".content-grid-cards").addClass('visible')
               if(page > this.pages){
                 this._router.navigate[('/fundaciones/todos/1')]
               }

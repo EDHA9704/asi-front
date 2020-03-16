@@ -11,30 +11,30 @@ import {AciudadanosComponent } from './components/aciudadanos/aciudadanos.compon
 import { AprobarComponent} from './components/aprobar/aprobar.component';
 import { NewfundacionComponent} from './components/newfundacion/newfundacion.component';
 
-import {MatStepperModule,MatInputModule,MatCheckboxModule, 
-  MatIconModule,MatSelectModule,MatButtonModule,MatMenuModule,
-  MatExpansionModule,MatFormFieldModule,MatDatepickerModule,MatNativeDateModule,MatCardModule, MatAutocompleteModule,MatPaginatorModule} from '@angular/material'
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+
   import {MomentModule} from 'angular2-moment';
-  import {MatTabsModule} from '@angular/material/tabs';
-  import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+
+
   import {MatTableModule} from '@angular/material/table';
 import { PanelComponent } from './components/panel/panel.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { NgxSpinnerModule } from "ngx-spinner";
+import {SharedModule} from 'src/app/_shared/shared.module'
 @NgModule({
   declarations: [AdminComponent,HeaderAdminComponent,AFundacionesComponent,NewfundacionComponent,
-  AvoluntariosComponent,AciudadanosComponent,AprobarComponent, PanelComponent],
+  AvoluntariosComponent,AciudadanosComponent,AprobarComponent, PanelComponent ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     MomentModule,
-    FormsModule,ReactiveFormsModule,
-    MatTabsModule,
+    NgxUiLoaderModule,
     MatTableModule,
-    MatPaginatorModule,
-    MatStepperModule,MatInputModule,MatCheckboxModule, 
+   
     MatTooltipModule,
-  MatIconModule,MatSelectModule,MatButtonModule,MatMenuModule,
-  MatExpansionModule,MatFormFieldModule,MatDatepickerModule,MatNativeDateModule,MatCardModule, MatAutocompleteModule
+    SharedModule,
+    NgxSpinnerModule,
+  
   ]
 })
 export class AdminModule { }

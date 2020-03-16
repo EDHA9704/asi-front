@@ -1,5 +1,5 @@
 import { Component, OnInit , ViewChild, DoCheck} from '@angular/core';
-import {MatPaginator} from '@angular/material';
+import {MatPaginator, MatDialog} from '@angular/material';
 import {MatTableDataSource} from '@angular/material'; 
 import {MatSort} from '@angular/material/sort';
 import {Router, ActivatedRoute, Params} from '@angular/router';
@@ -11,6 +11,8 @@ import {FormControl, Validators} from '@angular/forms';
 import { UploadService } from 'src/app/_shared/services/upload.service';
 import { environment } from '../../../../../environments/environment'; 
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
+import {MapCustomComponent} from 'src/app/_shared/components/map-custom/map-custom.component'
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 declare var $:any;
 @Component({
@@ -35,7 +37,7 @@ export class AFundacionesComponent implements OnInit {
   public carga;
   public edFun
   public statusValid;
-  displayedColumns: string[] = ['logo','nombreFundacion','representante','fechaFundacion','correo','telefono','celular','direccion','link','estado','accion'];
+  displayedColumns: string[] = ['logo','nombreFundacion','representante','correo','telefono','celular','estado','accion'];
  
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -62,7 +64,7 @@ export class AFundacionesComponent implements OnInit {
 
   nombres = new FormControl('', [Validators.required, Validators.pattern('[a-z A-Z áéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(25),Validators.minLength(4)]);
   fechaFunda = new FormControl('', [Validators.required]);
-  correo2 = new FormControl('', [Validators.required, Validators.pattern('[a-zA-ZñÑ0-9_]+([.][a-zA-ZñÑ0-9_]+)*@[a-zA-ZñÑ0-9_]+([.][a-zA-ZñÑ0-9_]+)*[.][a-zA-Z]{1,5}')]);
+  correo2 = new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]);
   password2 = new FormControl('', [Validators.required, Validators.maxLength(30),Validators.minLength(8), Validators.pattern(this.rgxPass2)]);
   logo = new FormControl('', [Validators.required]);
   id = new FormControl('', [Validators.required]);
@@ -78,6 +80,7 @@ export class AFundacionesComponent implements OnInit {
   representante = new FormControl('', [Validators.required, Validators.pattern(this.rg), Validators.maxLength(50),Validators.minLength(10)]);
   imageObj: File;
   public actualizarFunda = false;
+  public direccionSelec:any = ''
   getErrorMessage() {
     return this.nombres.hasError('required') ? 'El nombre es requerido' :
     this.nombres.hasError('pattern') ? 'No se admite: símbolos, caracteres especiales o números':
@@ -119,7 +122,7 @@ export class AFundacionesComponent implements OnInit {
     return this.telefono.hasError('required') ? 'Teléfono requerido' : 
     this.telefono.hasError('maxlength') ? 'Máximo 9 caracteres':
     this.telefono.hasError('minlength') ? 'Mínimo 9 caracteres': 
-    this.link.hasError('pattern') ? 'Número no válido':   
+    this.telefono.hasError('pattern') ? 'Número no válido':   
 
             '';
   }
@@ -163,14 +166,16 @@ export class AFundacionesComponent implements OnInit {
   }
   public currentUser;
   constructor(private _route:ActivatedRoute,
-    private _router:Router, private _userService:UserService,private _uploadService:UploadService,
-    private snackBar: MatSnackBar,private authenticationService: AuthenticationService,private _messageService:MessagesService) {
+    private _router:Router, private _userService:UserService,private _uploadService:UploadService,public dialog: MatDialog,
+    private snackBar: MatSnackBar,private authenticationService: AuthenticationService,private _messageService:MessagesService,
+    ) {
+     
       this.currentUser = this.authenticationService.currentUserValue;
       this.url = environment.apiUrl;
       this.newF = false;
-      this.usuarioFundacion = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
+      this.usuarioFundacion = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0)
      
-      this.carga = true;
+      
 
      }
 
@@ -241,16 +246,19 @@ $("#calleS").keyup(()=>{
   }
 
   obtFundaciones(){
+    this.carga = true;
     this._userService.obtUsuariosRolSP('4').subscribe(
       response=>{
         if(response.usuarios && response.n == '1'){
 
             this.fundaciones = response.usuarios;
+            
             $(".carga").fadeOut("slow");
 
             this.dataSource = new MatTableDataSource<UsuarioFundacion>(this.fundaciones);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+            $(".mat-elevation-z8").addClass('visible')
             this.carga = false;
 
         }else{
@@ -313,14 +321,26 @@ fileChangeEvent3(event:any){
    console.log(this.usuarioFundacion2)
 
    this.nombres.setValue(user.nombreFundacion);
-   this.fechaFunda.setValue(user.fechaFundacion)
+
+
+
+   var temDate = user.fechaFundacion.split("/")
+   console.log(temDate)
+   if(temDate[0] != '' && temDate[0] != null && temDate[0] != undefined){
+    var temDate2 = temDate[1]+'/'+temDate[0]+'/'+temDate[0]
+    var temdateFin = new Date(temDate2)
+   }else{
+    var temdateFin = new Date(user.fechaFundacion)
+   }
+   console.log(temdateFin)
+   this.fechaFunda.setValue(temdateFin)
    this.representante.setValue(user.representante);
    this.correo2.setValue(user.correo)
    this.telefono.setValue(user.telefono)
    this.celular.setValue(user.celular)
    this.sector.setValue(user.sector);
-   this.calleP.setValue(user.calleP)
-   this.calleS.setValue(user.calleS)
+   //this.calleP.setValue(user.calleP)
+   //this.calleS.setValue(user.calleS)
    this.barrio.setValue(user.barrio)
    $('#modalEditFun').modal('show');
    $(document).ready(()=>{
@@ -448,19 +468,24 @@ validarNM(op){
     // $('#modalEditFun').modal('hide');
     // console.log(this.fechaFunda.value)
      this.usuarioFundacion.nombreFundacion = this.nombres.value.trim();
-  
-     this.usuarioFundacion.fechaFundacion = this.fechaFunda.value;
+     var fec = new Date( this.fechaFunda.value);
+     var fechaFin = fec.toLocaleDateString();
+     this.usuarioFundacion.fechaFundacion = fechaFin;
      this.usuarioFundacion.correoFundacion = this.correo2.value.trim();
      this.usuarioFundacion.passwordFundacion = this.password2.value.trim();
      this.usuarioFundacion.telefonoFundacion = this.telefono.value;
      this.usuarioFundacion.celular = this.celular.value;
      this.usuarioFundacion.sector = this.sector.value.trim();
      this.usuarioFundacion.barrio = this.barrio.value.trim();
-     this.usuarioFundacion.calleP = this.calleP.value.trim();
-     this.usuarioFundacion.calleS = this.calleS.value.trim();
+     //this.usuarioFundacion.calleP = this.calleP.value.trim();
+     //this.usuarioFundacion.calleS = this.calleS.value.trim();
      this.usuarioFundacion.representante = this.representante.value.trim();
      this.usuarioFundacion._id = this.id.value;
-      
+     if(this.direccionSelec != ''){
+      this.usuarioFundacion.direccionMap = this.direccionSelec;
+    }else{
+      this.usuarioFundacion.direccionMap = this.usuarioFundacion.direccionMap
+    }
    if(this.nm == 'noe' &&  this.cor == 'noe'){
   
     this._userService.actualizarUsuario(this.usuarioFundacion,this.usuarioFundacion._id).subscribe(
@@ -477,43 +502,14 @@ validarNM(op){
               this.logo.setValue(res['usuario']['logo']);
               this.actualizarFunda = false;
               $('#modalEditFun').modal('hide');
+              this.direccionSelec = ''
               this._messageService.showSuccess('Fundación','Datos actualizados correctamente')
               this.obtFundaciones()
             });
-            /*this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+response.usuario._id,[],this.filesToUpload3,'logo')
-            .then((result:any)=>{
-              //alert('si')
-              
-              
-              if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
-                this.snackBar.open('Error al subir el logo','Cerrar', {
-                  duration: 2000,
-                });
-                
-              }else if(result.n == '3'){
-              
-                this.logo.setValue(result.usuario.logo);
-                this.obtFundaciones()
-              
-                this.filesToUpload3 = undefined;
-                this.snackBar.open('Usuario actualizado','Cerrar', {
-                  duration: 2000,
-                });
-  
-  
-               
-               
-              }else{
-                this.snackBar.open('Error al actualizar','Cerrar', {
-                  duration: 2000,
-                });
-              }
-  
-  
-  
-            });*/
+          
           }else{
             this.actualizarFunda = false;
+            this.direccionSelec = ''
            this.obtFundaciones()
            this._messageService.showSuccess('Fundación','Datos actualizados correctamente')
             this.filesToUpload3 = undefined;
@@ -525,11 +521,13 @@ validarNM(op){
           
         
         }else {
+          console.log(response)
           this.actualizarFunda = false;
           this._messageService.showError('Error','No se pudo actualizar los datos de la fundación')
         }
       },
       error =>{
+        console.log(<any>error)
         this.actualizarFunda = false;
         this._messageService.showError('Error','No se pudo actualizar los datos de la fundación')
 
@@ -544,5 +542,22 @@ validarNM(op){
    
     
     }
-  
+    openDialogMap(): void {
+      const dialogRef = this.dialog.open(MapCustomComponent, {
+        width: '500px',
+        height: '500px',
+      });
+    
+      dialogRef.afterClosed().subscribe(result => {
+    
+        if(result != ''){
+          this.direccionSelec = result;
+          this.usuarioFundacion.direccionMap = this.direccionSelec;
+        }else{
+          this.direccionSelec = ''
+        }
+        console.log('The dialog was closed',result);
+        
+      });
+    }
 }

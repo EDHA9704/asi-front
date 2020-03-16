@@ -77,15 +77,18 @@
                 <form [formGroup]="threeFormGroup">
                     <ng-template matStepLabel>Contraseña</ng-template>
                   
-                    <mat-form-field>
-                        <input matInput placeholder="Nueva contraseña" formControlName="password" required>
+                 
+                      <mat-form-field appearance="standard">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" formControlName="password" required>
+                        <mat-icon style="cursor: pointer;" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         <mat-error *ngIf="threeFormGroup.controls.password.hasError('required') ">
-                            Contraseña requerida.
+                          Contraseña requerida.
+                        </mat-error>
+                        <mat-error *ngIf="threeFormGroup.controls.password.hasError('pattern') ">
+                            Contraseña invalida.
                           </mat-error>
-                          <mat-error *ngIf="threeFormGroup.controls.password.hasError('pattern') ">
-                              Contraseña invalida.
-                            </mat-error>
-                      </mat-form-field>
+                    </mat-form-field>
                     <div class="btnsNP">
                         <button class="btn btn-success btnRGA" (click)="cambiarPassword()" [disabled]="!threeFormGroup.valid">Guardar</button>
                         <button class="btn btn-danger" (click)="eliminarCodigoPrev2(stepper)">Cancelar</button>

@@ -13,12 +13,12 @@ ul{
 }
 
 p{
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 img{
     width: 100%;
     max-width: 100%;
-    height: auto;
+    height: 100%;
 }
 section{
     padding: 5rem 0;
@@ -44,7 +44,8 @@ nav{
     border-bottom: 1px solid rgba(255,255,255,.2);
 }
 .nav-brand{
-    width: 4rem;
+    width: 4em;
+    height: 4em;
 }
 .menu-icons i{
     font-size: 3.5rem;
@@ -102,24 +103,36 @@ nav{
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 1020;
 }
 .greenHeader{
     transition: all .8s ease;
     background: #3bbfad;
 }
-
+ul{
+    li{
+        a{
+            font-weight: bolder;
+        }
+    }
+}
 .darkHeader{
     transition: all .8s ease;
-    background:  #2e2e2e;
+    background:  #2e2e2ecc;
+    position: absolute;
+    margin-bottom: 8em;
+    top: 0;
+    left: 0;
+    z-index: 1020;
    
 }
-@media screen and (min-width:700px){
+@media screen and (min-width:992px){
     header{
         height: 6rem;
     }
     .nav-brand{
         width: 4.5rem;
+        height: 4.5em;
     }
     .nav-list{
         width: initial;
@@ -209,7 +222,7 @@ nav{
     }
  }
 #dropNOTIF{
-     padding: 1rem;
+     padding: 1rem 0;
      font-size: 1.4rem;
  }
  
@@ -327,7 +340,18 @@ nav{
  .dropdown-divider{
     margin: 0 !important;
  }  
-
+ @media only screen and (max-width:400px){
+   
+    .DROP{
+        width:30rem !important;
+        height: 35rem !important;
+       
+    }
+    nav{
+        justify-content: space-around !important;
+    }
+    
+  }
  @media only screen and (max-width:780px){
     .dropNAV {
        position: relative !important;
@@ -338,7 +362,7 @@ nav{
        align-items: flex-start !important;
     }
     .DROP{
-        width: 40rem !important;
+        width: 40rem ;
         height: 35rem !important;
        
     }

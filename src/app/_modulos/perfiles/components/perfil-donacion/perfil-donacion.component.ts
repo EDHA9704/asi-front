@@ -8,6 +8,8 @@ import { UserService, AuthenticationService } from 'src/app/_shared/services';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import {environment} from '../../../../../environments/environment'
 import { FormControl, Validators } from '@angular/forms';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 declare var google:any;
 declare var $:any
 @Component({
@@ -55,8 +57,8 @@ export class PerfilDonacionComponent implements OnInit {
   }
   constructor(private _router:Router,private _route:ActivatedRoute,private _donacionService:DonacionService,
   private _notificacionService:NotificacionService,private _userService:UserService, private _messageService:MessagesService,
-  private authenticationService: AuthenticationService) {
- 
+  private authenticationService: AuthenticationService,private _comunicationService:CommunicationService,private ngxService: NgxUiLoaderService) {
+    this.ngxService.startLoader('loader-02');
       this.mensajeVSLE = ""
       this.url = environment.apiUrl;
       this.notificacion= new Notificacion("","","","","","","","");
@@ -82,6 +84,8 @@ export class PerfilDonacionComponent implements OnInit {
       response=>{
         console.log(response)
         this.donacionOB = response.donacion;
+        this.ngxService.stopLoader('loader-02');
+        this._comunicationService.perfilFundacionSelec(this.donacionOB.fundacion.logo)
         this.obtVoluntarios()
 
          

@@ -5,11 +5,12 @@ import { FormControl, Validators } from '@angular/forms';
 import { UserService, AuthenticationService } from 'src/app/_shared/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-import { MatStepper } from '@angular/material';
+import { MatStepper, MatDialog } from '@angular/material';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { UploadService } from 'src/app/_shared/services/upload.service';
 import { UsuarioFundacion } from 'src/app/_models/usuarioFundacion';
-
+import {MapCustomComponent} from 'src/app/_shared/components/map-custom/map-custom.component'
+declare var google:any;
 declare var $:any
 @Component({
   selector: 'app-mis-voluntarios',
@@ -34,7 +35,7 @@ export class MisVoluntariosComponent implements OnInit {
   public usuario:UsuarioVoluntario;
   public usuario2:any;
   minDate = new Date(1980, 0, 1);
-  maxDate = new Date(2019, 7, 31);
+  maxDate = new Date();
   public page
   public total;
   public pages;
@@ -50,16 +51,17 @@ export class MisVoluntariosComponent implements OnInit {
   public imgUN:any;
   public imL = false;
 public nuevoRegistro = false;
-
+  public direccionSelec:any = ''
   rgxPass  = new RegExp("^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,16}$")
   public imgCom;
   foto= new FormControl('', [Validators.required]);
   public actualizar = false;
+  bsVoluntario = new FormControl('', [ Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(100)]);
   nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(25),Validators.minLength(4)]);
   apellidos = new FormControl('', [Validators.required,Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(40),Validators.minLength(7)]);
   cedula = new FormControl('', [Validators.required,Validators.maxLength(10),Validators.minLength(10)]);
   fechaNacimiento = new FormControl('', [Validators.required]);
-  correo = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]);
+  correo = new FormControl('', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]);
   password = new FormControl('', [Validators.required, Validators.maxLength(30),Validators.minLength(8), Validators.pattern(this.rgxPass)]);
   tipoVoluntario = new FormControl('', [Validators.required]);
   disponibilidadTiempo = new FormControl('', [Validators.required]);
@@ -77,7 +79,7 @@ public nuevoRegistro = false;
     return this.apellidos.hasError('required') ? 'Especie requerida' :  
     this.apellidos.hasError('pattern') ? 'No se admite: símbolos, caracteres especiales o números':
             this.apellidos.hasError('maxlength') ? 'Máximo 40 caracteres':
-            this.apellidos.hasError('minlength') ? 'Mínimo 7 caracteres':
+            this.apellidos.hasError('minlength') ? 'Ingrese los apellidos completos':
             '';
   }
   getErrorMessage3() {
@@ -132,10 +134,22 @@ public nuevoRegistro = false;
             '';
   }
   public currentUser;
+  public advertencia;
+  public loading = true;
   public fundacion:UsuarioFundacion;
   keyUrl
   fullUrl:string
-  constructor(private _route:ActivatedRoute,
+  hide = true; 
+   //location
+   map:any;
+   mapHtml:any;
+   contMap = 0
+   markerActualUserLocation:any;
+   donLatLng = {
+     lat:Number,
+     lng:Number
+   }
+  constructor(private _route:ActivatedRoute,public dialog: MatDialog,
     private _router:Router,private _fundacionService:FundacionService,
     private _userService:UserService,
     private authenticationService: AuthenticationService, private _messageService:MessagesService,
@@ -158,6 +172,8 @@ public nuevoRegistro = false;
   });
   }
   actualPage(){
+    this.loading = true;
+    this.voluntarios = []
     this.pagesSelec=[]
     this.type = ''
     this._route.params.subscribe(params =>{
@@ -188,7 +204,7 @@ public nuevoRegistro = false;
          }
    
          //devolver listado de usuarios
-         this.obtVoluntarios(page);
+         
 
 
     
@@ -198,11 +214,12 @@ public nuevoRegistro = false;
 
     this._userService.obtUsuario(id).subscribe(
       response=>{
-        console.log("entro")
-        
+       
+        this.prob()
+        this.prob3()
         this.carga == false
         this.fundacion = response.usuario;
-        
+        this.obtVoluntarios(this.page);
       },
       error=>{
         this._router.navigate(['**']);
@@ -213,19 +230,22 @@ public nuevoRegistro = false;
   
   }
   prob(){
-
+    $(document).ready(()=>{
     $("#bsFunNombre").keyup(()=>{
+    
       this.obtnerVoluntariosByApellidos();
       this.busqueda = true;
   
   }); 
+}); 
   }
   nuewVoluntario(){
     this.myStepper.selectedIndex = 0;
-    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","")
+    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","")
     this.resets2()
     this.actualizar = false
     this.nuevoRegistro = true
+    $("#mapcustom").removeClass('mapCustom')
     $('#modalMascota').modal('show')
 
    
@@ -239,20 +259,23 @@ public nuevoRegistro = false;
   cancelarBus(){
     this.filtroBTN = false;
     this.actualPage()
+    this.bsVoluntario.reset()
     this._router.navigate(['/fundacion',this.name,this.idFun,'voluntarios','todos','1'])
 
   }
   obtnerVoluntariosByApellidos(){
-    const nombre = $("#bsFunNombre").val();
+    let cont = 0
+    this.voluntarios = []
+    this.loading = true;
+    const nombre = this.bsVoluntario.value;
+    //console.log(nombre)
     this.filtroBTN = true;
-    if(nombre != "" || nombre != undefined){
 
-    }
-    
    
     const resultado = document.querySelector('#busquedaUsers');
 
-    if(nombre != ''){
+    if(nombre != '' && nombre != undefined &&cont == 0){
+      cont++;
       this._fundacionService.obtVoluntariosByApellidos(nombre,this.idFun).subscribe(
         response=>{
          
@@ -263,19 +286,18 @@ public nuevoRegistro = false;
             this.voluntarios = response.usuarios;
             
             this.total = this.voluntarios.length;
-            console.log(response)
+           // console.log(response)
             
-            $('.clothes-pics figure').each(function(i){
-          
-              setTimeout(function(){
-                $('.clothes-pics figure').eq(i).addClass('is-showing');
-              }, 150 * (i+1));
-            });
-            
+           this.advertencia =false;
+           this.loading = false;
+           $(".content-grid-cards").addClass('visible')
 
           }
         },
         error=>{
+          this.voluntarios = []
+          this.loading = false;
+          this.advertencia = true
           this.carga = false;
           $(".carga").fadeOut("slow");
           var errorMessage = <any>error;
@@ -299,7 +321,8 @@ public nuevoRegistro = false;
   obtVoluntarios(page){
     let rol = 2;
     this.pagesSelec = []
-
+    this.voluntarios = []
+    this.loading = true;
     this._fundacionService.obtVoluntarios(page, rol).subscribe(
       response=>{
        
@@ -313,6 +336,9 @@ public nuevoRegistro = false;
             this.pagesSelec.push(i)
             
           }
+          this.advertencia =false;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
           this.carga = false;
 
 
@@ -322,10 +348,12 @@ public nuevoRegistro = false;
         }
       },
       error=>{
+        this.voluntarios = []
         var errorMessage = <any>error;
         console.log(errorMessage)
         this.carga = false;
-
+        this.loading = false;
+        this.advertencia = true;
         if(errorMessage != null && error.error.n == '2'){
           this.mensaje = 'Lo sentimos, no se encontro voluntarios';
         }else if(errorMessage != null && error.error.n == '3'){
@@ -341,8 +369,8 @@ public nuevoRegistro = false;
   obtenerVoluntario(usuario,id){
     this.actualizar = true;
     $('#modalMascota').modal('show')
-    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","")
-
+    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","")
+    
     this.usuario = usuario;
     this.nombres.setValue(usuario.nombres)
         this.apellidos.setValue(usuario.apellidos)
@@ -353,7 +381,11 @@ public nuevoRegistro = false;
         this.disponibilidadTiempo.setValue(usuario.disponibilidadTiempo)
         this.telefono.setValue(usuario.telefono)
         this.celular.setValue(usuario.celular)
-        this.direccion.setValue(usuario.direccion)
+        if(usuario.direccionMap){
+          this.loadMap(usuario.direccionMap.latLng.lat,usuario.direccionMap.latLng.lng)
+        }
+        
+        //this.direccion.setValue(usuario.direccion)
         this.usuarioVoluntario.disponibilidadParticipacion = usuario.disponibilidadParticipacion
         this.usuarioVoluntario.disponibilidadCasa = usuario.disponibilidadCasa
         $(document).ready(()=>{
@@ -364,7 +396,7 @@ public nuevoRegistro = false;
             });
     this._userService.obtUsuario(id).subscribe(
       response=>{
-
+        console.log(response)
         if(response.usuario && response.n == '1')
         //this.usuario = response.usuario;
        this.usuario2 =response.usuario;
@@ -377,14 +409,14 @@ public nuevoRegistro = false;
   }
   prob3(){
 
-    $("#cedula2").keyup(()=>{
+   /* $("#cedula2").keyup(()=>{
       this.validarNM('ce')
       $("#nmbr").fadeOut("fast")
       $("#nmbr2").fadeOut("fast")
       this.cedula.setValue(this.limpiarCampo(this.cedula.value));
 
 
-  }); 
+  }); */
   $("#nombres").keyup(()=>{
     this.nombres.setValue(this.limpiarCampo(this.nombres.value));
   }); 
@@ -461,6 +493,7 @@ public nuevoRegistro = false;
   fileChangeEvent(fileInput:any){
     const FILE = (event.target as HTMLInputElement).files[0];
     this.imageObj= FILE;
+    if(this.imageObj.type ==  "image/jpeg" || this.imageObj.type ==  "image/png" || this.imageObj.type ==  "image/jpg"){
     this.filesToUpload = <Array<File>>fileInput.target.files;
  
      let files = <Array<File>>fileInput.target.files;
@@ -479,6 +512,12 @@ public nuevoRegistro = false;
      if(this.filesToUpload != undefined){
       this.imL = false;
     }
+  }else{
+    this.filesToUpload = undefined;
+     this.imL = false;
+     this.imgUN = undefined;
+      this._messageService.showError('Error','Solo se permite subir fotos.')
+  }
   }
 
   actualizarVoluntario(stepper: MatStepper){
@@ -496,6 +535,12 @@ public nuevoRegistro = false;
     this.usuario.direccion = this.direccion.value.trim();
     this.usuario.telefono = this.telefono.value;
     this.usuario.celular = this.celular.value;
+
+    if(this.direccionSelec != ''){
+      this.usuario.direccionMap = this.direccionSelec;
+    }else{
+      this.usuario.direccionMap = this.usuario.direccionMap
+    }
     console.log(this.usuario2)
     console.log(this.usuario)
 
@@ -518,47 +563,19 @@ public nuevoRegistro = false;
                           this.imL = false;
                                  this.imgUN = undefined;
                                  stepper.selectedIndex = 0;
-        
+                                 this.direccionSelec != ''
                           this._messageService.showSuccess('Voluntario','Actualizado exitosamente')
                           
                           $('#modalMascota').modal('hide')
                         });
-                /*this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
-                .then((result:any)=>{
-                 
-                  
-                 
-    
-                if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
-                  this._messageService.showError('Actualizar','Algo salió mal, intentalo mas tarde.')
-  
-                }else if(result.n == '3'){
-                 this.actualizar = false;
-                  this.actualPage()
-                  this.imL = false;
-                         this.imgUN = undefined;
-                         stepper.selectedIndex = 0;
-
-                  this._messageService.showSuccess('Voluntario','Actualizado exitosamente')
-                  
-                  $('#modalMascota').modal('hide')
-                 
-                
-                }else{
-                  this._messageService.showError('Voluntario','Algo salió mal al subir al foto')
-
               
-                }
-    
-    
-                });*/
               }else{
                 this.actualizar = false;
                 this.imL = false;
                 this.imgUN = '';
                   this.actualPage()
                   stepper.selectedIndex = 0;
-
+                  this.direccionSelec != ''
                   this._messageService.showSuccess('Voluntario','Actualizado exitosamente')
                   $('#modalMascota').modal('hide')
               }
@@ -611,144 +628,148 @@ public nuevoRegistro = false;
   }
 
   registrarVoluntario(stepper: MatStepper){
-    this._messageService.showInfo('Actualizar','Procesando registro del voluntario')
+
+    if(this.direccionSelec != ''){
+      this._messageService.showInfo('Registro','Procesando registro del voluntario')
 
   
-    this.usuarioVoluntario.nombres = this.nombres.value.trim();
-    this.usuarioVoluntario.apellidos = this.apellidos.value.trim();
-    this.usuarioVoluntario.cedula = this.cedula.value.trim();
-    this.usuarioVoluntario.fechaNacimiento =this.fechaNacimiento.value;
-    this.usuarioVoluntario.correo = this.correo.value.trim();
-    this.usuarioVoluntario.password = this.password.value.trim();
-    this.usuarioVoluntario.tipoVoluntario = this.tipoVoluntario.value;
-    this.usuarioVoluntario.disponibilidadTiempo = this.disponibilidadTiempo.value;
-    this.usuarioVoluntario.telefono = this.telefono.value;
-    this.usuarioVoluntario.celular = this.celular.value;
-    this.usuarioVoluntario.direccion = this.direccion.value.trim();
-
-    if(this.usuarioVoluntario.nombres != "",
-      this.usuarioVoluntario.apellidos != "",
-      this.usuarioVoluntario.cedula != "",
-      
-      this.usuarioVoluntario.fechaNacimiento != "",
-      this.usuarioVoluntario.correo != "",
-      this.usuarioVoluntario.password != "",
-      this.usuarioVoluntario.tipoVoluntario != "",
-      this.usuarioVoluntario.disponibilidadTiempo != "",
-      this.usuarioVoluntario.telefono != "",
-      this.usuarioVoluntario.celular != "",
-      this.usuarioVoluntario.direccion != ""){
-
-        var valid = this.validar(this.usuarioVoluntario.cedula);
-        if(valid == true){
-
-          this._fundacionService.validarUsuarioV(this.usuarioVoluntario).subscribe(
-            response=>{
+      this.usuarioVoluntario.nombres = this.nombres.value.trim();
+      this.usuarioVoluntario.apellidos = this.apellidos.value.trim();
+      this.usuarioVoluntario.cedula = this.cedula.value.trim();
+      this.usuarioVoluntario.fechaNacimiento =this.fechaNacimiento.value;
+      this.usuarioVoluntario.correo = this.correo.value.trim();
+      this.usuarioVoluntario.password = this.password.value.trim();
+      this.usuarioVoluntario.tipoVoluntario = this.tipoVoluntario.value;
+      this.usuarioVoluntario.disponibilidadTiempo = this.disponibilidadTiempo.value;
+      this.usuarioVoluntario.telefono = this.telefono.value;
+      this.usuarioVoluntario.celular = this.celular.value;
+      //this.usuarioVoluntario.direccion = this.direccion.value.trim();
+      this.usuarioVoluntario.direccionMap = this.direccionSelec;
+      if(this.usuarioVoluntario.nombres != "",
+        this.usuarioVoluntario.apellidos != "",
+        this.usuarioVoluntario.cedula != "",
         
-              console.log(response)
-              if(response.n == '6'){
-                this._fundacionService.registerVoluntario(this.usuarioVoluntario).subscribe(
-                  response =>{
-                    
-                    if(response.usuario && response.usuario._id){
-                     
-                      if(this.filesToUpload != undefined){
-
-                        const imageForm = new FormData();
-                        imageForm.append('image', this.imageObj);
-                        this._uploadService.imageUpload(imageForm,'subir-foto-usuario/',response.usuario._id).subscribe(res => {
-                          this._messageService.showSuccess('Exito','Voluntario registrado')
-                          this.resets()
-                         // this.obtVoluntarios(this.page)
-                         this.actualPage()
-                         this.imL = false;
-                         this.imgUN = undefined;
-                        });
-
-                        /*this._uploadService.makeGileRequest2(this.url+'subir-foto-usuario/'+response.usuario._id,[],this.filesToUpload,'foto')
-                        .then((result:any)=>{
-                         
-                         
-                         
-            
-                        if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
-                          console.log("entro3")
-                          this._messageService.showError('Foto','No se pudo subir la foto')
-
-                          this._fundacionService.borrarUsuario(response.usuario._id).subscribe(
-                            response=>{
-                              
-                            },
-                            error=>{
-            
-                        })
-                        }else if(result.n == '3'){
-                          
-                          this._messageService.showSuccess('Exito','Voluntario registrado')
-
-                          this.resets()
-                         // this.obtVoluntarios(this.page)
-                         this.actualPage()
-                         this.imL = false;
-                         this.imgUN = undefined;
-                        
-                        }else{
-                          this._messageService.showError('Foto','No se pudo subir la foto')
-                        }
-            
-            
-                        });*/
-                      }else{
-                       
-                        this.resets()
-                        this.actualPage()
-                        this.imL = false;
-                        this.imgUN = undefined;
-                      }
-                    }else{
-                      this._messageService.showError('Foto',response.message)
-                    }
-                  },
-                  error =>{
-                   
-                    console.log(<any>error)
-                    this._messageService.showError('Foto','No se pudo registrar, intentalo de nuevo')
-                  }
-                );
-                
-              }else if(response.n == '5'){
-                stepper.selectedIndex = 0;
-                this._messageService.showError('Formulario','El número de cédula  ya está en uso')
-
-              }else if(response.n == '2'){
-                stepper.selectedIndex = 0;
-                this._messageService.showError('Formulario','La cédula y correo electrónico ya están en uso')
-              }else if(response.n == '3'){
-                stepper.selectedIndex = 1;
-                this._messageService.showError('Formulario','El correo electrónico ya está en uso')
-
-              }
-            },
-            error=>{
-              this._messageService.showError('Formulario','No se pudo validar los datos, intentalo de nuevo')
-        
-            }
-          )
-        
+        this.usuarioVoluntario.fechaNacimiento != "",
+        this.usuarioVoluntario.correo != "",
+        this.usuarioVoluntario.password != "",
+        this.usuarioVoluntario.tipoVoluntario != "",
+        this.usuarioVoluntario.disponibilidadTiempo != "",
+        this.usuarioVoluntario.telefono != "",
+        this.usuarioVoluntario.celular != ""
+        ){
+  
+          var valid = this.validar(this.usuarioVoluntario.cedula);
+          if(valid == true){
+  
+            this._fundacionService.validarUsuarioV(this.usuarioVoluntario).subscribe(
+              response=>{
           
+                console.log(response)
+                if(response.n == '6'){
+  
+                  this._fundacionService.registerVoluntario(this.usuarioVoluntario).subscribe(
+                    response =>{
+                      console.log(response)
+                      if(response.usuario && response.usuario._id){
+  
+                        var mail = {
+                          asunto:"NEWVOLUNTARIO",
+                          fundacion:this.currentUser.usuario.nombreFundacion,
+                          fullname:response.usuario.nombres + ' ' + response.usuario.apellidos ,
+                          password:this.password.value,
+                          correo : response.usuario.correo
+                        }
+                       
+                        
+                        if(this.filesToUpload != undefined){
+  
+                          const imageForm = new FormData();
+                          imageForm.append('image', this.imageObj);
+                          this._uploadService.imageUpload(imageForm,'subir-foto-usuario/',response.usuario._id).subscribe(res => {
+                            this.enviaEmail(mail)
+                            this.direccionSelec != ''
+                            this._messageService.showSuccess('Exito','Voluntario registrado')
+                            this.resets()
+                           // this.obtVoluntarios(this.page)
+                           this.actualPage()
+                           this.imL = false;
+                           this.imgUN = undefined;
+                          });
+  
+                       
+                        }else{
+                          this._messageService.showSuccess('Exito','Voluntario registrado')
+                          this.direccionSelec != ''
+                          this.resets()
+                          this.actualPage()
+                          this.imL = false;
+                          this.imgUN = undefined;
+                        }
+                      }else{
+                        this._messageService.showError('Error',response.message)
+                      }
+                    },
+                    error =>{
+                     
+                      console.log(<any>error)
+                      this._messageService.showError('Foto','No se pudo registrar, intentalo de nuevo')
+                    }
+                  );
+                  
+                }else if(response.n == '5'){
+                  stepper.selectedIndex = 0;
+                  this._messageService.showError('Formulario','El número de cédula  ya está en uso')
+  
+                }else if(response.n == '2'){
+                  stepper.selectedIndex = 0;
+                  this._messageService.showError('Formulario','La cédula y correo electrónico ya están en uso')
+                }else if(response.n == '3'){
+                  stepper.selectedIndex = 1;
+                  this._messageService.showError('Formulario','El correo electrónico ya está en uso')
+  
+                }
+              },
+              error=>{
+                this._messageService.showError('Formulario','No se pudo validar los datos, intentalo de nuevo')
+          
+              }
+            )
+          
+            
+          }else{
+            stepper.selectedIndex = 0;
+            this._messageService.showError('Formulario','El número de cédula no es válido')
+  
+          }
+          
+  
+  
+      }else{
+        this._messageService.showError('Formulario','Llena todos los campos')
+  
+      }
+    }else{
+      this._messageService.showError('Error','Selecciona la dirección del voluntario.')
+    }
+   
+ 
+  }
+  enviaEmail(mail){
+    this._userService.enviarEmail(mail).subscribe(
+      res=>{
+        console.log(res)
+        if(res.n == '3'){
+          
+        
         }else{
-          stepper.selectedIndex = 0;
-          this._messageService.showError('Formulario','El número de cédula no es válido')
 
         }
-        
 
-
-    }else{
-      this._messageService.showError('Formulario','Llena todos los campos')
-
-    }
- 
+      },
+      err=>{
+        console.log(<any>err)
+      }
+    )
   }
   resets(){
     $("#RGF")[0].reset();
@@ -775,7 +796,7 @@ public nuevoRegistro = false;
   
   } 
   //desactivar o activar el estado de la mascota
-  eliminarVoluntarioEstado(stepper: MatStepper,usuario,id){
+  eliminarVoluntarioEstado(usuario,id){
     console.log(id)
     this._fundacionService.eliminarVoluntarioEstado(usuario,id).subscribe(
       response=>{
@@ -784,12 +805,9 @@ public nuevoRegistro = false;
           this.actualizar = false;
                 this.imL = false;
                 this.imgUN = '';
+                this.resets()
                   this.actualPage()
-                  stepper.selectedIndex = 0;
-         
-   
-          //this.obtVoluntarios(this.page)
-          $('#editUsuario').modal('hide')
+ 
           this._messageService.showSuccess('Voluntario','El voluntario fue eliminado')
 
 
@@ -805,4 +823,71 @@ public nuevoRegistro = false;
       }
     );
   }
+  openDialogMap(): void {
+    const dialogRef = this.dialog.open(MapCustomComponent, {
+      width: '500px',
+      height: '500px',
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+  console.log(result)
+      if(result != ''){
+        this.direccionSelec = result;
+        if(this.actualizar == true){
+          this.usuario.direccionMap = this.direccionSelec
+        } 
+        this.loadMap(this.direccionSelec.latLng.lat,this.direccionSelec.latLng.lng)
+       // this.usuarioFundacion.direccionMap = this.direccionSelec;
+      }else{
+        this.direccionSelec = ''
+      }
+      console.log('The dialog was closed',result);
+      
+    });
+  }
+
+  async loadMap(lat,lng){
+    // const loading = await this.loadController.create()
+   //  loading.present()
+   // await this.currentLocationUser()
+ 
+   $( document ).ready(()=> {
+     const mapEle:HTMLElement = document.getElementById('mapcustom');
+  
+   
+    console.log(mapEle)
+    this.mapHtml = mapEle;
+    console.log("bien")
+    this.donLatLng.lat = lat
+    this.donLatLng.lng = lng
+    console.log("bien2")
+    console.log(this.donLatLng)
+    $("#mapcustom").addClass('mapCustom')
+    this.map = new google.maps.Map(this.mapHtml,{
+      center:this.donLatLng,
+      zoom:12,
+    })
+    console.log("bien3")
+    google.maps.event.addListenerOnce(this.map,'idle',()=>{
+     //loading.dismiss();
+     console.log("bien4")
+     this.putMarker(this.map,this.donLatLng,'Hello')
+    })
+   });
+   }
+   putMarker(map,markerL,text){
+    
+       
+     this.markerActualUserLocation = new google.maps.Marker({
+       position:{
+         lat:markerL.lat,
+         lng:markerL.lng
+       },
+       draggable: false,
+       zoom:8,
+       map:map,
+       title:text
+     })
+   
+ }
 }

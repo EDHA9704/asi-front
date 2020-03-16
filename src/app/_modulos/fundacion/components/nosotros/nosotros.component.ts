@@ -13,6 +13,7 @@ import { AuthenticationService, UserService } from '../../../../_shared/services
 import { FundacionService } from 'src/app/_shared/services/fundacion.service';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { SwiperComponent} from 'ngx-useful-swiper';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-nosotros',
@@ -21,7 +22,7 @@ import { SwiperComponent} from 'ngx-useful-swiper';
 })
 export class NosotrosComponent implements OnInit {
   mensaje1 = new FormControl('', [Validators.maxLength(30),Validators.minLength(3)]);
-  mensaje2 = new FormControl('', [Validators.maxLength(500),Validators.minLength(3)]);
+  mensaje2 = new FormControl('', [Validators.maxLength(50),Validators.minLength(3)]);
   getErrorMessage() {
     return  this.mensaje1.hasError('maxlength') ? 'Máximo 30 caracteres':
             this.mensaje1.hasError('minlength') ? 'Mínimo 6 caracteres':
@@ -55,10 +56,24 @@ export class NosotrosComponent implements OnInit {
   public mensajeNewPor
   public imgUN3:any;
   public imL3 = false;
+  public largeHS
   config: any = {
     
     slidesPerView: 3,
       spaceBetween: 30,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev'
+      },
+  };
+  config2: any = {
+    
+    slidesPerView: 1,
+      spaceBetween: 0,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
@@ -75,6 +90,7 @@ imageObj2: File;
 imageUrl2: string;
 public stUpload = false;
 public carga = false;
+public cargaPortads = false;
   keyUrl
   fullUrl:string
 
@@ -83,7 +99,9 @@ public carga = false;
     private _mascotaService:MascotaService,/*private _usuarioService:UsuarioService ,*/
     private _uploadService:UploadService, 
     private authenticationService: AuthenticationService,private userService:UserService,
-    private _fundacionService:FundacionService,private router: Router,private _messageService:MessagesService) {
+    private _fundacionService:FundacionService,private router: Router,private _messageService:MessagesService,
+    private ngxService: NgxUiLoaderService) {
+      this.ngxService.startLoader('loader-02');
       this.url = environment.apiUrl;
       this.currentUser = this.authenticationService.currentUserValue;
       console.log(this.currentUser)
@@ -101,7 +119,23 @@ public carga = false;
     $( document ).ready(()=> {
       console.log( "ready fundaicon!" );
       this.toggle()
+      if($( window ).width() <= 720){
+        this.largeHS = false;
+      }else{
+        this.largeHS = true;
+      }
+      
   });
+  $(document).ready(($)=>{
+    $(window).resize(()=>{
+      if($( window ).width() <= 720){
+        this.largeHS = false;
+      }else{
+        this.largeHS = true;
+      }
+});
+
+  }); 
   }
   loadPage(){
     this.fullUrl = this.router.url.toString()
@@ -141,7 +175,7 @@ public carga = false;
                 
             });*/
         this.usuarioFundacion = response.usuario;
-       
+        this.ngxService.stopLoader('loader-02');
         this.carga = true
       },
       error=>{
@@ -150,57 +184,49 @@ public carga = false;
     )
   }
   nuevaHI(){
-    
    /* $(document).ready(()=>{
       this.prob()
             
         });*/
-    console.log(this.filesToUpload2);
-    if((this.historia.titulo.length >= 4 && this.historia.titulo.length <= 25) && (this.historia.descripcion.length >= 15 && this.historia.titulo.length <= 1000) && (this.filesToUpload2 != undefined && this.filesToUpload2 != null)){
-      this._messageService.showInfo('Historia','Procesando')
-      this.stUpload = true;
-      this._fundacionService.registerHistoria(this.historia,this.currentUser.usuario._id).subscribe(
-        response=>{
-          if(response.historia && response.n == '1'){
-              
-            const imageForm = new FormData();
-            imageForm.append('image', this.imageObj2);
-            this._uploadService.imageUpload(imageForm,'subir-foto-historia/',response.historia._id).subscribe(res => {
-              this._messageService.showSuccess('Historia','Registro exitoso')
-                this.loadPage();
-                this.filesToUpload2 = undefined;
-                this.imL2 = false;
-                $("#exampleModal2").modal('hide')
-            });
-            /*this._uploadService.makeGileRequest(this.url+'subir-foto-historia/'+response.historia._id,[],this.filesToUpload2,'foto')
-            .then((result:any)=>{
-  
-  
-              if(result.n == '8' || result.n == '7' || result.n == '6' || result.n == '5' || result.n == '4' || result.n == '2' ){
+    console.log(this.historia.titulo.length);
+    console.log(this.historia.descripcion.length);
+    if((this.historia.titulo.length >= 4 && this.historia.titulo.length <= 25) && (this.historia.descripcion.length >= 15 && this.historia.descripcion.length <= 1000)){
+
+      if((this.filesToUpload2 != undefined && this.filesToUpload2 != null)){
+        this._messageService.showInfo('Historia','Procesando')
+        this.stUpload = true;
+        this._fundacionService.registerHistoria(this.historia,this.currentUser.usuario._id).subscribe(
+          response=>{
+            if(response.historia && response.n == '1'){
                 
-              }else if(result.n == '3'){
-     
+              const imageForm = new FormData();
+              imageForm.append('image', this.imageObj2);
+              this._uploadService.imageUpload(imageForm,'subir-foto-historia/',response.historia._id).subscribe(res => {
                 this._messageService.showSuccess('Historia','Registro exitoso')
-                this.loadPage();
-                this.filesToUpload2 = undefined;
-                this.imL2 = false;
-              
-              }else{
-                console.log(response)
-              }
+                  this.loadPage();
+                  this.filesToUpload2 = undefined;
+                  this.imL2 = false; 
+                  $("#modalHI").modal('hide')
+                 // $("#registerFormHI")[0].reset();historia.foto
+                 this.historia = new Historia("","","","");
+                  this.stUpload = false;
+              });
+  
              
-            });*/
-           
-          
-        }
-        },
-        error=>{
-          /* this.snackBar.open('Algo salio mal, intentalo de nuevo','Cerrar', {
-                  duration: 2000,
-                });*/
-                this._messageService.showError('Historia','Algo salio mal, intentalo de nuevo')
-        }
-      )
+            
+          }
+          },
+          error=>{
+            /* this.snackBar.open('Algo salio mal, intentalo de nuevo','Cerrar', {
+                    duration: 2000,
+                  });*/
+                  this._messageService.showError('Historia','Algo salio mal, intentalo de nuevo')
+          }
+        )
+      }else{
+        this._messageService.showError('Historia','Selecciona una foto para la historia')
+      }
+    
     }else{
       /*this.snackBar.open('No cumple con el número de caracteres','Cerrar', {
         duration: 2000,
@@ -302,6 +328,7 @@ public carga = false;
          
           this.portadasFundacion= response.portadasFundacion;
           console.log(this.portadasFundacion)
+          this.cargaPortads = true
          // this.hh = []
         if(this.p == 1){
           for(var i=0; i < this.portadasFundacion.length; i++){
@@ -318,13 +345,15 @@ public carga = false;
       
           
         }else{
+
           //this.status = 'error';
          console.log("mal")
 
         }
       },
       error=>{
-        
+        this.portadasFundacion = []
+        this.cargaPortads = true
         console.log(<any>error);
         //this._router.navigate(['/mascotas']);
       }
@@ -338,7 +367,7 @@ public carga = false;
       this.statusNewPor = 'procesando';
       this.stUpload = true;
       this._messageService.showInfo('Portada','Procesando')
-      this.portada.mensaje1 = this.mensaje1.value;
+      this.portada.mensaje1 = '';
       this.portada.mensaje2 = this.mensaje2.value;
       this._fundacionService.registerPortada(this.portada, this.idF).subscribe(
         response =>{

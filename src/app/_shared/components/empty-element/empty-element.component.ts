@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-empty-element',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./empty-element.component.scss']
 })
 export class EmptyElementComponent implements OnInit {
-
+  @Input() foto:string;
+  @Input() mensaje:string;
   constructor() { }
 
   ngOnInit() {

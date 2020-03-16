@@ -37,11 +37,12 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
   public url
   public select
   public idFun
+  public loading = true;
 
   public currentUser;
   keyUrl
   fullUrl:string
-
+  public estados = ["Todos","0","1","2"];
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _emergenciaService:EmergenciaService,
     private _userService:UserService,private router: Router,private authenticationService: AuthenticationService) { 
@@ -62,24 +63,27 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
     this.page = 1;
     this.actualPage();
     //this.obtVoluntarios()
+    this.changeFiltros()
+  }
+  ngDoCheck(){
+
+    this.filtroBSQ = this._emergenciaService.obtFiltro();
+    
+  }
+  changeFiltros(){
     $(document).ready(()=>{
       $("#tipoDrop").change(()=>{
 
         this.select = $("#tipoDrop").val();
         this.filtroBSQD(this.select)
     });
-    $("#nivelDrop").change(()=>{
+    $("#estadoDrop").change(()=>{
 
-      this.select = $("#nivelDrop").val();
+      this.select = $("#estadoDrop").val();
       this.filtroBSQD(this.select)
   });
 
   }); 
-  }
-  ngDoCheck(){
-
-    this.filtroBSQ = this._emergenciaService.obtFiltro();
-    
   }
   actualPage(){
     this.type = ''
@@ -119,31 +123,35 @@ export class MisEmergenciasComponent implements OnInit,DoCheck{
 
     if(this.type == 'busqueda'){
       this.filtroBTN = true;
-      this.filtroBSQ.forEach(elem => {
-        $(document).ready(()=>{
-        if(elem.tipo == 'tipoE'){
-          $("#tipoDrop").val(elem.option)
-        }
-        if(elem.tipo == 'nivelE'){
-          $("#nivelDrop").val(elem.option)
-        }
-        
-      })
-      });
       
+      this.llenarDrops()
      
-      this.buscarEmergencias(page)
+     
     }else{
       $(document).ready(()=>{
       $("#tipoDrop").val('Todos')
-      $("#nivelDrop").val('Todos')
+      $("#estadoDrop").val('Todos')
       })
       this.filtroBTN = false;
       //devolver listado de emergencias
-      this.obtEmergencias(page);
+     
     }
 
     
+  });
+}
+
+llenarDrops(){
+  this.filtroBSQ.forEach(elem => {
+    $(document).ready(()=>{
+    if(elem.tipo == 'tipoE'){
+      $("#tipoDrop").val(elem.option)
+    }
+    if(elem.tipo == 'estadoE'){
+      $("#estadoDrop").val(elem.option)
+    }
+    
+  })
   });
 }
 obtFundacion(id){
@@ -154,7 +162,13 @@ obtFundacion(id){
       
       this.carga == false
       this.fundacion = response.usuario;
-      
+      this.changeFiltros()
+      if(this.type == 'busqueda'){
+      this.llenarDrops()
+      this.buscarEmergencias(this.page)
+      }else{
+        this.obtEmergencias(this.page);
+      }
     },
     error=>{
       this.router.navigate(['**']);  
@@ -170,9 +184,10 @@ verFoto(foto){
 
 }
  obtEmergencias(page){
+   this.loading = true;
    let rol = 4;
    this.pagesSelec = []
-  
+   this.emergencias = []
    this._emergenciaService.obtEmergencias(page).subscribe(
      response=>{
        this.carga = false;
@@ -187,6 +202,10 @@ verFoto(foto){
            this.pagesSelec.push(i)
            
          }
+         this.loading = false;
+         $(document).ready(()=>{
+         $(".content-grid-cards").addClass('visible')
+         })
          this.itemsEmer = this.emergencias.length;
          this.status ='success';
          this.advertencia = false;
@@ -199,10 +218,12 @@ verFoto(foto){
        }
      },
      error=>{
+      this.emergencias = []
        $(".carga").fadeOut("slow");
        var errorMessage = <any>error;
        console.log(errorMessage)
        this.carga = false;
+       this.loading = false;
        this.advertencia = true;
        this.status = 'error';
        if((errorMessage != null && error.error.n == '2')){
@@ -214,7 +235,9 @@ verFoto(foto){
    )
  }
  buscarEmergencias(page,adding=false){
+   this.loading = true;
   this.pagesSelec = []
+  this.emergencias = []
   this._emergenciaService.filtroEmergencias(this.filtroBSQ,page).subscribe(
     response=>{
       this.carga = false;
@@ -229,6 +252,10 @@ verFoto(foto){
           this.pagesSelec.push(i)
           
         }
+        this.loading = false;
+        $(document).ready(()=>{
+        $(".content-grid-cards").addClass('visible')
+        })
         console.log(this.emergencias)
         this.itemsEmer = this.emergencias.length;
         this.status ='success';
@@ -240,7 +267,9 @@ verFoto(foto){
       }
     },
     error=>{
+      this.emergencias = []
       this.carga = false;
+      this.loading = false;
       this.advertencia =true;
       this.status = 'error';  
       $(".carga").fadeOut("slow");
@@ -273,7 +302,7 @@ cancelarBus(){
 
 filtroBSQD(option){
 
-  
+  console.log(option)
   var optionFinal = option;
   if(optionFinal == 'Mal estado de salud' || optionFinal == 'Accidente' || optionFinal == 'Preñada' || optionFinal == 'Con cachorros'|| optionFinal == 'Maltrato' || optionFinal == 'Abandono'){
     
@@ -300,15 +329,15 @@ filtroBSQD(option){
     localStorage.setItem('busquedaEmergencias2', JSON.stringify(this.filtroBSQ));
   }
 
-  if(optionFinal == 'Atención inmediata' || optionFinal == 'Muy urgente' || optionFinal == 'Urgente' || optionFinal == 'Normal' || optionFinal == 'No urgente'){
+  if(optionFinal == '0' || optionFinal == '1' || optionFinal == '2'){
     if(this.filtroBSQ == null){
      
       this.filtroBSQ = [];
-      this.filtroBSQ.push({tipo:'nivelE',option:optionFinal})
+      this.filtroBSQ.push({tipo:'estadoE',option:optionFinal})
     }else{
       var ok2= false;
       this.filtroBSQ.forEach(fl => {
-        if(fl.tipo == 'nivelE'){
+        if(fl.tipo == 'estadoE'){
           ok2 = true;
           fl.option = optionFinal;
         }
@@ -318,7 +347,7 @@ filtroBSQD(option){
 
      
       if(ok2 == false){
-        this.filtroBSQ.push({tipo:'nivelE',option:optionFinal})
+        this.filtroBSQ.push({tipo:'estadoE',option:optionFinal})
       }
     }
 

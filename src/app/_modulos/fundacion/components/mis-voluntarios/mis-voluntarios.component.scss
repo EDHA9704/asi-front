@@ -95,6 +95,10 @@ img{
             grid-template-columns: repeat(auto-fit,minmax(25rem,1fr));
             grid-gap: 2.5rem;
             padding: 0 6rem;
+            width: 100%;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
             mat-card{
                 padding: 0; 
                 box-shadow: 0px 0px 5px #444;
@@ -102,8 +106,17 @@ img{
                 .card-header{
                     display: flex;
                     justify-content: space-between;
+                    align-items: center;
                     .card-header-tex{
                         max-width: 70%;
+                    }
+                    button{
+                        background: #3bbfad;
+                        color: white;
+                        border: 0;
+                        border-radius: 4px;
+                        box-shadow: 1px 1px 4px 1px #444;
+                        min-height: 2.5em;
                     }
                     h5{
                         font-size: 2rem;
@@ -114,7 +127,7 @@ img{
                         cursor: pointer;
                         i{
                             font-size: 1.5rem;
-                            color: #555;
+                            color: white;
                         }
                     }
                    
@@ -149,7 +162,7 @@ img{
                         }
                     }
                     .card-body-subtitle{
-                        padding: 3rem 0;
+                        padding: 1rem 0;
                         span{
                             font-size: 1.7rem;
                             font-weight: bold;
@@ -184,7 +197,20 @@ img{
                 }
               }
         }
-
+        .visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 1s linear;
+          }
+    }
+}
+.custom-cards{
+    position: relative; 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .spinn{
+        position: absolute;
     }
 }
 #modalComprobante .modal-body{
@@ -337,6 +363,9 @@ padding-bottom: 10px;
     width: 100%;
     display: flex;
     justify-content: center;
+    button{
+        font-family: 'Exo', sans-serif;
+    }
 }
 .btnNEXT2 button{
     background: #3bbfad;
@@ -364,9 +393,25 @@ padding-bottom: 10px;
     
 }
 ::ng-deep .cdk-overlay-container{
-    z-index: 1200 !important;
+    z-index: 3000 !important;
 }
-
+.btnDir{
+    border-radius: 5px;
+		border: 1px solid #3bbfad !important;
+		background-color: transparent;
+		color: #3bbfad;
+		font-size: 12px;
+		font-weight: bold;
+		padding: 4px 18px;
+		
+		letter-spacing: 1px;
+		text-transform: uppercase;
+        transition: transform 80ms ease-in;
+        width: 100%;
+}
+.mapCustom{
+    height: 12em !important;
+}
 .input-labelVol{
     background: #3bbfad;
 
@@ -439,3 +484,13 @@ padding-bottom: 10px;
         }
     }
 }
+.modal{
+    z-index: 2000 !important;
+}
+@media only screen and (max-width:400px){
+   
+    .content-grid-cards{
+        padding: 0 !important;
+    }
+    
+  }

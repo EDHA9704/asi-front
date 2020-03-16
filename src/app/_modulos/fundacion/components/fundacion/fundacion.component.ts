@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UsuarioFundacion } from 'src/app/_models/usuarioFundacion';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,13 +13,14 @@ import { AuthenticationService, UserService } from '../../../../_shared/services
 import { FundacionService } from 'src/app/_shared/services/fundacion.service';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { SwiperComponent} from 'ngx-useful-swiper';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 
 @Component({
   selector: 'app-fundacion',
   templateUrl: './fundacion.component.html',
   styleUrls: ['./fundacion.component.scss']
 })
-export class FundacionComponent implements OnInit {
+export class FundacionComponent implements OnInit, OnDestroy{
   mensaje1 = new FormControl('', [Validators.maxLength(30),Validators.minLength(3)]);
   mensaje2 = new FormControl('', [Validators.maxLength(500),Validators.minLength(3)]);
   getErrorMessage() {
@@ -41,7 +42,7 @@ export class FundacionComponent implements OnInit {
   public imL2 = false;
   public historia:Historia;
   public historiasF=[];
-  public idF;
+
   public lgtHI;
 
   //variables para guardar las portaas
@@ -75,17 +76,24 @@ imageObj2: File;
 imageUrl2: string;
 public stUpload = false;
 public carga = false;
+public idFun
+keyUrl
+  fullUrl:string
   constructor(
     private authenticationService: AuthenticationService,private userService:UserService,
-    private router: Router) {
+    private router: Router,private _communcationService:CommunicationService) {
       this.url = environment.apiUrl;
       this.currentUser = this.authenticationService.currentUserValue;
-     
+      this.fullUrl = this.router.url.toString()
+      this.keyUrl = this.fullUrl.split('/')
      }
-
+ ngOnDestroy(){
+ 
+ }
   ngOnInit() {
+    this.idFun =this.keyUrl[2]
+    this.obtFundacion2()
    
-
   }
   loadPage(){
   
@@ -102,20 +110,22 @@ public carga = false;
     })
   }
   obtFundacion2(){
-
-    this.userService.obtUsuario(this.idF).subscribe(
+ 
+    this.userService.obtUsuario(this.idFun).subscribe(
       response=>{
         console.log(response)
         /*$(document).ready(()=>{
           this.prob()
                 
             });*/
-        this.usuarioFundacion = response.usuario;
        
+        this.usuarioFundacion = response.usuario;
+        this._communcationService.perfilFundacionSelec(this.usuarioFundacion.logo)
+        //localStorage.setItem('photoFF', response.usuario.logo);
         this.carga = true
       },
       error=>{
-        this.router.navigate(['**']);  
+        //this.router.navigate(['**']);  
       }
     )
   }

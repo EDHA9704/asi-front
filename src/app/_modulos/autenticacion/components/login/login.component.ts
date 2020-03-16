@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../../_shared/services';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
-import { MatStepper } from '@angular/material';
+import { MatStepper, MatDialog } from '@angular/material';
 import { UsuarioFundacion } from 'src/app/_models/usuarioFundacion';
 import { Mail } from 'src/app/_models/mail';
 import { Codigo } from 'src/app/_models/codigo';
@@ -13,7 +13,7 @@ import { UploadService } from 'src/app/_shared/services/upload.service';
 declare var $:any;
 import { environment } from '../../../../../environments/environment';
 import { NotificacionService } from 'src/app/_shared/services/notificacion.service';
-
+import {MapCustomComponent} from 'src/app/_shared/components/map-custom/map-custom.component'
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
   public mail:Mail;
   public codi:Codigo;
   public advertenciaCodigo = ''
+  public direccionSelec:any = ''
   @ViewChild('stepper', {static: true}) private myStepper: MatStepper;
   totalStepsCount: number;
 
@@ -57,13 +58,16 @@ export class LoginComponent implements OnInit {
   
 imageObj: File;
 imageUrl: string;
+hide = true; 
+hide2 = true;
+fullUrl:any
   constructor(private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router,public dialog: MatDialog,
     private authenticationService: AuthenticationService,
     private _meesageService:MessagesService,private _uploadService:UploadService,private _notificacionService:NotificacionService) { 
-      this.usuarioFundacion = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
-      this.usuarioFundacion2 = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
+      this.usuarioFundacion = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0)
+      this.usuarioFundacion2 = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0)
       this.mail = new Mail("","","","","","");
       this.codi = new Codigo(
         "",
@@ -76,6 +80,8 @@ imageUrl: string;
     }
 
   ngOnInit() {
+    
+
     $( document ).ready(()=> {
       console.log( "ready!" );
       $('#password2').popover({ trigger: 'focus', title: 'Contraseña', content: "La contraseña debe contener entre 8-20 caracteres, al menos 1 letra mayúscula, 1 letra minúscula, 1 número y un caracter no alfanumérico." })
@@ -89,32 +95,13 @@ imageUrl: string;
 
   // get return url from route parameters or default to '/'
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  
   }
   get fl() { return this.loginForm.controls; }
   get f() { return this.formGr1.controls; }
   get f2() { return this.formGr2.controls; }
   get f3() { return this.formGr3.controls; }
 
- /* onSubmit() {
-      this.submitted = true;
-
-      // stop here if form is invalid
-      if (this.loginForm.invalid) {
-          return;
-      }
-
-      this.loading = true;
-      this.authenticationService.login(this.f.username.value, this.f.password.value)
-          .pipe(first())
-          .subscribe(
-              data => {
-                  this.router.navigate([this.returnUrl]);
-              },
-              error => {
-                  this.error = error;
-                  this.loading = false;
-              });
-  }*/
   onSubmit(){
     var OneSignal = window['OneSignal'] || [];
     this.loading = true;
@@ -122,7 +109,7 @@ imageUrl: string;
     this.authenticationService.login(this.loginForm.value,true).subscribe(
       
       response=>{
-        this.loading = false;
+        
         if(response.n == '4'){
           OneSignal.getUserId().then((userId) =>{
             console.log("User ID is", userId);
@@ -141,14 +128,36 @@ imageUrl: string;
               }
             )
           });
-          if(response.usuario.rol == '1'){
-            this.router.navigate(['/admin']);
-           }else if(response.usuario.rol == '4'){
-            this.router.navigate(['/fundacion',response.usuario._id]);
-           }else{
-            this.router.navigate(['/home']);
-           }
+          if(this.returnUrl && this.returnUrl != '' && this.returnUrl != null  && this.returnUrl != undefined){
+            console.log(this.returnUrl)
+            this.router.navigate([this.returnUrl]);
+            setTimeout(() => {
+              this.loading = false;
+            }, 1000);
+          }else{
+            if(response.usuario.rol == '1'){
+              this.router.navigate(['/admin']);
+              setTimeout(() => {
+                this.loading = false;
+              }, 1000);
+               
+             }else if(response.usuario.rol == '4'){
+              this.router.navigate(['/fundacion',response.usuario._id,'nosotros']);
+              setTimeout(() => {
+                this.loading = false;
+              }, 1000);
+             }else{
+              this.router.navigate(['/home']);
+              setTimeout(() => {
+                this.loading = false;
+              }, 1000);
+             }
+          }
+         
           
+        }else{
+          this.error = 'No se pudo identificar el usuario'
+          this._meesageService.showError('Error',this.error)
         }
       }, 
       error =>{
@@ -161,6 +170,9 @@ imageUrl: string;
       }
     )
   }
+
+ 
+
   animationLogin(){
         const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
@@ -186,7 +198,7 @@ imageUrl: string;
   
     });
     this.formGr2 = this.formBuilder.group({
-      correo2 : ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]],
+      correo2 : ['', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]],
       password2:['', [Validators.required, Validators.maxLength(30), Validators.pattern(this.rgxPass2)]],
       telefono :['', [Validators.required,Validators.pattern('^([0-9]){9,10}$')]],
       celular :['', [Validators.required,Validators.pattern('^([0-9]){10,10}$')]]
@@ -197,9 +209,7 @@ imageUrl: string;
     
       sector : ['', [Validators.required]],
       barrio : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ . , : ; -]+$')]],
-      calleP : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ . , : ; -]+$')]],
-      calleS : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ . , : ; -]+$')]]
-  
+     
     });
   }
   //para fundaciones
@@ -209,6 +219,7 @@ fileChangeEvent2(/*fileInput:any*/event: any){
   const FILE = (event.target as HTMLInputElement).files[0];
   this.imageObj = FILE;
   console.log(this.imageObj)
+  if(this.imageObj.type ==  "image/jpeg" || this.imageObj.type ==  "image/png" || this.imageObj.type ==  "image/jpg"){
   this.filesToUpload2 = <Array<File>>event.target.files;
   
    let files = <Array<File>>event.target.files;
@@ -227,6 +238,12 @@ fileChangeEvent2(/*fileInput:any*/event: any){
    if(this.filesToUpload2 != undefined){
     this.imL2 = false;
   }
+}else{
+  this.filesToUpload2 = undefined;
+  this.imL2 = false;
+  this.imgUN2 = undefined;
+   this._meesageService.showError('Error','Solo se permite subir fotos.')
+}
 }
 
 //registro fundacion
@@ -234,7 +251,14 @@ fileChangeEvent2(/*fileInput:any*/event: any){
 enviarEmailRF(stepper: MatStepper){
   this.loadingRG = true;
   this._meesageService.showInfo('Registro','Estamos procesando tu registro')
-  this.usuarioFundacion.nombreFundacion = this.formGr1.value.nombres;
+
+  let nombre = this.formGr1.value.nombres;
+  let nombreClean = nombre.replace('Fundación','')
+  let nombreClean2 = nombreClean.replace('Fundacion','')
+  let nombreClean3 = nombreClean2.replace('fundación','')
+  let nombreClean4 = nombreClean3.replace('fundacion','')
+
+  this.usuarioFundacion.nombreFundacion = nombreClean4.trim()
   var fec = new Date( this.formGr1.value.fechaFunda);
   var fechaFin = fec.toLocaleDateString();
   this.usuarioFundacion.fechaFundacion = fechaFin;
@@ -246,9 +270,9 @@ enviarEmailRF(stepper: MatStepper){
   this.usuarioFundacion.celular = this.formGr2.value.celular;
   this.usuarioFundacion.sector = this.formGr3.value.sector;
   this.usuarioFundacion.barrio = this.formGr3.value.barrio;
-  this.usuarioFundacion.calleP = this.formGr3.value.calleP;
-  this.usuarioFundacion.calleS = this.formGr3.value.calleS;
-
+  //this.usuarioFundacion.calleP = this.formGr3.value.calleP;
+  //this.usuarioFundacion.calleS = this.formGr3.value.calleS;
+  this.usuarioFundacion.direccionMap = this.direccionSelec;
   //this.usuarioFundacion.representante = this.representante.value;
   console.log(this.usuarioFundacion)
 
@@ -375,6 +399,7 @@ verificarCodigo(){
         this.loadingCodigo = false
               $('#modalFundacion').modal('hide');
               $('#modalFundacion2').modal('show');
+              this.direccionSelec = ''
               this.limipiarForms()
               this.authenticationService.eliminarCodigo(responseC.codigo._id).subscribe(
                 response=>{
@@ -502,18 +527,22 @@ validarNextStep(op,stepper: MatStepper){
 
       //this.statusValid = '';
       var b = this.formGr3.value.barrio.trim();
-      var cp = this.formGr3.value.calleP.trim();
-      var cs = this.formGr3.value.calleS.trim();
+      //var cp = this.formGr3.value.calleP.trim();
+      //var cs = this.formGr3.value.calleS.trim();
 
       this.formGr3.controls['barrio'].setValue(b);
-      this.formGr3.controls['calleP'].setValue(cp);
-      this.formGr3.controls['calleS'].setValue(cs);
+    //  this.formGr3.controls['calleP'].setValue(cp);
+      //this.formGr3.controls['calleS'].setValue(cs);
 
      
-      if(b.length < 4 || cp.length < 4 || cs.length <4){
+      if(b.length < 4 ){
         //this.statusValid = 'errorCamposFR2E'
-        this._meesageService.showError('Formulario','Revisa el formulario, la dirección especificada no es válida')  
-      }else{
+        this._meesageService.showError('Formulario','Revisa el formulario, El barrio especificado no es válido')  
+      }else if(this.direccionSelec == ''){
+        this._meesageService.showError('Dirección','Selecciona tu dirección en el mapa')  
+      }
+      
+      else{
         //this.statusValid == '';
         this.enviarEmailRF(stepper)
       }
@@ -530,5 +559,23 @@ limipiarForms(){
   this.formGr1.reset()
   this.formGr2.reset()
   this.formGr3.reset()
+}
+
+openDialogMap(): void {
+  const dialogRef = this.dialog.open(MapCustomComponent, {
+    width: '500px',
+    height: '500px',
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+
+    if(result != ''){
+      this.direccionSelec = result;
+    }else{
+      this.direccionSelec = ''
+    }
+    console.log('The dialog was closed',result);
+    
+  });
 }
 }

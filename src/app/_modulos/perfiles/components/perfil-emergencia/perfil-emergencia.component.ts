@@ -11,6 +11,8 @@ import { MessagesService } from 'src/app/_shared/messages/messages.service';
 import { AuthenticationService } from 'src/app/_shared/services';
 import { NotificacionService } from 'src/app/_shared/services/notificacion.service';
 import { FormControl, Validators } from '@angular/forms';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 declare var google:any;
 
 declare var $:any;
@@ -55,10 +57,13 @@ export class PerfilEmergenciaComponent implements OnInit {
     lat:Number,
     lng:Number
   }
+  fullUrl:string
   constructor(private _route:ActivatedRoute,
     private _router:Router,private _emergenciaService:EmergenciaService,
     private _userService:UserService,private _messageService:MessagesService,
-    private authenticationService: AuthenticationService, private _notificacionService:NotificacionService) {
+    private authenticationService: AuthenticationService,
+     private _notificacionService:NotificacionService,private _comunicationService:CommunicationService,private ngxService: NgxUiLoaderService) {
+      this.ngxService.startLoader('loader-02');
       this.url = environment.apiUrl;
       this.notificacion= new Notificacion("","","","","","","","");
       this.currentUser = this.authenticationService.currentUserValue;
@@ -66,6 +71,7 @@ export class PerfilEmergenciaComponent implements OnInit {
      }
 
   ngOnInit() {
+    this.fullUrl = this._router.url.toString()
     this.loadPage();
   }
   loadPage(){
@@ -180,7 +186,8 @@ export class PerfilEmergenciaComponent implements OnInit {
       response=>{
         if(response.emergencia){
           this.emergencia = response.emergencia;
-    
+          this.ngxService.stopLoader('loader-02');
+          this._comunicationService.perfilFundacionSelec('')
           console.log(this.emergencia);
           if(this.permission == true){
             this.obtVoluntarios()
@@ -545,5 +552,9 @@ export class PerfilEmergenciaComponent implements OnInit {
       title:text
     })
   
+}
+
+redirectLogin(){
+  this._router.navigate(['/autenticacion'], { queryParams: { returnUrl: this.fullUrl }});
 }
 }

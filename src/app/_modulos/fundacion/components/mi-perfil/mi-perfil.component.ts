@@ -6,6 +6,9 @@ import { UserService, AuthenticationService } from 'src/app/_shared/services';
 import { UploadService } from 'src/app/_shared/services/upload.service';
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
 declare var $:any
+import {MapCustomComponent} from 'src/app/_shared/components/map-custom/map-custom.component'
+import { MatDialog } from '@angular/material';
+
 @Component({
   selector: 'app-mi-perfil',
   templateUrl: './mi-perfil.component.html',
@@ -32,29 +35,34 @@ export class MiPerfilComponent implements OnInit {
   mision = new FormControl('', [Validators.required,Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ 0-9 , . :]*$'), Validators.maxLength(300),Validators.minLength(15)]);
   vision =  new FormControl('', [Validators.required,Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ 0-9, . :]*$'), Validators.maxLength(300),Validators.minLength(15)]);
   titular = new FormControl('', [Validators.required, Validators.pattern(this.rg), Validators.maxLength(50),Validators.minLength(5)]);
-  banco = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(50),Validators.minLength(5)]);
-  cuenta = new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'),Validators.maxLength(10),Validators.minLength(10)]);
+  banco = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]*$'), Validators.maxLength(50),Validators.minLength(3)]);
+  cuenta = new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'),Validators.maxLength(50),Validators.minLength(5)]);
   telefono = new FormControl('', [Validators.required,Validators.maxLength(9),Validators.minLength(9),Validators.pattern('[0-9]*$')]);
   celular = new FormControl('', [Validators.required,Validators.maxLength(10),Validators.minLength(10),Validators.pattern('[0-9]*$')]);
  
   nombres = new FormControl('', [Validators.required, Validators.pattern('[a-z A-Z áéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(25),Validators.minLength(4)]);
   representante = new FormControl('', [Validators.required, Validators.pattern(this.rg), Validators.maxLength(50),Validators.minLength(10)]);
   fechaFunda = new FormControl('', [Validators.required]);
-  correo2 = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]);
+  correo2 = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]);
   sector = new FormControl('', [Validators.required]);
   barrio = new FormControl('', [Validators.required,Validators.maxLength(50),Validators.minLength(3),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]*$')]);
   calleP = new FormControl('', [Validators.required,Validators.maxLength(50),Validators.minLength(3),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]*$')]);
   calleS = new FormControl('', [Validators.required,Validators.maxLength(50),Validators.minLength(3),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]*$')]);
   link = new FormControl('', [Validators.required, Validators.pattern(this.rgxPass)]);
   password2 = new FormControl('', [Validators.required, Validators.maxLength(30),Validators.minLength(8), Validators.pattern(this.rgxPass2)]);
- 
+  
+  correoCuenta = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z0-9_\\-]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]);
+  cedulaCuenta = new FormControl('', [Validators.required, Validators.maxLength(10),Validators.minLength(10),Validators.pattern('[0-9]*$')]);
+  tipoCuenta = new FormControl('', [Validators.required]);
+  hide2 = true;
   sector2= [
     {value: 'Norte'}, 
     {value: 'Centro'},
     {value: 'Sur'}
   ];
+  public direccionSelec:any = ''
   getErrorMessage() {
-    return this.perfil.hasError('required') ? 'Especie requerida' :  
+    return this.perfil.hasError('required') ? 'Perfil requerido' :  
     this.perfil.hasError('pattern') ? 'No se admite: símbolos o caracteres especiales':
             this.perfil.hasError('maxlength') ? 'Máximo 230 caracteres':
             this.perfil.hasError('minlength') ? 'Describe mejor el perfil de la fundación':
@@ -62,35 +70,51 @@ export class MiPerfilComponent implements OnInit {
             '';
   }
   getErrorMessage2() {
-    return this.mision.hasError('required') ? 'Especie requerida' :  
+    return this.mision.hasError('required') ? 'Misión requerida' :  
     this.mision.hasError('pattern') ? 'No se admite: símbolos o caracteres especiales':
             this.mision.hasError('maxlength') ? 'Máximo 230 caracteres':
             this.mision.hasError('minlength') ? 'Describe mejor la misión de la fundación':
             '';
   }
   getErrorMessage3() {
-    return this.vision.hasError('required') ? 'Especie requerida' :  
+    return this.vision.hasError('required') ? 'Visión requerida' :  
     this.vision.hasError('pattern') ? 'No se admite: símbolos o caracteres especiales':
             this.vision.hasError('maxlength') ? 'Máximo 230 caracteres':
             this.vision.hasError('minlength') ? 'Describe mejor la visión de la fundación':
             '';
   }
   getErrorMessage4() {
-    return this.titular.hasError('required') ? 'Especie requerida' :  
+    return this.titular.hasError('required') ? 'Titular requerida' :  
     this.titular.hasError('pattern') ? 'Ingresa al menos un nombre y un apellido':
             this.titular.hasError('maxlength') ? 'Máximo 50 caracteres':
             this.titular.hasError('minlength') ? 'No válido':
             '';
   }
+  getErrorMessage21() {
+    return this.cedulaCuenta.hasError('required') ? 'Cédula requerida' :  
+    this.cedulaCuenta.hasError('pattern') ? 'Solo se admite números':
+            this.cedulaCuenta.hasError('maxlength') ? 'Cédula no válida':
+            this.cedulaCuenta.hasError('minlength') ? 'Cédula no válida':
+            '';
+  }
+  getErrorMessage22() {
+    return this.correoCuenta.hasError('required') ? 'Correo requerido' :  
+            this.correoCuenta.hasError('pattern') ? 'Ingresa un correo válido':
+            '';
+  }
+  getErrorMessage23() {
+    return this.tipoCuenta.hasError('required') ? 'Tipo de cuenta requerido' :  
+            '';
+  }
   getErrorMessage5() {
-    return this.banco.hasError('required') ? 'Especie requerida' :  
+    return this.banco.hasError('required') ? 'Nombre del banco requerido' :  
     this.banco.hasError('pattern') ? 'No se admite: símbolos, caracteres especiales o  números':
             this.banco.hasError('maxlength') ? 'Máximo 50 caracteres':
             this.banco.hasError('minlength') ? 'Especifica mejor el nombre del banco':
             '';
   }
   getErrorMessage6() {
-    return this.cuenta.hasError('required') ? 'Especie requerida' :  
+    return this.cuenta.hasError('required') ? 'Número de cuenta requerida' :  
     this.cuenta.hasError('pattern') ? 'Solo se admite números':
             this.cuenta.hasError('maxlength') ? 'Número de cuenta no válido':
             this.cuenta.hasError('minlength') ? 'Número de cuenta no válido':
@@ -175,7 +199,7 @@ export class MiPerfilComponent implements OnInit {
             '';
   }
   public currentUser;
-  constructor(private _route:ActivatedRoute,
+  constructor(private _route:ActivatedRoute,public dialog: MatDialog,
     private _router:Router, private _usuarioService:UserService,private _uploadService:UploadService,
     private authenticationService: AuthenticationService,private _messageService:MessagesService) { 
       this.currentUser = this.authenticationService.currentUserValue;
@@ -187,14 +211,10 @@ export class MiPerfilComponent implements OnInit {
       this.prob()
             
         });
-        this._route.params.subscribe(params =>{
-         
-          let id = params['id'];
+
 
              this.obtenerFundacion(this.currentUser.usuario._id);
-  
 
-        })
   }
   obtenerFundacion(id){
     this._usuarioService.obtUsuario(id).subscribe(
@@ -212,18 +232,22 @@ export class MiPerfilComponent implements OnInit {
         this.perfil.setValue(this.usuarioFundacion.perfil);
         this.titular.setValue(this.usuarioFundacion.titular);
         this.banco.setValue(this.usuarioFundacion.banco);
+        this.correoCuenta.setValue(this.usuarioFundacion.correoCuenta);
+        this.cedulaCuenta.setValue(this.usuarioFundacion.cedulaCuenta);
+        this.tipoCuenta.setValue(this.usuarioFundacion.tipoCuenta);
         this.cuenta.setValue(this.usuarioFundacion.numCuenta);
         this.telefono.setValue(this.usuarioFundacion.telefonoFundacion);
         this.celular.setValue(this.usuarioFundacion.celular);
         this.nombres.setValue(this.usuarioFundacion.nombreFundacion)
         this.representante.setValue(this.usuarioFundacion.representante)
-        this.fechaFunda.setValue(this.usuarioFundacion.fechaFundacion)
+        let fecha = new Date(this.usuarioFundacion.fechaFundacion)
+        this.fechaFunda.setValue(fecha)
         this.correo2.setValue(this.usuarioFundacion.correoFundacion)
         this.link.setValue(this.usuarioFundacion.link)
         this.sector.setValue(this.usuarioFundacion.sector)
         this.barrio.setValue(this.usuarioFundacion.barrio)
-        this.calleP.setValue(this.usuarioFundacion.calleP)
-        this.calleS.setValue(this.usuarioFundacion.calleS)
+        //this.calleP.setValue(this.usuarioFundacion.calleP)
+        //this.calleS.setValue(this.usuarioFundacion.calleS)
         $(document).ready(()=>{
           this.prob()
                 
@@ -271,11 +295,17 @@ export class MiPerfilComponent implements OnInit {
       this.usuarioFundacion.titular = this.titular.value.trim();
       this.usuarioFundacion.banco = this.banco.value.trim();
       this.usuarioFundacion.numCuenta = this.cuenta.value.trim();
+      this.usuarioFundacion.cedulaCuenta = this.cedulaCuenta.value.trim();
+      this.usuarioFundacion.correoCuenta = this.correoCuenta.value.trim();
+      this.usuarioFundacion.tipoCuenta = this.tipoCuenta.value.trim();
       var update2 = {
         estado:1,
         titular:this.usuarioFundacion.titular,
         banco:this.usuarioFundacion.banco,
         numCuenta:this.usuarioFundacion.numCuenta,
+        cedulaCuenta:this.usuarioFundacion.cedulaCuenta,
+        correoCuenta:this.usuarioFundacion.correoCuenta,
+        tipoCuenta:this.usuarioFundacion.tipoCuenta,
        
   
       }
@@ -561,8 +591,9 @@ $("#banco").keyup(()=>{
     
     }
     if(op == 'fc'){
-
-      this.usuarioFundacion.fechaFundacion = this.fechaFunda.value;
+      var fec = new Date( this.fechaFunda.value);
+      var fechaFin = fec.toLocaleDateString();
+      this.usuarioFundacion.fechaFundacion = fechaFin;
       this.usuarioFundacion.correoFundacion = this.correo2.value.trim();
       this.usuarioFundacion.link = this.link.value.trim();
       var update2 = {
@@ -619,32 +650,45 @@ $("#banco").keyup(()=>{
     }
 
     if(op == 'sb'){
-      this.usuarioFundacion.sector= this.sector.value;
-      this.usuarioFundacion.barrio = this.barrio.value.trim();
-      this.usuarioFundacion.calleP = this.calleP.value.trim();
-      this.usuarioFundacion.calleS = this.calleS.value.trim();
-
-      var update3 = {
-      
-        sector:this.usuarioFundacion.sector,
-        barrio:this.usuarioFundacion.barrio,
-        calleP:this.usuarioFundacion.calleP,
-        calleS:this.usuarioFundacion.calleS
-
-      }
-      this._usuarioService.actualizarUsuario(update3,this.usuarioFundacion._id).subscribe(
-        response=>{
-  
-          this.status='success';
-       
-          this._messageService.showSuccess('Perfil','Datos actualizados')
-
-        },
-        error=>{
-          this._messageService.showError('Error','No se pudo actualizar, inténtalo de nuevo')
-
+      if(this.usuarioFundacion.direccionMap != '' && 
+      this.usuarioFundacion.direccionMap != null && this.usuarioFundacion.direccionMap != undefined){
+        this.usuarioFundacion.sector= this.sector.value;
+        this.usuarioFundacion.barrio = this.barrio.value.trim();
+        if(this.direccionSelec != ''){
+          this.usuarioFundacion.direccionMap = this.direccionSelec;
+        }else{
+          this.usuarioFundacion.direccionMap = this.usuarioFundacion.direccionMap
         }
-      )
+       
+       // this.usuarioFundacion.calleP = this.calleP.value.trim();
+        //this.usuarioFundacion.calleS = this.calleS.value.trim();
+  
+        var update3 = {
+        
+          sector:this.usuarioFundacion.sector,
+          barrio:this.usuarioFundacion.barrio,
+          direccionMap: this.usuarioFundacion.direccionMap
+         // calleP:this.usuarioFundacion.calleP,
+         // calleS:this.usuarioFundacion.calleS
+  
+        }
+        this._usuarioService.actualizarUsuario(update3,this.usuarioFundacion._id).subscribe(
+          response=>{
+    
+            this.status='success';
+            this.direccionSelec = ''
+            this._messageService.showSuccess('Perfil','Datos actualizados')
+  
+          },
+          error=>{
+            this._messageService.showError('Error','No se pudo actualizar, inténtalo de nuevo')
+  
+          }
+        )
+      }else{
+        this._messageService.showError('Error','Selecciona la dirección en el mapa')
+      }
+     
 
     }
 
@@ -707,5 +751,23 @@ $("#banco").keyup(()=>{
   error=>{
 
   }
+}
+openDialogMap(): void {
+  const dialogRef = this.dialog.open(MapCustomComponent, {
+    width: '500px',
+    height: '500px',
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+
+    if(result != ''){
+      this.direccionSelec = result;
+      this.usuarioFundacion.direccionMap = this.direccionSelec;
+    }else{
+      this.direccionSelec = ''
+    }
+    console.log('The dialog was closed',result);
+    
+  });
 }
 }

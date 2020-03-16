@@ -20,5 +20,6 @@ export class Mascota{
         public vm:String,
         public vb:String,
         public va:String,
+        public otherVacunas:String,
 ){}
 }

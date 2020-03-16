@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from './_shared/services';
 import { User, Role } from './_models';
+import $ from "jquery";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,6 +27,13 @@ export class AppComponent implements OnInit {
       return this.currentUser && this.currentUser.rol === Role.Admin;
   }
   ngOnInit() {
+    $( document ).ready(()=> {
+      console
+      .log("viendo scroll")
+      $(window).scroll(function() {
+       console.log('OK FUNCIONA')
+      });
+});
     console.log("ENTRO APP")
     
     var OneSignal = window['OneSignal'] || [];

@@ -24,39 +24,50 @@
               <p>Descarga la aplicación móvil y realiza tus consultas directamente ó contáctanos por medio de:</p>
             
               <div class="row justify-content-center">
-                <div class="col-12 col-sm-12 col-md-5" >
+                <div class="col-12 col-sm-12 col-md-6" >
                   <div class="datosContactos" *ngIf="fundacion">
-                    <ul>
-                     
-                      <li>
-                        <span>
-                          <i class="fa fa-phone" aria-hidden="true"></i>
-                        </span>
-                        <p>{{fundacion.telefono}}</p>
-                      </li>
-                      <li>
-                        <span>
-                          <i class="fa fa-mobile" aria-hidden="true"></i>
-                        </span>
-                        <p>{{fundacion.celular}}</p>
-                      </li>
-                      <li>
-                        <span>
-                          <i class="fa fa-envelope-open" aria-hidden="true"></i>
-                        </span>
-                        <p>{{fundacion.correo}}</p>
-                      </li>
-                    </ul>
+                    <div class="contact">
+                      <div class="icon-contact">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                      </div>
+                      <div class="text-contact"><p>{{fundacion.telefono}}</p></div>
+                    </div>
+                    <div class="contact">
+                      <div class="icon-contact">
+                        <i class="fa fa-mobile" aria-hidden="true"></i>
+                      </div>
+                      <div class="text-contact"><p>{{fundacion.celular}}</p></div>
+                    </div>
+                    <div class="contact">
+                      <div class="icon-contact">
+                        <i class="fa fa-envelope-open" aria-hidden="true"></i>
+                      </div>
+                      <div class="text-contact"><p>{{fundacion.correo}}</p></div>
+                    </div>
+                    <div class="contact">
+                      <div class="icon-contact">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                      </div>
+                      <div class="text-contact-custom">
+                        <p><strong>Sector:</strong> {{fundacion.sector}}</p>
+                        <p><strong>Barrio:</strong> {{fundacion.barrio}}</p>
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
-               <div class="col-12 col-sm-12 col-md-5">
-                   <div class="dir" style="width: 100%; text-align: start;">
-                    <h5>Dirección:</h5>
-                    <p>Sector: {{fundacion.sector}}</p>
-                    <p>Barrio: {{fundacion.barrio}}</p>
-                    <p>Calle 1: {{fundacion.calleP}}</p>
-                    <p>Calle 2: {{fundacion.calleS}}</p>
+               <div class="col-12 col-sm-12 col-md-6" *ngIf="fundacion && fundacion.direccionMap">
+                 <div class="content-map">
+                
+                   <div class="mapa">
+                       <div id="mapcustom" style="width: 100%; height: 100%;" >
+                       </div>
                    </div>
+                   <div class="mapa-dir">
+                    <p><strong> {{fundacion.direccionMap.formmatedAddres}}</strong></p>
+                  </div>
+                 </div>
+                
                    
                </div>
               </div>
@@ -69,4 +80,3 @@
       </section>
     </div>
 
-    <app-footer-fundacion></app-footer-fundacion>

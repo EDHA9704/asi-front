@@ -4,10 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FundacionRoutingModule } from './fundacion-routing.module';
 import { FundacionComponent } from './components/fundacion/fundacion.component';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-import { SpinnerComponent } from './../../_shared/components/spinner/spinner.component';
-import {MatStepperModule,MatInputModule,MatCheckboxModule,
-  MatIconModule,MatSelectModule,MatButtonModule,MatMenuModule,
-  MatExpansionModule,MatFormFieldModule,MatDatepickerModule,MatNativeDateModule,MatCardModule, MatAutocompleteModule} from '@angular/material'
+import { SharedModule} from './../../_shared/shared.module';
+
   import {MomentModule} from 'angular2-moment';
   import { NgxSpinnerModule } from "ngx-spinner";
 import { MisMascotasComponent } from './components/mis-mascotas/mis-mascotas.component';
@@ -16,43 +14,34 @@ import { MisDonacionesComponent } from './components/mis-donaciones/mis-donacion
 import { MisAdopcionesComponent } from './components/mis-adopciones/mis-adopciones.component';
 import { MisVoluntariosComponent } from './components/mis-voluntarios/mis-voluntarios.component';
 import { ContactanosComponent } from './components/contactanos/contactanos.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 import { NgxUsefulSwiperModule } from 'ngx-useful-swiper';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
-import {HeaderComponent} from './components/header/header.component';
-import { FooterFundacionComponent } from './components/footer-fundacion/footer-fundacion.component';
+
 import { NosotrosComponent } from './components/nosotros/nosotros.component'
 
+
 @NgModule({
-  declarations: [FundacionComponent,SpinnerComponent, 
+  declarations: [FundacionComponent, 
     MisMascotasComponent, MisEmergenciasComponent, 
     MisDonacionesComponent, MisAdopcionesComponent, 
-    MisVoluntariosComponent, ContactanosComponent, MiPerfilComponent,HeaderComponent, FooterFundacionComponent, NosotrosComponent],
+    MisVoluntariosComponent, ContactanosComponent, MiPerfilComponent, NosotrosComponent],
   imports: [
     CommonModule,
     FundacionRoutingModule,
     FormsModule,ReactiveFormsModule,
-    MatFormFieldModule,
+
     FormsModule,ReactiveFormsModule,
-    //AngMaterialModule,
-    MatStepperModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MatCardModule,
-    MatSelectModule,
-    MatAutocompleteModule,
+    NgxUiLoaderModule,
     MomentModule,
     NgxSpinnerModule,
-    MatExpansionModule,
+
     NgxUsefulSwiperModule,
+    SharedModule
 
     
   ],
-  exports:[
-    HeaderComponent
-  ]
+ 
 })
 export class FundacionModule { }

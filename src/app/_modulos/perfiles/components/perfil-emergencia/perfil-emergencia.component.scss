@@ -1,3 +1,6 @@
+.main{
+    min-height: 100vh;
+}
 .container{
     padding: 4rem 10rem;
 }
@@ -514,9 +517,9 @@ header .titulo .lineTi{
         }
     }
     .retiro{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        width: 100%;
+        margin: 0;
+        padding: 1em 0;
         .retiro-datos{
             width: 100%;
             display: flex;
@@ -527,8 +530,9 @@ header .titulo .lineTi{
             }
         }
         .retiro-mapa{
-            min-width: 80%;
-            height: 40em;
+          .mapcustom{
+              height: 25em;
+          }
         }
         span{
             min-width: 10rem !important;
@@ -620,5 +624,14 @@ header .titulo .lineTi{
     font-size: 1.5rem;
     .titulo{
         font-weight: bold;
+    }
+}
+.btnAcoger{
+    width: 100%;
+    margin: 1em 0;
+    button{
+        background-color: #3bbfad;
+        width: 100%;
+        color: white;
     }
 }

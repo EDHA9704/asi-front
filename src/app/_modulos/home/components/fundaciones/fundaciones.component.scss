@@ -64,7 +64,7 @@ img{
    
 }
 .main{
-    padding: 6rem;
+    padding: 4rem;
     .content-grid{
         
 
@@ -94,6 +94,10 @@ img{
             grid-template-columns: repeat(auto-fit,minmax(25rem,1fr));
             grid-gap: 2.5rem;
             padding: 0 6rem;
+            width: 100%;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
             mat-card{
                 padding: 0; 
                 box-shadow: 0px 0px 5px #444;
@@ -104,6 +108,15 @@ img{
                     .card-header-tex{
                         max-width: 70%;
                     }
+                    a{
+                        background: #3bbfad;
+                        color: white;
+                        border: 0;
+                        border-radius: 4px;
+                        box-shadow: 1px 1px 4px 1px #444;
+                        min-height: 2.5em;
+                        padding: .5em;
+                    }
                     h5{
                         font-size: 2rem;
                     }
@@ -113,7 +126,7 @@ img{
                         cursor: pointer;
                         i{
                             font-size: 1.5rem;
-                            color: #555;
+                            color: white;
                         }
                     }
                    
@@ -148,7 +161,7 @@ img{
                         }
                     }
                     .card-body-subtitle{
-                        padding: 3rem 0;
+                        padding: 0 0 3rem 0;
                         span{
                             font-size: 1.7rem;
                             font-weight: bold;
@@ -183,7 +196,20 @@ img{
                 }
               }
         }
-
+        .visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 1s linear;
+          }
+    }
+}
+.custom-cards{
+    position: relative; 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .spinn{
+        position: absolute;
     }
 }
 #modalComprobante .modal-body{
@@ -271,8 +297,8 @@ img{
     display: block;
     display: -webkit-box;
     max-width: 100%;
-    height: 50px;
-    font-size: 1.7rem;
+    height: 45px;
+    font-size: 1.5rem;
     margin: .5rem auto;
     line-height: 1;
     -webkit-line-clamp: 3;
@@ -280,3 +306,10 @@ img{
     overflow: hidden;
     text-overflow: ellipsis;
 }
+@media only screen and (max-width:400px){
+   
+    .content-grid-cards{
+        padding: 0 !important;
+    }
+    
+  }

@@ -7,7 +7,7 @@
 </div>
 <div class="mat-elevation-z8">
   <mat-form-field>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar usuario">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar voluntarios">
     </mat-form-field>
   <table mat-table [dataSource]="dataSource"  matSort class="mat-elevation-z8">
 
@@ -31,10 +31,7 @@
       <td mat-cell *matCellDef="let element"> {{element.correo}} </td>
     </ng-container>
    
-      <ng-container matColumnDef="direccion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Dirección </th>
-          <td mat-cell *matCellDef="let element"> {{element.direccion}} </td>
-        </ng-container>
+     
         <ng-container matColumnDef="telefono">
           <th mat-header-cell *matHeaderCellDef mat-sort-header><i class="fa fa-phone-square" aria-hidden="true"></i></th>
           <td mat-cell *matCellDef="let element"> {{element.telefono}} </td>
@@ -43,26 +40,17 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> <i class="fa fa-phone-square" aria-hidden="true"></i></th>
           <td mat-cell *matCellDef="let element"> {{element.celular}} </td>
         </ng-container>
-        <ng-container matColumnDef="tipoVoluntario">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> <i class="fa fa-briefcase" aria-hidden="true"></i></th>
-          <td mat-cell *matCellDef="let element"> {{element.tipoVoluntario}} </td>
-        </ng-container>
        
-        <ng-container matColumnDef="disponibilidadCasa">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> <i class="fa fa-home" aria-hidden="true"></i> </th>
-            <td mat-cell *matCellDef="let element"> {{element.disponibilidadCasa}} </td>
-          </ng-container>
-          <ng-container matColumnDef="disponibilidadParticipacion">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header><i class="fa fa-handshake-o" aria-hidden="true"></i></th>
-            <td mat-cell *matCellDef="let element"> {{element.disponibilidadParticipacion}} </td>
-          </ng-container>
-          <ng-container matColumnDef="disponibilidadTiempo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header><i class="fa fa-clock-o" aria-hidden="true"></i></th>
-            <td mat-cell *matCellDef="let element"> {{element.disponibilidadTiempo}} </td>
-          </ng-container>
+       
+     
           <ng-container matColumnDef="estado">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
-              <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+              <td mat-cell *matCellDef="let element"> 
+                <p *ngIf="element.estado == 3">Eliminado</p>
+                <p *ngIf="element.estado == 2">Actualización</p>
+                <p *ngIf="element.estado == 0">Por aprobar</p>
+                <p *ngIf="element.estado == 1">Activo</p>
+               </td>
             </ng-container>
          
 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

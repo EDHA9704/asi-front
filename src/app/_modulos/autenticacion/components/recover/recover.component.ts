@@ -36,6 +36,7 @@ export class RecoverComponent implements OnInit {
 
   public user:UsuarioFundacion;
   public codi:Codigo;
+  hide = true;
   @ViewChild('stepper', {static: true}) private myStepper: MatStepper;
   totalStepsCount: number;
   public isLinear;
@@ -50,7 +51,7 @@ export class RecoverComponent implements OnInit {
     this.vall3 = null;
     this.vallE3 = null;
 
-    this.user = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
+    this.user = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0)
     this.codi = new Codigo("","","","","","")
    }
 
@@ -70,7 +71,7 @@ export class RecoverComponent implements OnInit {
   }
 
 validarCorreo(stepper: MatStepper){
-  this.user = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","",0)
+  this.user = new UsuarioFundacion("","","","","","","","","","","","","","","","","","","","","","","",0)
     var usuario = this.firstFormGroup.value;
     this._usuarioService.obtUsuarioCorreo(usuario).subscribe(
       response=>{
@@ -232,7 +233,7 @@ eliminarCodigoPrev2(stepper: MatStepper){
         this.codi = null;
         this.user = null;
         setTimeout(() => {           // or do some API calls/ Async events
-          this._router.navigate(['/login']);
+          this._router.navigate(['/autenticacion']);
          }, 2);
        
 

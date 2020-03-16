@@ -18,11 +18,7 @@ const routes: Routes = [
     path: '',
     component: FundacionComponent,
     children:[
-      {
-        path: '',
-        redirectTo: 'nosotros',
-       
-      },
+      
       {
         path: 'nosotros',
         component: NosotrosComponent

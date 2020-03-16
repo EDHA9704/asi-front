@@ -3,13 +3,14 @@ import {UsuarioFundacion} from '../../../../_models/usuarioFundacion';
 import {Mail} from '../../../../_models/mail';
 import { UserService, AuthenticationService,} from '../../../../_shared/services';
 import { UploadService } from 'src/app/_shared/services/upload.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatDialog} from '@angular/material';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import {FormControl, Validators,FormBuilder,FormGroup} from '@angular/forms';
 declare var $:any;
 import { MatStepper } from '@angular/material/stepper';
 import { environment } from '../../../../../environments/environment'; 
 import { MessagesService } from 'src/app/_shared/messages/messages.service';
+import {MapCustomComponent} from 'src/app/_shared/components/map-custom/map-custom.component'
 
 @Component({
   selector: 'app-newfundacion',
@@ -48,9 +49,10 @@ export class NewfundacionComponent implements OnInit {
   rgxPass2  = new RegExp("^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,30}$")
   rgx3 = new RegExp("[\\w ]+")
   rg = new RegExp("^([a-zA-ZñáéíóúñÑ]+[\\s]+[a-zA-ZñáéíóúñÑ]+[\\s]*)+$")
-
-
-  constructor(private _formBuilder: FormBuilder, private _route:ActivatedRoute,
+  hide = true; 
+  hide2 = true;
+  public direccionSelec:any = ''
+  constructor(private _formBuilder: FormBuilder, private _route:ActivatedRoute,public dialog: MatDialog,
     private _router:Router,private _usuarioService:UserService,private _uploadService:UploadService,private _messageService:MessagesService) {
       
       this.url = environment.apiUrl;
@@ -73,7 +75,10 @@ export class NewfundacionComponent implements OnInit {
       "",
       "",
       "",
-      "", "",
+      "",
+      "",
+      "",
+      "",
       "", "",
       0
  
@@ -100,7 +105,7 @@ export class NewfundacionComponent implements OnInit {
       
         });
         this.formGr2 = this._formBuilder.group({
-          correo2 : ['', [Validators.required, Validators.pattern('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}')]],
+          correo2 : ['', [Validators.required, Validators.pattern('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$')]],
           password2:['', [Validators.required, Validators.maxLength(30),Validators.minLength(8), Validators.pattern(this.rgxPass2)]],
           telefono :['', [Validators.required,Validators.maxLength(9),Validators.minLength(9),Validators.pattern('[0-9]+$')]],
           celular :['', [Validators.required,Validators.maxLength(10),Validators.minLength(10),Validators.pattern('[0-9]+$')]]
@@ -111,8 +116,8 @@ export class NewfundacionComponent implements OnInit {
         
           sector : ['', [Validators.required]],
           barrio : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]+$')]],
-          calleP : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]+$')]],
-          calleS : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . - ]+$')]]
+         // calleP : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . -]+$')]],
+          //calleS : ['', [Validators.required,Validators.maxLength(50),Validators.minLength(4),Validators.pattern('[0-9 a-z A-Z áéíóúÁÉÍÓÚñÑ , . - ]+$')]]
       
         });
   }
@@ -149,94 +154,74 @@ $("#calleS").keyup(()=>{
   }
 
   registrarFundacion(stepper: MatStepper){
+    if(this.direccionSelec != ''){
+      this.usuarioFundacion.nombreFundacion = this.formGr1.value.nombres;
+      var fec = new Date( this.formGr1.value.fechaFunda);
+      var fechaFin = fec.toLocaleDateString();
+      this.usuarioFundacion.fechaFundacion = fechaFin;
+      this.usuarioFundacion.representante = this.formGr1.value.representante;
     
-    this.usuarioFundacion.nombreFundacion = this.formGr1.value.nombres;
-  var fec = new Date( this.formGr1.value.fechaFunda);
-  var fechaFin = fec.toLocaleDateString();
-  this.usuarioFundacion.fechaFundacion = fechaFin;
-  this.usuarioFundacion.representante = this.formGr1.value.representante;
-
-  this.usuarioFundacion.correoFundacion = this.formGr2.value.correo2;
-  this.usuarioFundacion.passwordFundacion = this.formGr2.value.password2;
-  this.usuarioFundacion.telefonoFundacion = this.formGr2.value.telefono;
-  this.usuarioFundacion.celular = this.formGr2.value.celular;
-  this.usuarioFundacion.sector = this.formGr3.value.sector;
-  this.usuarioFundacion.barrio = this.formGr3.value.barrio;
-  this.usuarioFundacion.calleP = this.formGr3.value.calleP;
-  this.usuarioFundacion.calleS = this.formGr3.value.calleS;
-
-
- 
-
-  this._usuarioService.validarUsuarioF(this.usuarioFundacion).subscribe(
-    response=>{
-
-      if(response.n == '6'){
-        this._usuarioService.registerFundacion(this.usuarioFundacion,'admin').subscribe(
-          response =>{
-          // this.usuarioFundacion2 = response.usuario;
-            if(response.usuario && response.usuario._id && response.n == '1'){ 
-              var as = "RGFADMIN";
-              this.mail.idFundacion = response.usuario._id;
-              this.mail.asunto = as;
-              this.mail.idFundacion = response.usuario._id;
-              this.mail.nombreFundacion = response.usuario.nombreFundacion;
-              this.mail.contraseniaFundacion = this.usuarioFundacion.passwordFundacion;
-              this.mail.correoFundacion = this.usuarioFundacion.correoFundacion;
-              console.log(this.mail)
-              if(this.filesToUpload2 != undefined){
+      this.usuarioFundacion.correoFundacion = this.formGr2.value.correo2;
+      this.usuarioFundacion.passwordFundacion = this.formGr2.value.password2;
+      this.usuarioFundacion.telefonoFundacion = this.formGr2.value.telefono;
+      this.usuarioFundacion.celular = this.formGr2.value.celular;
+      this.usuarioFundacion.sector = this.formGr3.value.sector;
+      this.usuarioFundacion.barrio = this.formGr3.value.barrio;
+      this.usuarioFundacion.direccionMap = this.direccionSelec;
+     // this.usuarioFundacion.calleP = this.formGr3.value.calleP;
+     // this.usuarioFundacion.calleS = this.formGr3.value.calleS;
     
-
-                const imageForm = new FormData();
-            imageForm.append('image', this.imageObj);
-            this._uploadService.imageUpload(imageForm,'subir-foto-fundacion/',response.usuario._id).subscribe(res => {
-              
-              this._usuarioService.enviarEmail(this.mail).subscribe(
-                res=>{
+    
+     
+    
+      this._usuarioService.validarUsuarioF(this.usuarioFundacion).subscribe(
+        response=>{
+    
+          if(response.n == '6'){
+            this._usuarioService.registerFundacion(this.usuarioFundacion,'admin').subscribe(
+              response =>{
+              // this.usuarioFundacion2 = response.usuario;
+                if(response.usuario && response.usuario._id && response.n == '1'){ 
+                  var as = "RGFADMIN";
+                  this.mail.idFundacion = response.usuario._id;
+                  this.mail.asunto = as;
+                  this.mail.idFundacion = response.usuario._id;
+                  this.mail.nombreFundacion = response.usuario.nombreFundacion;
+                  this.mail.contraseniaFundacion = this.usuarioFundacion.passwordFundacion;
+                  this.mail.correoFundacion = this.usuarioFundacion.correoFundacion;
+                  console.log(this.mail)
+                  if(this.filesToUpload2 != undefined){
+        
+    
+                    const imageForm = new FormData();
+                imageForm.append('image', this.imageObj);
+                this._uploadService.imageUpload(imageForm,'subir-foto-fundacion/',response.usuario._id).subscribe(res => {
                   
-                  if(res.n == '3'){
-                    
-                   this.filesToUpload2 = undefined;
-                   stepper.selectedIndex = 0;
-                   this.resets()
-                   this._messageService.showSuccess('Registro','La fundación se registro exitosamente, se envió un correo.')
-                 
-                  this.imL2 = false;
-                  this.imgUN2 = undefined;
-                  }else{
-                    this._messageService.showError('Error','No se pudo enviar el correo de notificación')
-
-                  }
-
-                },
-                err=>{
-                  this._messageService.showError('Error','No se pudo enviar el correo de notificación')
-                }
-              )
-            });
-
-               /* this._uploadService.makeGileRequest2(this.url+'subir-foto-fundacion/'+response.usuario._id,[],this.filesToUpload2,'logo')
-                .then((result:any)=>{
-                  //alert('si')
-                  
-                  
-                  if(result.n == '5' || result.n == '4' || result.n == '2'  || result.n == '1'){
-
-                    this.snackBar.open('Error al registrar','Cerrar', {
-                      duration: 2000,
-                    });
-                    this._usuarioService.borrarUsuario(response.usuario._id).subscribe(
-                      response=>{
+                  this._usuarioService.enviarEmail(this.mail).subscribe(
+                    res=>{
+                      
+                      if(res.n == '3'){
                         
-                      },
-                      error=>{
+                       this.filesToUpload2 = undefined;
+                       stepper.selectedIndex = 0;
+                       this.resets()
+                       this._messageService.showSuccess('Registro','Registro exitoso, se envió un correo con los accesos al sistema web para la fundación.')
+                     
+                      this.imL2 = false;
+                      this.imgUN2 = undefined;
+                      }else{
+                        this._messageService.showError('Error','No se pudo enviar el correo de notificación')
     
-                  })
-                  }else if(result.n == '3'){
-                  
-                    this.usuarioFundacion.logo = result.logo;
-                    
-                    
+                      }
+    
+                    },
+                    err=>{
+                      this._messageService.showError('Error','No se pudo enviar el correo de notificación')
+                    }
+                  )
+                });
+    
+                  }else{
                     this._usuarioService.enviarEmail(this.mail).subscribe(
                       res=>{
                         
@@ -245,101 +230,66 @@ $("#calleS").keyup(()=>{
                          this.filesToUpload2 = undefined;
                          stepper.selectedIndex = 0;
                          this.resets()
-                         this.snackBar.open('Registro exitoso','Cerrar', {
-                          duration: 2000,
-                        });
+    
+                                            this._messageService.showSuccess('Registro','La fundación se registro exitosamente, se envió un correo.')
+    
                         this.imL2 = false;
                         this.imgUN2 = undefined;
                         }else{
-                           this.snackBar.open('No se pudo enviar el correo','Cerrar', {
-                           duration: 2000,
-                           });
+                          this._messageService.showError('Error','No se pudo enviar el correo de notificación')
+    
                         }
     
                       },
                       err=>{
-                        this.snackBar.open('No se pudo enviar el correo','Cerrar', {
-                          duration: 2000,
-                          });
+                        this._messageService.showError('Error','No se pudo enviar el correo de notificación')
+    
                       }
                     )
-    
                    
                    
-                  }else{
-                    this.snackBar.open('Error al registrar','Cerrar', {
-                      duration: 2000,
-                    });
+                 
                   }
-    
-    
-    
-                });*/
-              }else{
-                this._usuarioService.enviarEmail(this.mail).subscribe(
-                  res=>{
                     
-                    if(res.n == '3'){
-                      
-                     this.filesToUpload2 = undefined;
-                     stepper.selectedIndex = 0;
-                     this.resets()
-
-                                        this._messageService.showSuccess('Registro','La fundación se registro exitosamente, se envió un correo.')
-
-                    this.imL2 = false;
-                    this.imgUN2 = undefined;
-                    }else{
-                      this._messageService.showError('Error','No se pudo enviar el correo de notificación')
-
-                    }
-
-                  },
-                  err=>{
-                    this._messageService.showError('Error','No se pudo enviar el correo de notificación')
-
-                  }
-                )
-               
-               
-             
-              }
+                   
+                  
                 
-               
-              
-            
-            }else if(response.n == '4'|| response.n == '6'){
-              this._messageService.showError('Error',response.message)
-
-            }else {
-              this._messageService.showError('Error','No se pudo procesar el registro')
-
+                }else if(response.n == '4'|| response.n == '6'){
+                  this._messageService.showError('Error',response.message)
     
-            }
-          },
-          error =>{
-            this._messageService.showError('Error','No se pudo procesar el registro')
-
-            
+                }else {
+                  this._messageService.showError('Error','No se pudo procesar el registro')
+    
+        
+                }
+              },
+              error =>{
+                this._messageService.showError('Error','No se pudo procesar el registro')
+    
+                
+              }
+            );
+          }else if(response.n == '5'){
+            stepper.selectedIndex = 0;
+            this.statusValid = 'errorNombre';
+          }else if(response.n == '2'){
+            stepper.selectedIndex = 0;
+            this.statusValid = 'errorNC';
+    
+          }else if(response.n == '3'){
+            stepper.selectedIndex = 1;
+            this.statusValid = 'errorCorreo'
           }
-        );
-      }else if(response.n == '5'){
-        stepper.selectedIndex = 0;
-        this.statusValid = 'errorNombre';
-      }else if(response.n == '2'){
-        stepper.selectedIndex = 0;
-        this.statusValid = 'errorNC';
-
-      }else if(response.n == '3'){
-        stepper.selectedIndex = 1;
-        this.statusValid = 'errorCorreo'
-      }
-    },
-    error=>{
-      this.statusValid = 'errorValidar'
-
+        },
+        error=>{
+          this.statusValid = 'errorValidar'
+    
+        }
+      )
+    }else{
+      this._messageService.showError('Error','Selecciona tu la dirección de la fundación en el mapa')
     }
-  )
+ 
     
    
    
@@ -351,7 +301,8 @@ $("#calleS").keyup(()=>{
    fileChangeEvent2(event:any){
     const FILE = (event.target as HTMLInputElement).files[0];
     this.imageObj= FILE;
-     this.filesToUpload2 = <Array<File>>event.target.files;
+    if(this.imageObj.type ==  "image/jpeg" || this.imageObj.type ==  "image/png" || this.imageObj.type ==  "image/jpg"){
+      this.filesToUpload2 = <Array<File>>event.target.files;
      
       let files = <Array<File>>event.target.files;
      this.urls2 = [];
@@ -369,6 +320,13 @@ $("#calleS").keyup(()=>{
       if(this.filesToUpload2 != undefined){
        this.imL2 = false;
      }
+    }else{
+      this.filesToUpload2 = undefined;
+     this.imL2 = false;
+     this.imgUN2 = undefined;
+      this._messageService.showError('Error','Solo se permite subir fotos.')
+    }
+     
    }
    limpiarCampo(text){
 
@@ -414,7 +372,7 @@ $("#calleS").keyup(()=>{
       }
     }
     if(op == '2'){
-      if( /^\s*$/.test(this.formGr3.value.calleP) || /^\s*$/.test(this.formGr3.value.calleS ) || /^\s*$/.test(this.formGr3.value.barrio )){
+      if( /^\s*$/.test(this.formGr3.value.barrio )){
        
         this.statusValid = 'errorCamposFR2'
          
@@ -423,15 +381,14 @@ $("#calleS").keyup(()=>{
 
         this.statusValid = '';
         var b = this.formGr3.value.barrio.trim();
-        var cp = this.formGr3.value.calleP.trim();
-        var cs = this.formGr3.value.calleS.trim();
+       // var cp = this.formGr3.value.calleP.trim();
+       // var cs = this.formGr3.value.calleS.trim();
 
         this.formGr3.controls['barrio'].setValue(b);
-        this.formGr3.controls['calleP'].setValue(cp);
-        this.formGr3.controls['calleS'].setValue(cs);
+       
 
        
-        if(b.length < 4 || cp.length < 4 || cs.length <4){
+        if(b.length < 4){
           this.statusValid = 'errorCamposFR2E'
         }else{
           this.statusValid == '';
@@ -450,5 +407,23 @@ $("#calleS").keyup(()=>{
                 this.formGr2.reset();
                 this.formGr3.reset();
             
+  }
+  openDialogMap(): void {
+    const dialogRef = this.dialog.open(MapCustomComponent, {
+      width: '500px',
+      height: '500px',
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+  
+      if(result != ''){
+        this.direccionSelec = result;
+        this.usuarioFundacion.direccionMap = this.direccionSelec;
+      }else{
+        this.direccionSelec = ''
+      }
+      console.log('The dialog was closed',result);
+      
+    });
   }
 }

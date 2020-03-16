@@ -20,11 +20,17 @@
                 <h5>Ordenar por</h5>
           
                 <div class="form-group has-search">
-                    <span class="fa fa-search form-control-feedback"></span>
-                    <input id="bsFunNombre" type="text" class="form-control" placeholder="Buscar por apellidos">
+                  <mat-form-field appearance="outline" style="font-size: 1.5em;">
+                    <mat-label>Buscar por apellidos</mat-label>
+                  
+                    <input  [formControl]="bsVoluntario" id="bsFunNombre" matInput type="text"  placeholder="Buscar por apellidos">
+                    <mat-icon matSuffix>search</mat-icon>
+                
+                  </mat-form-field>
+                  
                   </div>
-      
-                <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Ver todos</button>
+        
+                <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Limpiar filtros <i class="fa fa-times-circle" aria-hidden="true"></i></button>
              
               </form>
               <div class="container dividerTi" *ngIf="carga == false">
@@ -33,15 +39,18 @@
                 
               </div>
         </div>
-        <div class="col-12 col-sm-9 content-grid-cards">
+        <div class="col-12 col-sm-9 custom-cards">
+          <app-empty-element *ngIf="advertencia == true" [foto]="'voluntario.png'" [mensaje]="'No se encontro voluntarios.'"></app-empty-element>
+          <app-loading-custom class="spinn" *ngIf="loading == true"></app-loading-custom>
+          <div class="content-grid-cards">
             <mat-card *ngFor="let vol of voluntarios">
                 <div class="card-header">
                     <div class="card-header-tex">
                         <h5>{{vol.tipoVoluntario}}</h5>
                     </div>
-                    <div class="card-header-icon" (click)="obtenerVoluntario(vol,vol._id)">
-                        <i class="fa fa-expand" aria-hidden="true"></i>
-                    </div>
+                    <button type="button" class="card-header-icon" (click)="obtenerVoluntario(vol,vol._id)">
+                      <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </button>
                 </div>
                 <div class="card-status">
                     <span>{{vol.cedula}}</span>
@@ -73,33 +82,34 @@
 
                 </div>
             </mat-card>
+            </div>
         </div>
         <div class="col-12 col-sm-3"></div>
         <div class="col-12 col-sm-9" *ngIf="filtroBTN == false">
             <div class="selectPages" >
                 <div class="pageAnt2">
-                    <a  [routerLink]="['/fundacion',name,idFun,'voluntarios', type, '1']"
+                    <a  [routerLink]="['/fundacion',idFun,'voluntarios', type, '1']"
                       class="btn btn-primary">
                       <i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
                   </div>
               <div class="pageAnt">
-                <button [disabled]="page == 1"  [routerLink]="['/fundacion',name,idFun,'voluntarios', type, prev_pagee]"
+                <button [disabled]="page == 1"  [routerLink]="['/fundacion',idFun,'voluntarios', type, prev_pagee]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-left" aria-hidden="true"></i></button>
               </div>
               <div class="pagess">
         
-               <a  [routerLink]="['/fundacion',name,idFun,'voluntarios', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
+               <a  [routerLink]="['/fundacion',idFun,'voluntarios', type, p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
            
               </div>
               <div class="pageNex">
-                <button [disabled]="page == pages"  [routerLink]="['/fundacion',name,idFun,'voluntarios', type, next_pagee]"
+                <button [disabled]="page == pages"  [routerLink]="['/fundacion',idFun,'voluntarios', type, next_pagee]"
                 class="btn btn-primary">
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </button>
               </div>
               <div class="pageNex2">
-                  <a  [routerLink]="['/fundacion',name,idFun,'voluntarios', type, pages]"
+                  <a  [routerLink]="['/fundacion',idFun,'voluntarios', type, pages]"
                   class="btn btn-primary">
                   <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                 </a>
@@ -141,7 +151,7 @@
         <div class="modal-header" style="align-items: center;">
           <h5 class="modal-title" id="exampleModalLongTitle" style="font-size: 1.5rem; margin: 0;">Registro de voluntario</h5>
           <div class="btnModalVolAcc" >
-            <button *ngIf="actualizar == true" class="btn btn-danger" style="background: #bf3b3b !important;" (click)="eliminarVoluntarioEstado(usuario,usuario._id)">Eliminar usuario </button>
+            <button *ngIf="actualizar == true" class="btn btn-danger" style="background: #bf3b3b !important;" (click)="eliminarVoluntarioEstado(usuario,usuario._id)">Eliminar voluntario</button>
 
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -248,29 +258,26 @@
                   <form id="RGF2">
                     <ng-template matStepLabel></ng-template>
                     <div class="row">
-                        <div class="form-group col-md-6">
+                      <div class="form-group col-md-6">
         
-                            <mat-form-field appearance="standard">
-                                <mat-label>Correo electrónico</mat-label>
-                              
-                                <input required [formControl]="correo" id="correo2" matInput type="email"  placeholder="Correo electrónico del voluntario"  [class.is-invalid]="!correo.valid && correo.touched" [class.is-valid]="correo.valid">
-                                <mat-icon matSuffix><i class="fa fa-envelope" aria-hidden="true"></i></mat-icon>
-                               <mat-error *ngIf="correo.invalid">{{getErrorMessage5()}}</mat-error>
-                              </mat-form-field>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Teléfono</mat-label>
+                          
+                            <input required [formControl]="telefono" matInput type="text"  placeholder="Teléfono del voluntario"  [class.is-invalid]="!telefono.valid && telefono.touched" [class.is-valid]="telefono.valid">
+                            <mat-icon matSuffix><i class="fa fa-phone-square" aria-hidden="true"></i></mat-icon>
+                           <mat-error *ngIf="telefono.invalid">{{getErrorMessage9()}}</mat-error>
+                          </mat-form-field>
+                    </div>
+                    <div class="form-group col-md-6">
       
-                        </div>
-                        <div class="form-group col-md-6" *ngIf="actualizar == false">
-        
-                            <mat-form-field appearance="standard">
-                                <mat-label>Contraseña</mat-label>
-                              
-                                <input required [formControl]="password" id="password" matInput type="password"  placeholder="Cédula del voluntario"  [class.is-invalid]="!password.valid && password.touched" [class.is-valid]="password.valid">
-                                <mat-icon matSuffix><i class="fa fa-key" aria-hidden="true"></i></mat-icon>
-                                <mat-hint align="start">La contraseña debe contener entre 8-20 caracteres, al menos 1 letra mayúscula, 1 letra minúscula, 1 número y un caracter no alfanumérico.</mat-hint>
-                               <mat-error *ngIf="password.invalid">{{getErrorMessage6()}}</mat-error>
-                              </mat-form-field>
-          
-                        </div>
+                        <mat-form-field appearance="standard">
+                            <mat-label>Celular</mat-label>
+                          
+                            <input required [formControl]="celular" matInput type="text"  placeholder="Celular del voluntario"  [class.is-invalid]="!celular.valid && celular.touched" [class.is-valid]="celular.valid">
+                            <mat-icon matSuffix><i class="fa fa-mobile" aria-hidden="true"></i></mat-icon>
+                           <mat-error *ngIf="celular.invalid">{{getErrorMessage10()}}</mat-error>
+                          </mat-form-field>
+                    </div>
                         <div class="form-group col-md-6">
                             <mat-form-field appearance="standard">
                                 <mat-select [formControl]="tipoVoluntario" placeholder="Tipo de voluntario" [class.is-invalid]="!tipoVoluntario.valid && tipoVoluntario.touched"
@@ -292,10 +299,33 @@
                                 <mat-icon matSuffix><i class="fa fa-clock-o" aria-hidden="true"></i></mat-icon>
                                 <mat-error *ngIf="disponibilidadTiempo.invalid">{{getErrorMessage8()}}</mat-error>
                               </mat-form-field>
-                        </div>   
+                        </div> 
+                        <div class="form-group col-md-6">
+        
+                          <mat-form-field appearance="standard">
+                              <mat-label>Correo electrónico</mat-label>
+                            
+                              <input required [formControl]="correo" id="correo2" matInput type="email"  placeholder="Correo electrónico del voluntario"  [class.is-invalid]="!correo.valid && correo.touched" [class.is-valid]="correo.valid">
+                              <mat-icon matSuffix><i class="fa fa-envelope" aria-hidden="true"></i></mat-icon>
+                             <mat-error *ngIf="correo.invalid">{{getErrorMessage5()}}</mat-error>
+                            </mat-form-field>
+    
+                      </div>
+                      <div class="form-group col-md-6" *ngIf="actualizar == false">
+      
+                         
+                            <mat-form-field appearance="standard">
+                              <mat-label>Contraseña</mat-label>
+                              <input matInput placeholder="Contraseña" [type]="hide ? 'password' : 'text'" [formControl]="password" id="password" required>
+                              <mat-icon style="cursor: pointer;" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              <mat-hint align="start">La contraseña debe contener entre 8-20 caracteres, al menos 1 letra mayúscula, 1 letra minúscula, 1 número y un caracter no alfanumérico.</mat-hint>
+                             <mat-error *ngIf="password.invalid">{{getErrorMessage6()}}</mat-error>
+                          </mat-form-field>
+        
+                      </div>  
                     </div>
                       
-                    <div class="btnNEXT2">
+                    <div class="btnNEXT2" style="margin-top: 3em;">
                       <button mat-button matStepperPrevious>Regresar</button>
                       <button mat-button matStepperNext>Siguiente</button>
                     </div>
@@ -304,36 +334,21 @@
                 <mat-step>
                   <ng-template matStepLabel></ng-template>
                   <form id="RGF3" class="row">
+                     
                       <div class="form-group col-md-6">
-        
-                          <mat-form-field appearance="standard">
-                              <mat-label>Teléfono</mat-label>
-                            
-                              <input required [formControl]="telefono" matInput type="text"  placeholder="Teléfono del voluntario"  [class.is-invalid]="!telefono.valid && telefono.touched" [class.is-valid]="telefono.valid">
-                              <mat-icon matSuffix><i class="fa fa-phone-square" aria-hidden="true"></i></mat-icon>
-                             <mat-error *ngIf="telefono.invalid">{{getErrorMessage9()}}</mat-error>
-                            </mat-form-field>
+                        <p *ngIf="actualizar == true && usuario.direccionMap"><strong>Dirección: </strong>{{usuario.direccionMap.formmatedAddres}}</p>
+                        <p *ngIf="actualizar == false "><strong>Dirección: </strong>{{direccionSelec.formmatedAddres}}</p>
+                        <div class="mapa" style="width: 90%; max-width: 20em;">
+                          <div id="mapcustom" style="width: 100%; max-height: 12em;" >
+                          </div>
                       </div>
-                      <div class="form-group col-md-6">
-        
-                          <mat-form-field appearance="standard">
-                              <mat-label>Celular</mat-label>
-                            
-                              <input required [formControl]="celular" matInput type="text"  placeholder="Celular del voluntario"  [class.is-invalid]="!celular.valid && celular.touched" [class.is-valid]="celular.valid">
-                              <mat-icon matSuffix><i class="fa fa-mobile" aria-hidden="true"></i></mat-icon>
-                             <mat-error *ngIf="celular.invalid">{{getErrorMessage10()}}</mat-error>
-                            </mat-form-field>
                       </div>
-                      <div class="form-group col-md-6">
-        
-                          <mat-form-field appearance="standard">
-                              <mat-label>Dirección</mat-label>
-                            
-                              <input required [formControl]="direccion" matInput type="text" id="direccion"  placeholder="Dirección domiciliaria del voluntario"  [class.is-invalid]="!direccion.valid && direccion.touched" [class.is-valid]="direccion.valid">
-                              <mat-icon matSuffix><i class="fa fa-home" aria-hidden="true"></i></mat-icon>
-                             <mat-error *ngIf="direccion.invalid">{{getErrorMessage11()}}</mat-error>
-                            </mat-form-field>
-                      </div>
+                      <div class="form-group col-md-6" style="display: flex; flex-direction: column; justify-content: center;">
+                        
+                        <button *ngIf="actualizar == false" (click)="openDialogMap()" class="btnDir">Seleccionar dirección <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                        <button *ngIf="actualizar == true" (click)="openDialogMap()" class="btnDir">Cambiar dirección <i class="fa fa-map-marker" aria-hidden="true"></i></button>
+
+                    </div>
                       <div class="form-group col-md-6 disponibilidad" *ngIf="nuevoRegistro == true || actualizar == true">
         
                           <p>¿El voluntario tiene la posibilidad de ayudar con casa temporal para un animal en emergencia?</p>
@@ -390,11 +405,11 @@
                   <div class="btnNEXT2">
                     <button mat-button matStepperPrevious>Regresar</button>
                     <button type="submit" mat-button *ngIf="actualizar == false" (click)="registrarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || direccion.invalid || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || direccion.invalid || celular.invalid" >Registrar</button>
-                    <button type="submit" class="btn btn-primary" *ngIf="actualizar == true" (click)="actualizarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || direccion.invalid || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || direccion.invalid || celular.invalid" >Actualizar</button>
+                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid" >Registrar</button>
+                    <button type="submit"  *ngIf="actualizar == true" (click)="actualizarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid" >Actualizar</button>
       
                   </div>
                 </mat-step>
@@ -404,4 +419,3 @@
       </div>
     </div>
   </div>
-  <app-footer-fundacion  *ngIf="fundacion"></app-footer-fundacion>

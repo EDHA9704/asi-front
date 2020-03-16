@@ -34,7 +34,7 @@
                
                 
         
-              <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Ver todos</button>
+              <button class="btn btn-danger" (click)="cancelarBus()" *ngIf="filtroBTN == true">Limpiar filtros <i class="fa fa-times-circle" aria-hidden="true"></i></button>
            
             </form>
         
@@ -45,18 +45,22 @@
               
             </div>
         </div> 
-        <div class="col-12 col-sm-9 content-grid-cards">
+        <div class="col-12 col-sm-9 custom-cards">
+
+          <app-empty-element *ngIf="advertencia == true" [foto]="'corazon.png'" [mensaje]="'No se encontro donaciones.'"></app-empty-element>
+          <app-loading-custom class="spinn" *ngIf="loading == true"></app-loading-custom>
+          <div class="content-grid-cards">
             <mat-card *ngFor="let dona of donaciones">
                 <div class="card-header">
                     <div class="card-header-tex">
                         <h5 >{{dona.tipo}}</h5>
                         
                     </div>
-                    <div class="card-header-icon" [routerLink]="['/perfil','donacion',currentUser.usuario._id,dona._id]">
-                        <i class="fa fa-expand" aria-hidden="true"></i>
-                    </div>
+                    <button type="button" class="card-header-icon" [routerLink]="['/perfil','donacion',currentUser.usuario._id,dona._id]">
+                      <i class="fa fa-external-link" aria-hidden="true"></i>
+                    </button>
                 </div> 
-                <div class="card-status">
+                <div class="card-status" [class.card-statusNeg]="dona.estado == 0">
                     <span *ngIf="dona.estado == 1 || dona.estado == 'fundacion'">Aprobada</span>
                     <span *ngIf="dona.estado == 2">Negada</span>
                     <span *ngIf="dona.estado == 3">Por asignar</span>
@@ -91,6 +95,7 @@
 
                 </div>
             </mat-card>
+            </div>
         </div>
         <div class="col-12 col-sm-3"></div>
         <div class="col-12 col-sm-9">
@@ -134,40 +139,48 @@
 
 
         
-  <div class="col-12 col-md-6 cardD">
-    <div class="titulo">
-        <h5>Depositos y transferencias bancarias</h5>
+  <div class="col-12 col-md-12 col-lg-6">
+    <div class="card-donacion">
+      <div class="card-foto">
+        <img src="../../../../../assets/img/dinero.png">
+      </div>
+      <div class="card-datos">
+        <div class="row">
+          <div class="col-6 "><p>Titular: {{fundacion.titular}}</p></div>
+          <div class="col-6 "><p>Cédula: {{fundacion.cedulaCuenta}}</p></div>
+          <div class="col-6 "> <p>Correo: {{fundacion.correoCuenta}}</p></div>
+          <div class="col-6 "><p>Banco: {{fundacion.banco}}</p></div>
+          <div class="col-6 "> <p>Número de cuenta: {{fundacion.numCuenta}}</p></div>
+          <div class="col-6 "><p>Tipo de cuenta: {{fundacion.tipoCuenta}}</p></div>
+        </div>
+        
+        
        
+        
+       
+        
+      </div>
+      <div class="card-titulo">
+        <h5>Depositos y transferencias bancarias</h5>
+      </div>
     </div>
-    <p style="color: #535353">Desde la aplicación móvil podrás subir el comprobante para verificar tu donación económica.</p>
-
-    <div class="infor">
-        <div class="imgDon">
-            <img src="../../../../../assets/img/puerta-para-perros-grandes-mascotas-D_NQ_NP_758821-MEC26331135264_112017-F.jpg">
-          </div>
-          <div class="datosDona" *ngIf="fundacion">
-
-              <p>Titular: {{fundacion.titular}}</p>
-              <p>Banco: {{fundacion.banco}}</p>
-              <p>Número de cuenta: {{fundacion.numCuenta}}</p>
   
-            </div>
-    </div>
     
   </div>
-  <div class="col-12 col-md-6 cardD">
-      <div class="titulo">
-          <h5>Donaciones en productos</h5>
-         
+  <div class="col-12 col-md-12 col-lg-6">
+    <div class="card-donacion">
+      <div class="card-foto">
+        <img src="../../../../../assets/img/producto.png">
       </div>
-      <p style="color: #535353">Desde la aplicación móvil podrás registrar la donación en productos, despúes uno de nuestros voluntarios serán
+      <div class="card-datos">
+        <p >Desde la aplicación móvil podrás registrar la donación en productos, despúes uno de nuestros voluntarios serán
           asignados para contactar contigo y retirar la donación.</p>
-      <div class="infor">
-          <div class="imgDon">
-              <img src="../../../../../assets/img/puerta-para-perros-grandes-mascotas-D_NQ_NP_758821-MEC26331135264_112017-F.jpg">
-            </div>
-          
       </div>
+      <div class="card-titulo">
+        <h5>Donaciones en productos</h5>
+      </div>
+    </div>
+      
       
     </div>
 
@@ -451,4 +464,4 @@
           </div>
         </div>
       </div>
-      <app-footer-fundacion *ngIf="fundacion"></app-footer-fundacion>
+  

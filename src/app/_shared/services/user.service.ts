@@ -66,6 +66,12 @@ export class UserService {
 
         return this.http.put(environment.apiUrl+'actualizar-usuario/'+id,params,{headers:headers});
     }
+    actualizarUsuarioCiudadano(usuario,id):Observable<any>{
+      let params = JSON.stringify(usuario);
+      let headers = new HttpHeaders().set('Content-Type','application/json')
+
+      return this.http.put(environment.apiUrl+'actualizar-usuarioCiudadano/'+id,params,{headers:headers});
+  }
     validarCorreoF(usuario:any):Observable<any>{
       let params = JSON.stringify(usuario);
       let headers = new HttpHeaders().set('Content-Type','application/json');
@@ -97,6 +103,11 @@ export class UserService {
      eliminarFundacion(id):Observable<any>{
       let headers = new HttpHeaders().set('Content-Type','application/json')
       return this.http.delete(environment.apiUrl+'eliminar-fundacion/'+id, {headers:headers});
+      
+    }
+    eliminarCiudadano(id):Observable<any>{
+      let headers = new HttpHeaders().set('Content-Type','application/json')
+      return this.http.delete(environment.apiUrl+'eliminar-ciudadano/'+id, {headers:headers});
       
     }
      //fundaciones no aprobadas

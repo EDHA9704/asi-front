@@ -3,7 +3,21 @@
         <nav>
             <div class="nav-brand">
                 <a [routerLink]="['/']" >
-                    <img src="../../../../../assets//img/Captura2.png">
+
+
+                    <img *ngIf="!currentUser && keyUrl[1] == 'home'" src="../../../../../assets/img/Captura2.png">
+                    <img *ngIf="!currentUser && keyUrl[1] == 'perfil' && keyUrl[4] == 'home' " src="../../../../../assets/img/Captura2.png">
+                    <img *ngIf="!currentUser && keyUrl[1] == 'perfil' && keyUrl[2] != 'mascota' " src="../../../../../assets/img/Captura2.png">
+                    <img *ngIf="!currentUser && keyUrl[1] == 'fundacion' && photoFF" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                        photoFF}}">
+                        <img *ngIf="currentUser && keyUrl[1] == 'fundacion' && photoFF" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            photoFF}}">
+                            <img *ngIf="currentUser && keyUrl[1] == 'perfil' && photoFF" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                                photoFF}}">
+                        <img *ngIf="!currentUser && keyUrl[1] == 'perfil' && keyUrl[4] == 'fund' && photoFF" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                            photoFF}}">
+
+                    
                 </a>
                 
             </div>
@@ -50,12 +64,12 @@
                                 <div class="dropdown-divider"></div>
                                 <div id="divNotificacion" class="notificacion">
     
-                                    <p style="padding: 1rem 1rem;" *ngIf="notificaciones.length == 0 ">No existe notificaciones</p>
-                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',idFun,'perfil']">actualiza tus datos</a></p>
+                                    <p style="padding: 1rem 1rem;" *ngIf="cargaN == false && notificaciones.length == 0 && currentUser.usuario.estado != 2 ">No existe notificaciones</p>
+                                    <p style="padding: 1rem 1rem;" *ngIf="currentUser.usuario.estado == 2" >Tu cuenta aún no se encuentra activa. Para activarla <a [routerLink]="['/fundacion',currentUser.usuario._id,'perfil']">actualiza tus datos</a></p>
     
                                     <div class="notiS" *ngFor="let not of notificaciones" [class.activeNT]="not.estado == 1">
                                         <!--NOTIFICACION TIPO EMERGENCIA-->
-                                        <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun,not.emergencia._id]" *ngIf="not.tipo == 2">
+                                        <div class="contNot"  [routerLink]="['/perfil/emergencia',not.emergencia._id]" *ngIf="not.tipo == 2">
                                             <div class="imgnotiS" *ngIf="not.voluntario">
      
                                                 <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
@@ -77,9 +91,9 @@
                                                     <img *ngIf="!not.emergencia.fotoMascota" src="../../../../assets/img/Captura2.png">
                                             </div>
                                            
-                                        </div>
+                                        </div> 
                                         <!--NOTIFICACION TIPO ADOPCION-->
-                                        <div class="contNot"  (click)="brake.emit('hola')" *ngIf="not.tipo == 1 ">
+                                        <div class="contNot"  [routerLink]="['/perfil/adopcion',currentUser.usuario._id,not.adopcion._id]" *ngIf="not.tipo == 1 ">
                                             <div class="imgnotiS" *ngIf="not.voluntario">
     
                                                 <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
@@ -104,7 +118,7 @@
                                             </div>
                                         </div>
                                         <!--NOTIFICACION TIPO AYUDA - (ACOGIDA-ATENDIDA) -->
-                                        <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun, not.emergencia._id]" *ngIf="not.tipo == 5 || not.tipo == 6">
+                                        <div class="contNot"  [routerLink]="['/perfil/emergencia', not.emergencia._id]" *ngIf="not.tipo == 5 || not.tipo == 6">
                                             <div class="imgnotiS">
     
                                                     <img *ngIf="not.fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.fundacion.logo}}">
@@ -122,7 +136,7 @@
                                           
                                         </div>
                                         <!--NOTIFICACION TIPO APROBADA - NEGAr EMERGENCIA ASIGNADA VOLUNTARIO -->
-                                        <div class="contNot"  [routerLink]="['/perfil-emergencia', idFun, not.emergencia._id]" *ngIf="not.tipo == 7 || not.tipo == 8">
+                                        <div class="contNot"  [routerLink]="['/perfil/emergencia', not.emergencia._id]" *ngIf="not.tipo == 7 || not.tipo == 8">
                                             <div class="imgnotiS">
     
                                                     <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
@@ -140,7 +154,7 @@
                                         
                                         </div>
                                          <!--NOTIFICACION TIPO DONACION -->
-                                         <div class="contNot"   *ngIf="not.tipo == 3">
+                                         <div class="contNot"   *ngIf="not.tipo == 3" [routerLink]="['/perfil/donacion',currentUser.usuario._id,not.donacion._id]" >
                                             <div class="imgnotiS" *ngIf="not.voluntario">
     
                                                     <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
@@ -164,7 +178,7 @@
                                         
                                         </div>
                                                           <!--NOTIFICACION TIPO DONACION ap - ng  -->
-                                                          <div class="contNot"   *ngIf="not.tipo == 13 || not.tipo == 14">
+                                                          <div class="contNot"   *ngIf="not.tipo == 13 || not.tipo == 14" [routerLink]="['/perfil/donacion',currentUser.usuario._id,not.donacion._id]">
                                                             <div class="imgnotiS" *ngIf="not.voluntario">
                     
                                                                     <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
@@ -207,7 +221,7 @@
                                
                                 <div class="contentD">
                                         <button class="dropdown-item" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
-                                        <a class="dropdown-item"  [routerLink]="['/fundacion',idFun,'perfil']">Actualizar perfil</a>
+                                        <a class="dropdown-item"  [routerLink]="['/fundacion',currentUser.usuario._id,'perfil']">Actualizar perfil</a>
                                 </div>
                                 
                             </div>

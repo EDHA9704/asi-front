@@ -10,6 +10,8 @@ import { MessagesService } from 'src/app/_shared/messages/messages.service';
 declare var $:any;
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { UploadService } from 'src/app/_shared/services/upload.service';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
+import { NgxUiLoaderService} from 'ngx-ui-loader'; // Import NgxUiLoaderService
 @Component({
   selector: 'app-perfil-mascota',
   templateUrl: './perfil-mascota.component.html',
@@ -48,6 +50,10 @@ public config_gallery: any = {
     spaceBetween: 0,
     zoom: true,
     loop:true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
     navigation: {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
@@ -55,6 +61,7 @@ public config_gallery: any = {
 };
 especie = new FormControl('', [Validators.required]);
   nombre = new FormControl('', [Validators.required,Validators.pattern('^[a-z A-Z áéíóúÁÉÍÓÚñÑ]+$'), Validators.maxLength(15),Validators.minLength(2)]);
+  otherVacunas = new FormControl('', [ Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ 0-9 ; : . , -]*$'), Validators.maxLength(50),Validators.minLength(2)]);
   sexo = new FormControl('', [Validators.required]);
   raza = new FormControl('', [Validators.required]);
   color = new FormControl('', [Validators.required]);
@@ -83,6 +90,12 @@ especie = new FormControl('', [Validators.required]);
     this.nombre.hasError('pattern') ? 'No se admite: símbolos, caracteres especiales o números':
             this.nombre.hasError('maxlength') ? 'Máximo 15 caracteres':
             this.nombre.hasError('minlength') ? 'Mínimo 2 caracteres':
+            '';
+  }
+  getErrorMessageOTHER() {
+    return this.otherVacunas.hasError('pattern') ? 'No se acepta: símbolos, caracteres especiales, números':
+            this.otherVacunas.hasError('maxlength') ? 'Máximo 50 caracteres':
+            this.otherVacunas.hasError('minlength') ? 'Mínimo 2 caracteres':
             '';
   }
   getErrorMessage3() {
@@ -125,17 +138,33 @@ especie = new FormControl('', [Validators.required]);
             this.descripcion.hasError('minlength') ? 'Describe mejor a la mascota':
             '';
   }
-
+  keyUrl
+  fullUrl:string
   constructor(private _route:ActivatedRoute,private _router:Router,
     private authenticationService: AuthenticationService,private _mascotaService:MascotaService,
-    private _messageService:MessagesService,private _uploadService:UploadService) {
+    private _messageService:MessagesService,private _uploadService:UploadService,
+    private _comunicationService:CommunicationService,private ngxService: NgxUiLoaderService) {
+      this.ngxService.startLoader('loader-02');
     this.currentUser = this.authenticationService.currentUserValue;
     this.url = environment.apiUrl;
     
    }
 
   ngOnInit() {
+    
     this.loadPage();
+    this.fullUrl = this._router.url.toString()
+    this.keyUrl = this.fullUrl.split('/')
+    console.log(this.keyUrl)
+   /* $( document ).ready(()=> {
+      if(this.keyUrl[2] == 'mascota'){
+        $(".mascota-header").addClass('headerName')
+      
+      }else{
+        $(".mascota-header").removeClass('headerName')
+      }
+  });
+    */
   }
   obtMascota(id){
     this.images = []
@@ -145,11 +174,20 @@ especie = new FormControl('', [Validators.required]);
        response =>{
  
          if(response.mascota && response.n == '1'){
-         
+          this.ngxService.stopLoader('loader-02');
           // this.obtFotosMascotas(response.mascota._id);
            //this.nObtMasc = response.n;
            //this.vmas = true;
            this.mascota= response.mascota;
+           this._comunicationService.perfilFundacionSelec(this.mascota.responsable.logo)
+          $( document ).ready(()=> {
+            if(this.keyUrl[4] == 'fund'){
+              $(".mascota-header").addClass('headerName')
+            
+            }else{
+              $(".mascota-header").removeClass('headerName')
+            }
+        });
            console.log(this.mascota)
  
  
@@ -220,6 +258,7 @@ especie = new FormControl('', [Validators.required]);
             this.edadT.setValue(this.mascota.edadT)
             this.anios.setValue(this.mascota.anios)
             this.meses.setValue(this.mascota.meses)
+            this.otherVacunas.setValue(this.mascota.otherVacunas)
             this.descripcion.setValue(this.mascota.descripcion)
             $(document).ready(()=>{
               this.prob()
@@ -302,7 +341,7 @@ $("#descripcion").keyup(()=>{
     this.mascota.anios = this.anios.value;
     this.mascota.meses = this.meses.value;
     this.mascota.descripcion = this.descripcion.value;
-
+    this.mascota.otherVacunas = this.otherVacunas.value
     if(this.mascota.especie == 'Felino'){
      console.log("entroAC")
       this.mascota.vpp = this.ppy.value;

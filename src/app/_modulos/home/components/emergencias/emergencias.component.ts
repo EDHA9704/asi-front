@@ -2,6 +2,7 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmergenciaService } from 'src/app/_shared/services/emergencia.service';
 import {environment} from '../../../../../environments/environment'
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 declare var $:any
 @Component({
   selector: 'app-emergencias',
@@ -11,10 +12,10 @@ declare var $:any
 export class EmergenciasComponent implements OnInit,DoCheck{
   titulo = 'Emergencias'
   descripcion = 'Gracias a la ayuda de las fundaciones, voluntarios y ciudadanos es posible'+
-  'ayudar a animales que se encuentran en peligro o que han sufrido algun'+
-  'accidente y brindarles la atención necesaria para que puedan encontrar una familia.'
+  ' ayudar a animales que se encuentran en peligro o que han sufrido algun'+
+  ' accidente y brindarles la atención necesaria para que puedan encontrar una familia.'
   img = "corEm.png"
-
+  descripcion2 = 'Emergencias reportadas'
   public type;
   public pagesSelec;
   public mensaje;
@@ -38,8 +39,9 @@ export class EmergenciasComponent implements OnInit,DoCheck{
   public imgCom
   public url
   public select
+  public loading=true;
   public tipoE = ["Todos","Mal estado de salud","Accidente","Preñada","Con cachorros","Maltrato","Abandono"];
-  constructor(private _route:ActivatedRoute,
+  constructor(private _route:ActivatedRoute,private _comunicationService:CommunicationService,
     private _router:Router,private _emergenciaService:EmergenciaService) {
       this.filtroBSQ = this._emergenciaService.obtFiltro();
       this.url = environment.apiUrl;
@@ -52,6 +54,7 @@ export class EmergenciasComponent implements OnInit,DoCheck{
      }
 
   ngOnInit() {
+    this._comunicationService.perfilFundacionSelec('')
     this.page = 1;
     this.actualPage();
     //this.obtVoluntarios()
@@ -143,6 +146,7 @@ cancelarBus(){
 }
 
   buscarEmergencias(page,adding=false){
+    this.loading = true;
     this.pagesSelec = []
     this.emergencias = []
     this._emergenciaService.filtroEmergencias(this.filtroBSQ,page).subscribe(
@@ -164,13 +168,15 @@ cancelarBus(){
           //console.log(this.emergencias)
           this.itemsEmer = this.emergencias.length;
           this.status ='success';
-
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
           if(page > this.pages){
             this._router.navigate[('/login')]
           }
         }
       },
       error=>{
+        this.loading = false;
         this.carga = false;
         this.advertencia =true;
         this.status = 'error';  
@@ -284,6 +290,8 @@ cancelarBus(){
           this.emergencias = response.emergencias;
           console.log(this.emergencias)
           this.itemsEmer = this.emergencias.length;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
           for (let i = 1; i <= this.pages; i++) {
             this.pagesSelec.push(i)
             
@@ -307,6 +315,7 @@ cancelarBus(){
         var errorMessage = <any>error;
         console.log(errorMessage)
         this.carga = false;
+        this.loading = false;
         this.advertencia = true;
         this.status = 'error';
         if((errorMessage != null && error.error.n == '2')){

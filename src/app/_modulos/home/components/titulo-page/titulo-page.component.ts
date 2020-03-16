@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TituloPageComponent implements OnInit {
   @Input() titulo: string;
   @Input() descripcion: string;
+  @Input() descripcion2: string;
   @Input() img: string;
   constructor() { }
 

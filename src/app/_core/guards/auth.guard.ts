@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         return true
       }else{
         if(currentUser.usuario.rol == '4'){
-          this.router.navigate(['/fundacion',currentUser.usuario._id]);
+          this.router.navigate(['/fundacion',currentUser.usuario._id,'nosotros']);
           return false
         }else if(currentUser.usuario.rol == '1'){
           this.router.navigate(['/admin']);
