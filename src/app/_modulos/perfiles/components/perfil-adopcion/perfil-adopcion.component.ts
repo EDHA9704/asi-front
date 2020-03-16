@@ -256,4 +256,9 @@ export class PerfilAdopcionComponent implements OnInit {
      })
    
  }
+
+ redirectMascota(nombre,id,idr){
+  this._router.navigate(['perfil/mascota',idr,'fund',nombre,id]);
+  
+}
 }

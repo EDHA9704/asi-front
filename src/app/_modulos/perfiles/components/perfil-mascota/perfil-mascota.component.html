@@ -63,22 +63,23 @@ minTime= "500"
   
   
   
-      <section class="mascota-header">
-        <div class="contentWater">
-          <div class="contentw">
-            <h2>{{mascota.nombre}}</h2>
-            <h2>{{mascota.nombre}}</h2>
-          </div>
-          
-        </div>
-          
-  
-      
-      </section>
+ 
       <section class="mascota-body" >
         <div class="row" style=" margin: 0 !important;width: 100% !important;">
           <div class="col-12 col-md-12 col-lg-8 gallery">
             <div class="content">
+              <section class="mascota-header">
+                <div class="contentWater">
+                  <div class="contentw">
+                    <h2>{{mascota.nombre}}</h2>
+                    <h2>{{mascota.nombre}}</h2>
+                  </div>
+                  
+                </div>
+                  
+          
+              
+              </section>
               <swiper class="swiper" [config]="config_gallery" #swiperGallery style="width: 85%; height: 25rem;">
                 <label *ngIf="permission == true" for="file23" class="input-label2"><i class="fa fa-upload" aria-hidden="true"></i> Añadir foto</label>
                  <input *ngIf="permission == true" id="file23" (change)="fileChangeEvent($event)" name="foto" type="file">

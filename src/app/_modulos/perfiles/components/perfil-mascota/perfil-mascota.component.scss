@@ -50,6 +50,9 @@ mat-form-field{
     min-height: 100vh;
     padding-top: 7em;;
 }
+.mainclean{
+    padding-top: 0 !important;
+}
 .container-mascota{
     width: 100%;
     height: 100%;
@@ -208,7 +211,8 @@ mat-form-field{
     }
 
     .info{
-       
+        display: flex;
+        align-items: center;
         padding: 2rem;
         .titulo{
             width: 100%;

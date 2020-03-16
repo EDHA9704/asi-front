@@ -24,7 +24,7 @@ const routes: Routes = [
   {path: '', component: LayoutComponent, children:[
     {
       path: '',
-      redirectTo: '/home',
+      redirectTo: '/home/inicio',
       pathMatch: 'full'
     
     },

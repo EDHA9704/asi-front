@@ -44,7 +44,7 @@ minTime= "500"
    
       <div class="row">
           <div class="col-12 col-md-3 donacion-content">
-              <div class="donacion-content-img">
+              <div class="donacion-content-img" (click)="redirectMascota(adopcion.mascota.nombre,adopcion.mascota._id,adopcion.fundacion._id)" style="cursor: pointer;">
                   <img src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
                     adopcion.mascota.fotos[0].name}}">
   

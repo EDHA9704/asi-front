@@ -156,15 +156,16 @@ especie = new FormControl('', [Validators.required]);
     this.fullUrl = this._router.url.toString()
     this.keyUrl = this.fullUrl.split('/')
     console.log(this.keyUrl)
-   /* $( document ).ready(()=> {
-      if(this.keyUrl[2] == 'mascota'){
-        $(".mascota-header").addClass('headerName')
+ 
+    $( document ).ready(()=> {
+      if(this.keyUrl[4] == 'home'){
+        $(".main").addClass('mainclean')
       
       }else{
-        $(".mascota-header").removeClass('headerName')
+        $(".main").removeClass('mainclean')
       }
   });
-    */
+    
   }
   obtMascota(id){
     this.images = []
