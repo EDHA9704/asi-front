@@ -7,7 +7,7 @@
     <div class="tituloPage-name">
       <h3>Mascotas</h3>
       <span class="lineTi"></span>
-      <p style="font-size: 1.5em;">Mascotas de la fundación {{fundacion.nombreFundacion}}</p>
+      <p style="font-size: 1.5em;" *ngIf="!currentUser">Mascotas de la fundación {{fundacion.nombreFundacion}}</p>
     </div>
   </section>
 <section class="main" *ngIf="fundacion">
