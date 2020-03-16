@@ -10,6 +10,7 @@ p{
            
     font-size: 1.5rem;
 }
+
 ::ng-deep .cdk-overlay-container{
     z-index: 1200 !important;
 }
@@ -47,6 +48,7 @@ mat-form-field{
 }
 .main{
     min-height: 100vh;
+    padding-top: 7em;;
 }
 .container-mascota{
     width: 100%;
@@ -484,7 +486,7 @@ font-size: 14px;
 }
 
 .headerName{
-    margin-top: 6em !important;
+    margin-top: 0;
 }
 .descripcion-pet{
     width: 100%;
