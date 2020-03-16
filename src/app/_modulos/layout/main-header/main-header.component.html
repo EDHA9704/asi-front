@@ -2,7 +2,7 @@
     <div class="container">
         <nav>
             <div class="nav-brand">
-                <a [routerLink]="['/']" >
+                <a style="cursor: pointer;" (click)="redirect()">
 
 
                     <img *ngIf="!currentUser && keyUrl[1] == 'home'" src="../../../../../assets/img/Captura2.png">

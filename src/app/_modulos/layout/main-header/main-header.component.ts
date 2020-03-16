@@ -354,4 +354,19 @@ async  deleteOneSignal(id,signal){
     this.router.navigate(['/fundacion',id]); 
     
   }
+
+  redirect(){
+    if(this.keyUrl[1] == 'fundacion'){
+      this.router.navigate(['/fundacion',this.keyUrl[2],'nosotros']); 
+    }else if(this.keyUrl[1] == 'home'){
+      this.router.navigate(['/']); 
+    }else if(!this.currentUser && this.keyUrl[1] == 'perfil' && this.keyUrl[2] == 'mascota' && this.keyUrl[4] == 'fund'){
+      this.router.navigate(['/fundacion',this.keyUrl[3],'nosotros']); 
+    }else if(this.currentUser && this.keyUrl[1] == 'perfil'){
+      this.router.navigate(['/fundacion',this.keyUrl[3],'nosotros']); 
+    }else if(!this.currentUser && this.keyUrl[1] == 'perfil' && this.keyUrl[2] != 'mascota'){
+      this.router.navigate(['/']); 
+    }
+    
+  }
 }
