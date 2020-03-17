@@ -16,7 +16,7 @@ import {MatCardModule} from '@angular/material/card';
 import { ToastrModule } from 'ngx-toastr';
 import { FundacionComponent } from './_modulos/fundacion/components/fundacion/fundacion.component';
 import { SpinnerComponent } from './_shared/components/spinner/spinner.component';
-
+import {MatBadgeModule} from '@angular/material/badge';
 import { FundacionModule} from './_modulos/fundacion/fundacion.module';
 import { HomeModule} from './_modulos/home/home.module';
 import { LayoutComponent } from 'src/app/_modulos/layout/layout.component';
@@ -67,6 +67,7 @@ import {MatStepperModule,MatInputModule,MatCheckboxModule,
     MatIconModule,
     MatCardModule,
     MomentModule,
+    MatBadgeModule,
     ToastrModule.forRoot(),
     NgxSpinnerModule,
     NgxUsefulSwiperModule ,

@@ -50,10 +50,17 @@
             <ul class="nav-list2" *ngIf="currentUser && currentUser.usuario.rol == '4'">
                 <li class="nav-item" *ngIf="currentUser">
                     <div class="btn-group dropNAV"> 
-                        <button (click)="obtallnotificaciones(1);" type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true"
+                        <p (click)="obtallnotificaciones(1);" style="margin:0 1em; cursor: pointer;" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                      
+                            <mat-icon style="color: white;" matBadge="15" matBadgeColor="warn">notifications_active</mat-icon>
+                              <!-- Include text description of the icon's meaning for screen-readers -->
+                             
+                          </p>
+                        <!--<button  type="button" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <i class="fa fa-bell" aria-hidden="true"></i> <span class="badge badge-light"></span>
-                        </button>
+                        </button>-->
                         <div class="dropdown-menu DROP dropdown-menu-right" id="dropNOTIF">
                             <div class="containerNotifi">
                                 <div class="titulo">
@@ -111,6 +118,27 @@
                                             </div>
                         
                                     
+                                            <div class="imgnotiS2" >
+                                                
+                                                    <img *ngIf="not.mascota.fotos.length > 0" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.mascota.fotos[0].name}}">
+                                                    <img *ngIf="not.mascota.fotos.length == 0" src="../../../../assets/img/Captura2.png">
+                                            </div>
+                                        </div>
+                                         <!--NOTIFICACION TIPO ADOPCION-->
+                                         <div class="contNot"  [routerLink]="['/perfil/adopcion',currentUser.usuario._id,not.adopcion._id]" *ngIf="not.tipo == 9 ">
+                                            <div class="imgnotiS" *ngIf="not.voluntario">
+    
+                                                <img *ngIf="not.voluntario.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.voluntario.foto}}">
+                                                <img *ngIf="!not.voluntario.foto" src="../../../../assets/img/Captura2.png">
+                                            </div>
+                                            <div class="imgnotiS" *ngIf="not.ciudadano">
+    
+                                                <img *ngIf="not.ciudadano.foto" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.ciudadano.foto}}">
+                                                <img *ngIf="!not.ciudadano.foto" src="../../../../assets/img/Captura2.png">
+                                            </div>
+                                            <div class="textnotiS">
+                                                <p >Aprobaste la adopción para {{not.mascota.nombre}}</p>
+                                            </div>
                                             <div class="imgnotiS2" >
                                                 
                                                     <img *ngIf="not.mascota.fotos.length > 0" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{not.mascota.fotos[0].name}}">
