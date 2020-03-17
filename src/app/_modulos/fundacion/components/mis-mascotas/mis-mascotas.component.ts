@@ -247,11 +247,20 @@ $("#edadDrop").change(()=>{
         this.carga == false
         this.fundacion = response.usuario;
         this.changeFiltro()
-        if(this.type == 'busqueda'){
-          this.buscarMascotas(this.page)
+        if(this.currentUser){
+          if(this.type == 'busqueda'){
+            this.buscarMascotas(this.page)
+          }else{
+            this.obtMascotas(this.page);
+          }
         }else{
-          this.obtMascotas(this.page);
+          if(this.type == 'busqueda'){
+            this.buscarMascotas2(this.page)
+          }else{
+            this.obtMascotas2(this.page);
+          }
         }
+       
       },
       error=>{
         //this.router.navigate(['**']);  
@@ -326,12 +335,141 @@ $("#edadDrop").change(()=>{
     }
   
   }
+  obtMascotas2(page,adding=false){
+    if(this.fundacion){
+      this.loading = true
+      this.pagesSelec = []
+      this.mascotas = []
+      this._mascotaService.obtMisMascotas2(this.idFun,page).subscribe(
+          response=>{
+            console.log(response)
+            this.carga = false;
+            if(response.mascotas && response.n == '1'){
+  
+              $('.conL').fadeOut('fast');
+             
+              this.total= response.total;
+              this.pages = response.pages;
+              this.itemsPerPage = response.itemsPerPage;
+              response.mascotas.forEach(ms => {
+                var tem =  ms.fotos.filter(ph => ph.estado == 'activo' );
+                this.mascotas.push({ms:ms,photo:tem[0]})
+                
+              });
+              this.loading = false;
+              $(document).ready(()=>{
+              $(".content-grid-cards").addClass('visible')
+              })
+              for (let i = 1; i <= this.pages; i++) {
+                this.pagesSelec.push(i)
+                
+              }
+              this.advertencia =false;
+              
+              this.itemsMSC = this.mascotas.length;
+              this.mensaje = response.message;
+             
+    
+            }else{
+            //this.status = 'error';
+            }
+          },
+          error=>{
+            this.mascotas = []
+           console.log(<any>error)
+            this.loading = false;
+            //this.status = 'error';  
+          this.carga = false;
+           this.advertencia = true;
+            var errorMessage = <any>error;
+            
+            //this.status = 'error';
+            if(errorMessage != null && error.error.n == '2'){
+             
+              this.mensaje = 'Lo sentimos, '+error.error.message;
+            }else if(errorMessage != null && error.error.n == '3'){
+             
+              this.mensaje = error.error.message;
+            }else{
+              
+              this.mensaje = 'Algo salio mal.'
+            }
+          }
+        )
+   
+    }
+  
+  }
   buscarMascotas(page,adding=false){
     this.loading = true;
     console.log("ENTROBUSQUDA")
     this.pagesSelec = []
     this.mascotas = []
     this._mascotaService.filtroMascotas2(this.idFun,this.filtroBSQ,page).subscribe(
+      response=>{
+        this.carga = false;
+        if(response.mascotas && response.n == '1'){
+  
+          $(".carga").fadeOut("slow");
+         
+          this.total = response.total;
+          this.pages = response.pages;
+          this.itemsPerPage = response.itemsPerPage;
+          response.mascotas.forEach(ms => {
+            var tem =  ms.fotos.filter(ph => ph.estado == 'activo' );
+            this.mascotas.push({ms:ms,photo:tem[0]})
+            
+          });
+          for (let i = 1; i <= this.pages; i++) {
+            this.pagesSelec.push(i)
+            
+          }
+          this.advertencia =false;
+          this.loading = false;
+          $(".content-grid-cards").addClass('visible')
+          this.itemsMSC = this.mascotas.length;
+       
+          //this.obtFotos(response.mascotas._id, page);
+          /*if(page > this.pages){
+            this._router.navigate[('/login')]
+          }*/
+        }
+      },
+      error=>{
+        this.mascotas = []
+        this.carga = false;
+        $(".carga").fadeOut("slow");
+        var errorMessage = <any>error;
+       console.log(<any>error)
+       this.loading = false;
+       this.advertencia = true;
+      
+        if(errorMessage != null && errorMessage.error.n == '2'){
+          this.mensaje = 'Lo sentimos, '+error.error.message;
+          this.mascotas = null;
+          this._messageService.showError('Busqueda','No se encontro resultados')
+         
+        }else if(errorMessage != null && error.error.n == '5'){
+          this.mensaje = 'No se ha elegigo filtros';
+          this._messageService.showError('Busqueda','No se ha elegido filtros')
+          this.mascotas = null;
+        }
+        
+        else{
+          this.mensaje = 'Algo salio mal, intentalo mas tarde'
+          this._messageService.showError('Busqueda',this.mensaje)
+
+          
+        }
+      }
+    )
+  }
+  buscarMascotas2(page,adding=false){
+    this.loading = true;
+    console.log("ENTROBUSQUDA")
+    this.pagesSelec = []
+    this.mascotas = []
+    this._mascotaService.filtroMascotas22(this.idFun,this.filtroBSQ,page).subscribe(
       response=>{
         this.carga = false;
         if(response.mascotas && response.n == '1'){

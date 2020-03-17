@@ -50,7 +50,11 @@ export class MascotaService {
 
     return this._http.get(this.url+'obtener-mis-mascotas/'+id+'/'+page, {headers:headers});
   }
+  obtMisMascotas2(id, page = 1):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type','application/json');
 
+    return this._http.get(this.url+'obtener-mis-mascotas2/'+id+'/'+page, {headers:headers});
+  }
   obtFotosMascotas(id):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type','application/json');
 
@@ -95,6 +99,12 @@ filtroMascotas2(id,filtro:any,page = 1):Observable<any>{
   let headers = new HttpHeaders().set('Content-Type','application/json');
 
   return this._http.post(this.url+'filtro-mascotas2/'+id+'/'+page, params,{headers:headers});
+}
+filtroMascotas22(id,filtro:any,page = 1):Observable<any>{
+  let params = JSON.stringify(filtro);
+  let headers = new HttpHeaders().set('Content-Type','application/json');
+
+  return this._http.post(this.url+'filtro-mascotas22/'+id+'/'+page, params,{headers:headers});
 }
 obtFiltro(){
   let filtro = JSON.parse(localStorage.getItem('busquedaMascotas2')); 
