@@ -200,6 +200,8 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         
       },
       error=>{
+        this.pagesSelec = []
+        this.adopciones = []
         this.carga = false;
         this.loading = false;
         this.advertencia = true;
@@ -223,7 +225,8 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
     )
   }
   buscarAdopciones(page,adding=false){
-   this.pagesSelec = []
+    this.pagesSelec = []
+    this.adopciones = []
     this._adopcionService.filtroAdopciones(this.idFun,this.filtroBSQ,page).subscribe(
       response=>{
         this.carga = false;
@@ -251,6 +254,8 @@ export class MisAdopcionesComponent implements OnInit,DoCheck {
         }
       },
       error=>{
+        this.pagesSelec = []
+        this.adopciones = []
         this.carga = false;
         this.loading = false;
         this.advertencia =true;

@@ -44,6 +44,14 @@ export class PerfilAdopcionComponent implements OnInit {
     }
  
   ngOnInit() {
+
+    this._comunicationService.reload.subscribe(res=>{
+      this.loadPage()
+    $(document).ready(()=>{
+      this.prob()
+            
+        });
+    })
     this.loadPage()
     $(document).ready(()=>{
       this.prob()

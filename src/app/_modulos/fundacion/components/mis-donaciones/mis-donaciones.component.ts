@@ -281,6 +281,7 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
         
       },
       error=>{
+        this.pagesSelec = []
         this.donaciones = []
         this.carga = false;
       
@@ -334,8 +335,8 @@ nombres = new FormControl('', [Validators.required, Validators.pattern('^[a-z A-
         }
       },
       error=>{
+        this.pagesSelec = []
         this.donaciones = []
-       
         this.loading = false;
         this.advertencia =true;
         this.carga = false;

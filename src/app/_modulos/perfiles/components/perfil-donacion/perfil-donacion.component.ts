@@ -67,6 +67,10 @@ export class PerfilDonacionComponent implements OnInit {
    }
  
   ngOnInit() {
+
+    this._comunicationService.reload.subscribe(res=>{
+      this.obtenerDonacion(this.id)
+    })
     this._route.params.subscribe(params =>{
       console.log("ENTRO",params)
       this.id = params['idD'];

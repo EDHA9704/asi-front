@@ -73,6 +73,14 @@ export class PerfilEmergenciaComponent implements OnInit {
   ngOnInit() {
     this.fullUrl = this._router.url.toString()
     this.loadPage();
+    this._comunicationService.reload.subscribe(res=>{
+      console.log("SIENTRO " + res)
+      if(res==true){
+        this.voluntariosMix = []
+         this.voluntariosAS = []
+        this.loadPage();
+      }
+    })
   }
   loadPage(){
    

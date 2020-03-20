@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="form-group col-md-12 direc">
                                   <button (click)="openDialogMap()">Seleccionar dirección <i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                                  <p>Dirección:{{direccionSelec.formmatedAddres}}</p>
+                                  <p>Dirección:</p><p *ngIf="direccionSelec && direccionSelec != ''">{{direccionSelec.formmatedAddres}}</p>
                                 </div>
                               
                         </form>
@@ -247,8 +247,8 @@
                         <button class="ghost" id="signIn">Iniciar sesión</button>
                     </div>
                     <div class="overlay-panel overlay-right">
-                        <h1>¿Aún no tienes cuenta?</h1>
-                        <p>Ingrese sus datos personales y unete a nuestra plataforma.</p>
+                        <h1>¿Todavía no tienes una cuenta?</h1>
+                        <p>Ingresa tus datos personales y únete a nuestra plataforma.</p>
                         <button class="ghost" id="signUp">Registrarse</button>
                     </div>
                 </div>
@@ -282,8 +282,7 @@
             <img style="width: 8rem;" src="../../../assets/img/affirmative-156538_640.png">
           </div>
           <p>
-              El proceso de registro fue completado exitosamente, los datos fueron enviados al administrador para la verificación
-              de los datos y la respectiva activación de la cuenta. Este proceso puede tardar entre 24 a 48 horas.
+            El proceso de registro fue completado exitosamente, los datos fueron enviados al administrador para la verificación de los mismos, este proceso puede tardar entre 24 a 48 horas.
           </p>
           
            

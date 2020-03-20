@@ -10,6 +10,16 @@ h5,h4,h3,h2,h1{
 img{
     width: 100%;
 }
+.disN{
+    opacity: .6;
+}
+.custom-body{
+    position: relative;
+}
+
+.custombar{
+    background-color: #3bbfad !important;
+}
 .header{
     margin-top: 11rem;
     width: 100%;
@@ -136,6 +146,13 @@ img{
                 .card-status{
                     text-align: center;
                     background: #3bbfad;
+                    span{
+                        color: white;
+                        font-size: 1.4rem;
+                    }
+                }
+                .card-statusNeg{
+                    background: #bf3b3b;
                     span{
                         color: white;
                         font-size: 1.4rem;

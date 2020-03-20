@@ -12,9 +12,8 @@ declare var $:any;
 })
 export class FundacionesComponent implements OnInit {
   titulo = 'Fundaciones'
-  descripcion = 'Mediante la unión de las fundaciones y ciudadanía es posible que decenas de perros y gatos callejeros, '+
-  'encuentren familias que les brinden amor y protección, una vez finalizado su proceso de recuperación.'
-  descripcion2 = 'Fundaciones registradas en el sistema.'
+  descripcion = 'Mediante la unión de Fundaciones y ciudadanía, es posible que decenas de perros y gatos callejeros, encuentren familias que les brinden amor y protección.'
+  descripcion2 = 'Registradas en el sistema.'
   img = "depositphotos_147298583-stock-illustration-lovers-union-icon.jpg"
   public type;
  
@@ -63,6 +62,7 @@ export class FundacionesComponent implements OnInit {
     this.prob();
   }
   actualPage(){
+    this.pagesSelec = []
     this.type = ''
     this._route.params.subscribe(params =>{
       let page = +params['page'];
@@ -129,6 +129,7 @@ export class FundacionesComponent implements OnInit {
 
   obtnerFundacionesByNombre(){
     this.fundaciones = []
+    this.pagesSelec = []
     this.loading = true
     const nombre = $("#bsFunNombre").val();
    
@@ -151,6 +152,8 @@ export class FundacionesComponent implements OnInit {
           }
         },
         error=>{
+          this.fundaciones = []
+    this.pagesSelec = []
           console.log(<any>error)
           this.carga = false;
           $(".carga").fadeOut("slow");
@@ -186,7 +189,8 @@ export class FundacionesComponent implements OnInit {
   }
   obtFundacionesActivas(page){
     console.log("ENTROOOOOO")
-    this.pagesSelec=[]
+    this.fundaciones = []
+    this.pagesSelec = []
     let rol = 4;
    
     this.status = 'procesando';
@@ -223,6 +227,8 @@ export class FundacionesComponent implements OnInit {
         }
       },
       error=>{
+        this.fundaciones = []
+        this.pagesSelec = []
         console.log(error)
         this.carga = false;
         $(".carga").fadeOut("slow");

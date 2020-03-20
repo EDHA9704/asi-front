@@ -11,11 +11,9 @@ declare var $:any
 })
 export class EmergenciasComponent implements OnInit,DoCheck{
   titulo = 'Emergencias'
-  descripcion = 'Gracias a la ayuda de las fundaciones, voluntarios y ciudadanos es posible'+
-  ' ayudar a animales que se encuentran en peligro o que han sufrido algun'+
-  ' accidente y brindarles la atención necesaria para que puedan encontrar una familia.'
+  descripcion = 'Gracias a la ayuda de Fundaciones, voluntarios y ciudadanos es posible ayudar a animales que se encuentren en peligro o que han sufrido algún accidente y brindarles toda la atención necesaria.'
   img = "corEm.png"
-  descripcion2 = 'Emergencias reportadas'
+  descripcion2 = 'Reportadas'
   public type;
   public pagesSelec;
   public mensaje;
@@ -176,6 +174,8 @@ cancelarBus(){
         }
       },
       error=>{
+        this.pagesSelec = []
+    this.emergencias = []
         this.loading = false;
         this.carga = false;
         this.advertencia =true;
@@ -305,12 +305,16 @@ cancelarBus(){
           
 
         }else{
+          this.pagesSelec = []
+    this.emergencias = []
           console.log(response.n)
           this.status = 'error';
           this.mensaje = 'Algo salió mal.'
         }
       },
       error=>{
+        this.pagesSelec = []
+    this.emergencias = []
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
         console.log(errorMessage)

@@ -218,6 +218,7 @@ verFoto(foto){
        }
      },
      error=>{
+      this.pagesSelec = []
       this.emergencias = []
        $(".carga").fadeOut("slow");
        var errorMessage = <any>error;
@@ -267,6 +268,7 @@ verFoto(foto){
       }
     },
     error=>{
+      this.pagesSelec = []
       this.emergencias = []
       this.carga = false;
       this.loading = false;

@@ -151,7 +151,20 @@ especie = new FormControl('', [Validators.required]);
    }
 
   ngOnInit() {
-    
+    this._comunicationService.reload.subscribe(res=>{
+      if(res == true){
+
+        this.loadPage()
+        $( document ).ready(()=> {
+          if(this.keyUrl[4] == 'home'){
+            $(".main").addClass('mainclean')
+          
+          }else{
+            $(".main").removeClass('mainclean')
+          }
+      });
+      }
+    })
     this.loadPage();
     this.fullUrl = this._router.url.toString()
     this.keyUrl = this.fullUrl.split('/')

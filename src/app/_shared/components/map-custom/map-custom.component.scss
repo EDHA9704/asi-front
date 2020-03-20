@@ -23,6 +23,9 @@
         }
     }
 }
+::ng-deep .cdk-overlay-container{
+    z-index: 3000 !important;
+}
 .actions{
     width: 100%;
     height: 10%;

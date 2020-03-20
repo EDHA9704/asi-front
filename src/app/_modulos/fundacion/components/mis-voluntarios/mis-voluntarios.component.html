@@ -145,7 +145,7 @@
     </div>
   
   </div>
-  <div class="modal fade" id="modalMascota" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal fade" id="modalMascota" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header" style="align-items: center;">
@@ -337,7 +337,7 @@
                      
                       <div class="form-group col-md-6">
                         <p *ngIf="actualizar == true && usuario.direccionMap"><strong>Dirección: </strong>{{usuario.direccionMap.formmatedAddres}}</p>
-                        <p *ngIf="actualizar == false "><strong>Dirección: </strong>{{direccionSelec.formmatedAddres}}</p>
+                        <p *ngIf="actualizar == false "><strong>Dirección: </strong></p ><p *ngIf="direccionSelec && direccionSelec != ''">{{direccionSelec.formmatedAddres}}</p>
                         <div class="mapa" style="width: 90%; max-width: 20em;">
                           <div id="mapcustom" style="width: 100%; max-height: 12em;" >
                           </div>
@@ -405,15 +405,18 @@
                   <div class="btnNEXT2">
                     <button mat-button matStepperPrevious>Regresar</button>
                     <button type="submit" mat-button *ngIf="actualizar == false" (click)="registrarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid" >Registrar</button>
+                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid || registrando == true" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                    password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid || registrando == true" >Registrar</button>
                     <button type="submit"  *ngIf="actualizar == true" (click)="actualizarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
-                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid" >Actualizar</button>
+                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid || registrando == true" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                 tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid || registrando == true" >Actualizar</button>
       
                   </div>
                 </mat-step>
               </mat-horizontal-stepper>
+              <div class="progress" style="height: 8px;" *ngIf="registrando == true">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success custombar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
         </div>
       
       </div>

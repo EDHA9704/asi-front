@@ -127,7 +127,7 @@ export class MisMascotasComponent implements OnInit {
   public fundacion:UsuarioFundacion;
   keyUrl
   fullUrl:string
-
+  public registrando;
   constructor(private _route:ActivatedRoute,private router: Router,private _mascotaService:MascotaService,
     private _router:Router,private _messageService:MessagesService,private authenticationService: AuthenticationService,
     private _uploadService:UploadService,private _userService:UserService) { 
@@ -310,7 +310,8 @@ $("#edadDrop").change(()=>{
             }
           },
           error=>{
-            this.mascotas = []
+            this.pagesSelec = []
+      this.mascotas = []
            console.log(<any>error)
             this.loading = false;
             //this.status = 'error';  
@@ -375,6 +376,7 @@ $("#edadDrop").change(()=>{
             }
           },
           error=>{
+            this.pagesSelec = []
             this.mascotas = []
            console.log(<any>error)
             this.loading = false;
@@ -436,7 +438,8 @@ $("#edadDrop").change(()=>{
         }
       },
       error=>{
-        this.mascotas = []
+        this.pagesSelec = []
+      this.mascotas = []
         this.carga = false;
         $(".carga").fadeOut("slow");
         var errorMessage = <any>error;
@@ -500,6 +503,7 @@ $("#edadDrop").change(()=>{
         }
       },
       error=>{
+        this.pagesSelec = []
         this.mascotas = []
         this.carga = false;
         $(".carga").fadeOut("slow");
@@ -698,6 +702,7 @@ $("#edadDrop").change(()=>{
     }
    }
    registrarMascota(stepper: MatStepper){
+    
     this.mascota = new Mascota("","","","","","","","","","","","","","","","","","","","","");
 
     this.mascota.nombre = this.nombre.value;
@@ -754,6 +759,8 @@ $("#edadDrop").change(()=>{
         
         
     if(this.filesToUpload2 != undefined){
+      this.registrando = true;
+      
       this._messageService.showInfo('Formulario','Procesando registro') 
        this._mascotaService.registerMascota(this.mascota, this.idFun).subscribe(
          response =>{
@@ -763,6 +770,7 @@ $("#edadDrop").change(()=>{
             const imageForm = new FormData();
             imageForm.append('image', this.imageObj);
             this._uploadService.imageUpload(imageForm,'subir-foto-mascota-nueva/',response.mascota._id).subscribe(res => {
+              this.registrando = false;
               $('#modalMascota').modal('hide')
                    this._messageService.showSuccess('Mascota','Registro exitoso')
                    this.filesToUpload2 = undefined;
@@ -771,43 +779,17 @@ $("#edadDrop").change(()=>{
                   this.cancelarReg(stepper)
             });
          
-             /*  this._uploadService.makeGileRequest2(this.url+'subir-foto-mascota-nueva/'+response.mascota._id,[],this.filesToUpload2,'foto')
-               .then((result:any)=>{
-                 //alert('si')
-                 if(result.n == '8' || result.n == '7' || result.n == '6' || result.n == '5' || result.n == '4' || result.n == '2' ){
-                  
-                  this._messageService.showError('Formulario','Error al subir la imagen, intentalo de nuevo')
-
-                   this._mascotaService.eliminarMascota(response.mascota._id).subscribe(
-                     response=>{
-                       
-                     },
-                     error=>{
- 
-                 })
-                 }else if(result.n == '1'){
-                  // form.reset();
-                  $('#modalMascota').modal('hide')
-                   this._messageService.showSuccess('Mascota','Registro exitoso')
-                   this.filesToUpload2 = undefined;
-                   this.imL2 = false;
-                  this.obtMascotas(this.idFun);
-                  this.cancelarReg(stepper)
-                 }
-                
-               });*/
-              
-             
            }else if(response.n == '5'){
-              
+            this.registrando = false;
                this._messageService.showError('Registro',response.message)
 
            }else{
+            this.registrando = false;
             this._messageService.showError('Registro',response.message)
            }
          },
          error =>{
-          
+          this.registrando = false;
            if(error.error.n == '3' || error.error.n == '2'){
             this._messageService.showError('Registro',error.error.message)
 

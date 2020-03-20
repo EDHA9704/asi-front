@@ -33,12 +33,21 @@ export class NotificacionService {
 
     return this._http.get(this.url+'obtener-todas-notificaciones/'+page, {headers:headers});
   }
+  obtALLNotificacionesCount():Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type','application/json')
+
+    return this._http.get(this.url+'obtener-todas-notificacionesCount', {headers:headers});
+  }
   obtALLNotificacionesAD(page = 1):Observable<any>{
     let headers = new HttpHeaders().set('Content-Type','application/json')
 
     return this._http.get(this.url+'obtener-todas-notificacionesAD/'+page, {headers:headers});
   }
+  obtALLNotificacionesADCount():Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type','application/json')
 
+    return this._http.get(this.url+'obtener-todas-notificacionesADCount', {headers:headers});
+  }
   nuevaOneSignal(device):Observable<any>{
 
     let params = JSON.stringify(device);

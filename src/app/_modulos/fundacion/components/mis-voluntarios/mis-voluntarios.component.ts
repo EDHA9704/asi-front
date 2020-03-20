@@ -30,6 +30,7 @@ export class MisVoluntariosComponent implements OnInit {
   public cor = 'noe';
   public mensaje;
   public nVolun;
+  public registrando;
   public usuarioVoluntario:UsuarioVoluntario;
   public voluntarios:UsuarioVoluntario[];
   public usuario:UsuarioVoluntario;
@@ -265,6 +266,7 @@ public nuevoRegistro = false;
   }
   obtnerVoluntariosByApellidos(){
     let cont = 0
+    this.pagesSelec = []
     this.voluntarios = []
     this.loading = true;
     const nombre = this.bsVoluntario.value;
@@ -295,6 +297,7 @@ public nuevoRegistro = false;
           }
         },
         error=>{
+          this.pagesSelec = []
           this.voluntarios = []
           this.loading = false;
           this.advertencia = true
@@ -348,6 +351,7 @@ public nuevoRegistro = false;
         }
       },
       error=>{
+        this.pagesSelec = []
         this.voluntarios = []
         var errorMessage = <any>error;
         console.log(errorMessage)
@@ -521,6 +525,7 @@ public nuevoRegistro = false;
   }
 
   actualizarVoluntario(stepper: MatStepper){
+    this.registrando = true;
     this._messageService.showInfo('Actualizar','Procesando actualización del voluntario')
 
     this.usuario.nombres = this.nombres.value.trim();
@@ -559,6 +564,7 @@ public nuevoRegistro = false;
                         imageForm.append('image', this.imageObj);
                         this._uploadService.imageUpload(imageForm,'subir-foto-usuario/',response.usuario._id).subscribe(res => {
                           this.actualizar = false;
+                          this.registrando = false;
                           this.actualPage()
                           this.imL = false;
                                  this.imgUN = undefined;
@@ -571,6 +577,7 @@ public nuevoRegistro = false;
               
               }else{
                 this.actualizar = false;
+                this.registrando = false;
                 this.imL = false;
                 this.imgUN = '';
                   this.actualPage()
@@ -581,11 +588,14 @@ public nuevoRegistro = false;
               }
     
             }else{
+              this.registrando = false;
               this._messageService.showError('Voluntario','Algo salió mal, intentalo de nuevo.')
 
             }
           },
           error=>{
+            
+            this.registrando = false;
             console.log(<any>error)
             this._messageService.showError('Voluntario','Algo salió mal, intentalo de nuevo.')
 
@@ -631,7 +641,7 @@ public nuevoRegistro = false;
 
     if(this.direccionSelec != ''){
       this._messageService.showInfo('Registro','Procesando registro del voluntario')
-
+      this.registrando = true;
   
       this.usuarioVoluntario.nombres = this.nombres.value.trim();
       this.usuarioVoluntario.apellidos = this.apellidos.value.trim();
@@ -689,6 +699,7 @@ public nuevoRegistro = false;
                             this.enviaEmail(mail)
                             this.direccionSelec != ''
                             this._messageService.showSuccess('Exito','Voluntario registrado')
+                            this.registrando = false;
                             this.resets()
                            // this.obtVoluntarios(this.page)
                            this.actualPage()
@@ -703,33 +714,40 @@ public nuevoRegistro = false;
                           this.resets()
                           this.actualPage()
                           this.imL = false;
+                          this.registrando = false;
+
                           this.imgUN = undefined;
                         }
                       }else{
+                        this.registrando = false;
                         this._messageService.showError('Error',response.message)
                       }
                     },
                     error =>{
-                     
+                      this.registrando = false;
                       console.log(<any>error)
                       this._messageService.showError('Foto','No se pudo registrar, intentalo de nuevo')
                     }
                   );
                   
                 }else if(response.n == '5'){
+                  this.registrando = false;
                   stepper.selectedIndex = 0;
                   this._messageService.showError('Formulario','El número de cédula  ya está en uso')
   
                 }else if(response.n == '2'){
+                  this.registrando = false;
                   stepper.selectedIndex = 0;
                   this._messageService.showError('Formulario','La cédula y correo electrónico ya están en uso')
                 }else if(response.n == '3'){
+                  this.registrando = false;
                   stepper.selectedIndex = 1;
                   this._messageService.showError('Formulario','El correo electrónico ya está en uso')
   
                 }
               },
               error=>{
+                this.registrando = false;
                 this._messageService.showError('Formulario','No se pudo validar los datos, intentalo de nuevo')
           
               }
@@ -737,6 +755,7 @@ public nuevoRegistro = false;
           
             
           }else{
+            this.registrando = false;
             stepper.selectedIndex = 0;
             this._messageService.showError('Formulario','El número de cédula no es válido')
   
@@ -745,10 +764,12 @@ public nuevoRegistro = false;
   
   
       }else{
+        this.registrando = false;
         this._messageService.showError('Formulario','Llena todos los campos')
   
       }
     }else{
+      this.registrando = false;
       this._messageService.showError('Error','Selecciona la dirección del voluntario.')
     }
    
@@ -824,14 +845,16 @@ public nuevoRegistro = false;
     );
   }
   openDialogMap(): void {
+    $('#modalMascota').modal('hide')
     const dialogRef = this.dialog.open(MapCustomComponent, {
       width: '500px',
       height: '500px',
     });
   
     dialogRef.afterClosed().subscribe(result => {
+      $('#modalMascota').modal('show')
   console.log(result)
-      if(result != ''){
+      if(result != null && result != undefined && result != ''){
         this.direccionSelec = result;
         if(this.actualizar == true){
           this.usuario.direccionMap = this.direccionSelec

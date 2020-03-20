@@ -25,6 +25,7 @@ p:any;
   mapHtml:any;
   direccion:any=''
   bsMap= new FormControl('', []);
+  bsMap2= new FormControl('', []);
   constructor(public zone: NgZone,public dialogRef: MatDialogRef<MapCustomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { 
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();

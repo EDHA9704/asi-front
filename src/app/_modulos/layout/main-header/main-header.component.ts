@@ -42,6 +42,7 @@ export class MainHeaderComponent implements OnInit {
   permission:any
   public url
   public fundacionSelec:any
+  public totalNt:any;
   constructor(public router: Router,private authenticationService: AuthenticationService,
     private _notificacionService:NotificacionService,private _communicationService:CommunicationService) {
     this.fullUrl = this.router.url.toString()
@@ -52,11 +53,21 @@ export class MainHeaderComponent implements OnInit {
    }
 
   ngOnInit() {
+    if(this.currentUser && this.currentUser.usuario.rol == 1){
+      console.log("ENTRO ********** AQUI")
+      this.obtEstadisticasAdmin()
+    }else if(this.currentUser && this.currentUser.usuario.rol == 4){
+      console.log("ENTRO ********** AQUI 2222")
+      this.obtEstadisticasFUND()
+    }
     this._communicationService.fundacionSelec.subscribe(res=>{
       
       this.photoFF  = res
       this.getLinks()
       this.styleHeader()
+      $(document).ready(()=>{
+        this.finSc()
+      })
       $(window).scroll(function() {
         var height = $(window).scrollTop();
         console.log(height)
@@ -67,6 +78,7 @@ export class MainHeaderComponent implements OnInit {
         }
       });
     })
+
     this.toggle()
 
    
@@ -234,6 +246,34 @@ export class MainHeaderComponent implements OnInit {
       this.mainLinks = this.linksAdmin;
     }
   } 
+  obtEstadisticasAdmin(){
+    this._notificacionService.obtALLNotificacionesADCount().subscribe(
+      res=>{
+        console.log(res.total)
+        this.totalNt = res.total;
+      },
+      err=>{
+        console.log(<any>err)
+        this.totalNt = 0
+      }
+    )
+  }
+  obtEstadisticasFUND(){
+    console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    this._notificacionService.obtALLNotificacionesCount().subscribe(
+      res=>{
+        console.log(res.total)
+        this.totalNt = res.total;
+        if(this.currentUser.usuario.estado == 2){
+          this.totalNt++;
+        }
+      },
+      err=>{
+        console.log(<any>err)
+        this.totalNt = 0
+      }
+    )
+  }
   obtallnotificaciones2(page,adding=false){
     console.log("entroo noif ******")
     this.cargaN = true;     
@@ -369,5 +409,8 @@ async  deleteOneSignal(id,signal){
       this.router.navigate(['/']); 
     }
     
+  }
+  reloadD(){
+    this._communicationService.reloadData();
   }
 }

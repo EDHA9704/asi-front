@@ -16,11 +16,9 @@ declare var $:any
 })
 export class MascotasComponent implements OnInit {
   titulo = 'Mascotas'
-  descripcion = 'Uno de nuestros objetivos es encontrar hogares definitivos para aquellos animales que son rescatados de las calles,'+
-  ' asegurándoles una nueva oportunidad de vida, con familias responsables que asuman el compromiso de velar por su'+
-  'bienestar.'
+  descripcion = 'El objetivo es encontrar hogares definitivos para aquellos animales que son rescatados de las calles, asegurándoles una nueva oportunidad de vida, con familias responsables que asuman el compromiso de velar por su bienestar.'
   img = "iconohuouse.jpg"
-  descripcion2 = 'Mascotas registradas por las fundaciones.'
+  descripcion2 = 'Registradas por las fundaciones.'
   public taman = ["Todos","Pequeño","Mediano","Grande"];
   public sexo = ["Todos","Macho","Hembra"];
   public edad = ["Todos","Cachorro","Joven","Adulto"];
@@ -91,10 +89,10 @@ export class MascotasComponent implements OnInit {
   }
   obtMascotas(page,adding=false){
     //this.ngxService.startLoader('loader-01');
-   
+   this.pagesSelec = []
     this.mascotas = []
     this.status = 'procesando';
-    this.pagesSelec = [];
+
     this._mascotaService.getList().pipe(first()).subscribe(
       res=>{
         console.log()
@@ -137,10 +135,13 @@ export class MascotasComponent implements OnInit {
           
           console.log(response.n)
           this.status = 'error';
-         
+          this.pagesSelec = []
+    this.mascotas = []
         }
       },
       error=>{
+        this.pagesSelec = []
+        this.mascotas = []
         this.total = 0;
         this.status = 'error';  
         this.carga = false;
@@ -251,7 +252,7 @@ export class MascotasComponent implements OnInit {
   buscarMascotas(page,adding=false){
     this.pagesSelec =[]
     this.mascotas = []
-console.log(this.filtroBSQ)
+     console.log(this.filtroBSQ)
     this._mascotaService.filtroMascotas(this.filtroBSQ,page).subscribe(
       response=>{
         console.log(response)
@@ -287,6 +288,8 @@ console.log(this.filtroBSQ)
         }
       },
       error=>{
+        this.pagesSelec =[]
+    this.mascotas = []
         this.carga = false;
         this.total = 0;
         this.advertencia =true;
