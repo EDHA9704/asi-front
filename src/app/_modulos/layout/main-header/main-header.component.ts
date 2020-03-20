@@ -54,10 +54,10 @@ export class MainHeaderComponent implements OnInit {
 
   ngOnInit() {
     if(this.currentUser && this.currentUser.usuario.rol == 1){
-      console.log("ENTRO ********** AQUI")
+     
       this.obtEstadisticasAdmin()
     }else if(this.currentUser && this.currentUser.usuario.rol == 4){
-      console.log("ENTRO ********** AQUI 2222")
+     
       this.obtEstadisticasFUND()
     }
     this._communicationService.fundacionSelec.subscribe(res=>{
@@ -259,7 +259,7 @@ export class MainHeaderComponent implements OnInit {
     )
   }
   obtEstadisticasFUND(){
-    console.log("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+  
     this._notificacionService.obtALLNotificacionesCount().subscribe(
       res=>{
         console.log(res.total)
@@ -278,6 +278,7 @@ export class MainHeaderComponent implements OnInit {
     console.log("entroo noif ******")
     this.cargaN = true;     
     //this.identity = this._usuarioService.obtIdentity();
+    this.obtEstadisticasAdmin()
     this._notificacionService.obtALLNotificacionesAD(page).subscribe(
       response=>{
 
@@ -311,7 +312,8 @@ export class MainHeaderComponent implements OnInit {
     )
   }
   obtallnotificaciones(page,adding=false){
-    this.cargaN = true;     
+    this.cargaN = true;    
+    this.obtEstadisticasFUND() 
     //this.identity = this._usuarioService.obtIdentity();
     this._notificacionService.obtALLNotificaciones(page).subscribe(
       response=>{
