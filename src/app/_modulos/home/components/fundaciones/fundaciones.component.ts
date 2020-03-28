@@ -153,6 +153,7 @@ export class FundacionesComponent implements OnInit {
         },
         error=>{
           this.fundaciones = []
+          this.loading = false;
     this.pagesSelec = []
           console.log(<any>error)
           this.carga = false;
@@ -221,6 +222,7 @@ export class FundacionesComponent implements OnInit {
           
 
         }else{
+          this.loading = false;
           console.log(response.n)
           this.status = 'error';
           this.mensaje = 'Algo salió mal.'
@@ -229,6 +231,7 @@ export class FundacionesComponent implements OnInit {
       error=>{
         this.fundaciones = []
         this.pagesSelec = []
+        this.loading = false;
         console.log(error)
         this.carga = false;
         $(".carga").fadeOut("slow");
