@@ -242,7 +242,7 @@ public nuevoRegistro = false;
   }
   nuewVoluntario(){
     this.myStepper.selectedIndex = 0;
-    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","")
+    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","","")
     this.resets2()
     this.actualizar = false
     this.nuevoRegistro = true
@@ -373,7 +373,7 @@ public nuevoRegistro = false;
   obtenerVoluntario(usuario,id){
     this.actualizar = true;
     $('#modalMascota').modal('show')
-    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","")
+    this.usuarioVoluntario = new UsuarioVoluntario("","","","","","","","","","","","","","","","","")
     
     this.usuario = usuario;
     this.nombres.setValue(usuario.nombres)
