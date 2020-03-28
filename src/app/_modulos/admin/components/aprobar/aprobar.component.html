@@ -154,83 +154,116 @@
       </div>
     </div>
         <div class="row pp" *ngIf="carga == false && advertencia == false && verTodas == 'si' ">
-            <div class="col-12 btnMasMascotas">
-              <a *ngIf="page > 1 && advertencia != true" [routerLink]="['/admin','cuentas','all', prev_page]" class="btn btn-primary">
+            <div class="col-12">
+              <div class="selectPages" >
+                <div class="pageAnt2">
+                    <a  [routerLink]="['/admin','cuentas','all',  '1']"
+                      class="btn btn-primary">
+                      <i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+                  </div>
+              <div class="pageAnt">
+                <button [disabled]="page == 1"  [routerLink]="['/admin','cuentas','all',  prev_page]"
+                  class="btn btn-primary">
+                  <i class="fa fa-angle-left" aria-hidden="true"></i></button>
+              </div>
+              <div class="pagess">
+        
+               <a  [routerLink]="['/admin','cuentas','all', p]" *ngFor="let p of pagesSelec" [class.pgActive]="page == p">{{p}}</a>
+           
+              </div>
+              <div class="pageNex">
+                <button [disabled]="page == pages"  [routerLink]="['/admin','cuentas','all', next_page]"
+                class="btn btn-primary">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="pageNex2">
+                  <a  [routerLink]="['/admin','cuentas','all',  pages]"
+                  class="btn btn-primary">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </a>
+                </div>
+            </div>
+
+              <!--<a *ngIf="page > 1 && advertencia != true" [routerLink]="['/admin','cuentas','all', prev_page]" class="btn btn-primary">
                 <i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Anterior</a>
               <a *ngIf="pages != page && advertencia != true" [routerLink]="['/admin','cuentas','all', next_page]"
                 class="btn btn-primary">Siguiente
                 <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-              </a>
+              </a>-->
             </div>
       
           </div>
     <!--UNA sola fundacion-->
     <div class="row" *ngIf="verTodas == 'no' && fundacion && advertencia == false">
-        <div class="col-12 fundaciones">
-          <div class="card">
-            <div class="card-body">
-                <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
-                  fundacion.logo}}">
-                <img class="img-fluid rounded-circle w-50 mb-3" *ngIf="!fundacion.logo" src="../../../../assets/img/Captura2.png">
-              <h3>{{fundacion.nombreFundacion}}</h3>
-              <h5 class="hace">{{(fundacion.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
-              <div class="info">
-                <div class="item">
-                  <div class="icon">
-                      <i class="fa fa-birthday-cake" aria-hidden="true"></i>
-                  </div>
-                    <p> Fundada el {{fundacion.fechaFundacion}}</p>
-                </div>
-                <div class="item">
-                  <div class="icon">
-                      <i class="fa fa-user" aria-hidden="true"></i>
-                  </div>
-                    <p> {{fundacion.representante}}</p>
-                </div>
-                <div class="item">
+        <div class="col-12 ">
+          <div class="fundaciones2">
+            <div class="card">
+              <div class="card-body">
+                  <img class="img-fluid rounded-circle w-50 mb-3"  *ngIf="fundacion.logo" src="https://fundacionesbckimg.s3.us-east-2.amazonaws.com/{{ 
+                    fundacion.logo}}">
+                  <img class="img-fluid rounded-circle w-50 mb-3" *ngIf="!fundacion.logo" src="../../../../assets/img/Captura2.png">
+                <h3>{{fundacion.nombreFundacion}}</h3>
+                <h5 class="hace">{{(fundacion.creadoEn | amFromUnix) | amLocale:'es' | amTimeAgo}}</h5>
+                <div class="info">
+                  <div class="item">
                     <div class="icon">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                        <i class="fa fa-birthday-cake" aria-hidden="true"></i>
                     </div>
-                      <p> {{fundacion.correo}}</p>
+                      <p> Fundada el {{fundacion.fechaFundacion}}</p>
                   </div>
-                 
-                <div class="item">
-                  <div class="icon">
-                      <i class="fa fa-phone-square" aria-hidden="true"></i>
-                  </div>
-                    <p> {{fundacion.telefono}}</p>
-                </div>
-                <div class="item">
-                  <div class="icon">
-                      <i class="fa fa-phone-square" aria-hidden="true"></i>
-                  </div>
-                    <p> {{fundacion.celular}}</p>
-                </div>
-                <div class="item">
+                  <div class="item">
                     <div class="icon">
-                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <i class="fa fa-user" aria-hidden="true"></i>
                     </div>
-                      <p> Sector {{fundacion.sector}}, barrio {{fundacion.barrio}}, calle principal {{fundacion.calleP}},
-                        calle secundaria {{fundacion.calleS}}
-                      </p>
+                      <p> {{fundacion.representante}}</p>
                   </div>
-              </div>
-              
-              
-            </div>
-            <div class="card-footer justify-content-center" >
-                <div class="p-1">
-                  <a style="cursor: pointer;" (click)="procesoCuenta('yes',fundacion)" class="yes" matTooltip="Aprobar cuenta">
-                      <i class="fa fa-check" aria-hidden="true"></i>
-                  </a>
+                  <div class="item">
+                      <div class="icon">
+                          <i class="fa fa-envelope" aria-hidden="true"></i>
+                      </div>
+                        <p> {{fundacion.correo}}</p>
+                    </div>
+                   
+                  <div class="item">
+                    <div class="icon">
+                        <i class="fa fa-phone-square" aria-hidden="true"></i>
+                    </div>
+                      <p> {{fundacion.telefono}}</p>
+                  </div>
+                  <div class="item">
+                    <div class="icon">
+                        <i class="fa fa-phone-square" aria-hidden="true"></i>
+                    </div>
+                      <p> {{fundacion.celular}}</p>
+                  </div>
+                  <div class="item">
+                      <div class="icon">
+                          <i class="fa fa-map-marker" aria-hidden="true"></i>
+                      </div>
+                        <p> Sector {{fundacion.sector}}, barrio {{fundacion.barrio}}, calle principal {{fundacion.calleP}},
+                          calle secundaria {{fundacion.calleS}}
+                        </p>
+                    </div>
                 </div>
                 
-                  <div class="p-1">
-                      <a style="cursor: pointer;" (click)="procesoCuenta('no',fundacion)" class="no" matTooltip="Negar cuenta">
-                          <i class="fa fa-times" aria-hidden="true"></i>                    </a>
-                    </div>
+                
               </div>
+              <div class="card-footer justify-content-center" >
+                  <div class="p-1">
+                    <a style="cursor: pointer;" (click)="procesoCuenta('yes',fundacion)" class="yes" matTooltip="Aprobar cuenta">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                  
+                    <div class="p-1">
+                        <a style="cursor: pointer;" (click)="procesoCuenta('no',fundacion)" class="no" matTooltip="Negar cuenta">
+                            <i class="fa fa-times" aria-hidden="true"></i>                    </a>
+                      </div>
+                </div>
+            </div>
           </div>
+         
         </div>
       </div>
       <div class="row" *ngIf="verTodas == 'no' && fundacion && advertencia == false">

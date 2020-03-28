@@ -37,6 +37,7 @@ export class AFundacionesComponent implements OnInit {
   public carga;
   public edFun
   public statusValid;
+  activando = false;
   displayedColumns: string[] = ['logo','nombreFundacion','representante','correo','telefono','celular','estado','accion'];
  
 
@@ -405,6 +406,24 @@ fileChangeEvent3(event:any){
      }
    )
  }
+ activarFundacion(id){
+   this.activando = true;
+  this._userService.activarFundacion(id).subscribe(
+    response=>{ 
+      this.activando = false;
+      if(response.n == '1'){
+       this._messageService.showSuccess('Fundación','Se activo la fundación correctamente')
+        this.obtFundaciones()
+       // $('#modalValidEliminarFUN').modal('hide')
+      }
+    },
+    error=>{
+      this.activando = false;
+     this._messageService.showError('Error','No se pudo activar la fundación ')
+
+    }
+  )
+}
  cancelarActualizacionLgo(){
    $('#modalEditFun').modal('show');
    $('#modalValidFOTOEDI').modal('hide');

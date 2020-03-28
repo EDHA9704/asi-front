@@ -16,7 +16,11 @@ export class NotificacionService {
 
     this.url = environment.apiUrl;
   }
-
+  changeEstado(id):Observable<any>{
+    let headers = new HttpHeaders().set('Content-Type','application/json')
+  
+    return this._http.put(this.url+'changeEstadoNotiMB/'+id,{},{headers:headers});
+  }
   registerNotificacion(notificacion:Notificacion,tipo):Observable<any>{
     let params = JSON.stringify(notificacion);
     let headers = new HttpHeaders().set('Content-Type','application/json');

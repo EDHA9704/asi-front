@@ -105,6 +105,11 @@ export class UserService {
       return this.http.delete(environment.apiUrl+'eliminar-fundacion/'+id, {headers:headers});
       
     }
+    activarFundacion(id):Observable<any>{
+      let headers = new HttpHeaders().set('Content-Type','application/json')
+      return this.http.put(environment.apiUrl+'activar-fundacion/'+id, {headers:headers});
+      
+    }
     eliminarCiudadano(id):Observable<any>{
       let headers = new HttpHeaders().set('Content-Type','application/json')
       return this.http.delete(environment.apiUrl+'eliminar-ciudadano/'+id, {headers:headers});

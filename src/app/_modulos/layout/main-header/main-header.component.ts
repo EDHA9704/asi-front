@@ -22,6 +22,7 @@ export class MainHeaderComponent implements OnInit {
   public mensaje;
   private signal:any;
   public photoFF :any;
+  public toggleBTN = false
   linksHome = [
     {name:'Inicio',root:'home/inicio'},
     {name:'Fundaciones',root:'home/fundaciones/todos/1'},
@@ -86,8 +87,17 @@ export class MainHeaderComponent implements OnInit {
   toggle(){
     const selectElement = (s:any) => document.querySelector(s)
     selectElement('.open').addEventListener('click',()=>{
-      selectElement('.nav-list').classList.add('active')
+      console.log(this.toggleBTN)
+      if(this.toggleBTN == false){
+        this.toggleBTN = false
+        selectElement('.nav-list').classList.add('active')
+      }else if(this.toggleBTN == true){
+        this.toggleBTN = false
+        selectElement('.nav-list').classList.remove('active')
 
+      }
+      
+ 
     })
     selectElement('.close').addEventListener('click',()=>{
       selectElement('.nav-list').classList.remove('active')
@@ -96,7 +106,7 @@ export class MainHeaderComponent implements OnInit {
   }
 
   styleHeader(){
-
+    $('.nav-list').removeClass('active')
     $( document ).ready(()=> {
       this.fullUrl = this.router.url.toString()
     this.keyUrl = this.fullUrl.split('/')
@@ -273,7 +283,7 @@ export class MainHeaderComponent implements OnInit {
         this.totalNt = 0
       }
     )
-  }
+  } 
   obtallnotificaciones2(page,adding=false){
     console.log("entroo noif ******")
     this.cargaN = true;     
@@ -412,7 +422,29 @@ async  deleteOneSignal(id,signal){
     }
     
   }
-  reloadD(){
+  reloadD(id){
+    
+    
+
+    this.cambiarEstado(id)
     this._communicationService.reloadData();
+  }
+  cambiarEstado(id){
+    this._notificacionService.changeEstado(id).subscribe(
+      res=>{
+        if(this.currentUser && this.currentUser.usuario.rol == '1'){
+          this.obtEstadisticasAdmin()
+        }else{
+          this.obtEstadisticasFUND() 
+        }
+       
+        
+        console.log(res)
+        
+      },
+      err=>{
+        console.log(<any>err)
+      }
+    )
   }
 }

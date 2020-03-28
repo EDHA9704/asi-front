@@ -816,7 +816,7 @@ public nuevoRegistro = false;
  //   this.cancelarVolun()
   
   } 
-  //desactivar o activar el estado de la mascota
+  
   eliminarVoluntarioEstado(usuario,id){
     console.log(id)
     this._fundacionService.eliminarVoluntarioEstado(usuario,id).subscribe(
@@ -844,6 +844,33 @@ public nuevoRegistro = false;
       }
     );
   }
+    activarVoluntarioEstado(usuario,id){
+      console.log(id)
+      this._fundacionService.activarVoluntarioEstado(usuario,id).subscribe(
+        response=>{
+  
+          if(response.usuario && response.n == '1'){
+            this.actualizar = false;
+                  this.imL = false;
+                  this.imgUN = '';
+                  this.resets()
+                    this.actualPage()
+   
+            this._messageService.showSuccess('Voluntario','El voluntario fue activado')
+  
+  
+          }else if(response.n == '4'){
+            this._messageService.showError('Permisos','No tienes permisos para realizar esta acción')
+  
+          }
+        }, 
+        error=>{
+          this._messageService.showError('Error','No se pudo activar al voluntario')
+  
+          console.log(<any>error);
+        }
+      );
+    }
   openDialogMap(): void {
     $('#modalMascota').modal('hide')
     const dialogRef = this.dialog.open(MapCustomComponent, {

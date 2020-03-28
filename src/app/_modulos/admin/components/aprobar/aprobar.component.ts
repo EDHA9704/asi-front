@@ -41,6 +41,7 @@ export class AprobarComponent implements OnInit {
   public carga;
   public verTodas;
   public valid;
+  public pagesSelec;
   msj = new FormControl('', [Validators.required, Validators.maxLength(300),Validators.minLength(10)]);
   getErrorMessage() {
     return this.msj.hasError('required') ? 'El mensaje es requerido' :
@@ -93,6 +94,7 @@ export class AprobarComponent implements OnInit {
   }
 
   loadPage() {
+    this.pagesSelec = []
     this._route.params.subscribe(params => {
       let id;
       let page;
@@ -140,10 +142,11 @@ export class AprobarComponent implements OnInit {
   }
 
   obtFundacionesNA(page) {
-
+    this.pagesSelec = []
+    this.fundacionesNA = []
       this._usuarioService.obtFundacionesNa(page).subscribe(
         response => {
-          this.fundacionesNA = []
+          
 
           if (response.fundacionesNA && response.n === '1') {
             this.carga = false;
@@ -152,7 +155,10 @@ export class AprobarComponent implements OnInit {
             this.pages = response.pages;
             console.log(this.pages + "AQUII")
             this.itemsPerPage = response.itemsPerPage;
-
+            for (let i = 1; i <= this.pages; i++) {
+              this.pagesSelec.push(i)
+              
+            }
             response.fundacionesNA.forEach(e => {
                 var ff =   new Date(e.fechaFundacion);
                 var fin = ff.toLocaleDateString()
@@ -176,6 +182,7 @@ export class AprobarComponent implements OnInit {
           var errorMessage = <any>error;
           this.carga = false;
           this.advertencia = true;
+          this.pagesSelec = []
           this.fundacionesNA = []
           if ((errorMessage != null && error.error.n == '5') || (errorMessage != null && error.error.n == '4') || (errorMessage != null && error.error.n == '3')) {
         
@@ -206,12 +213,14 @@ export class AprobarComponent implements OnInit {
             
             this.carga = false;
             this.fundacion = response.fundacion;
-
             if(this.fundacion.estado != 0){
               this.advertencia = true;
               this.mensaje2 = "No se pudo encontrar la fundación"
+             
             }else{
+              console.log("AQUI * *****",this.verTodas)
               this.advertencia = false;
+              $(".fundaciones").addClass('visible')
             }
           } else if (response.n === '2') {
             this.advertencia = true;

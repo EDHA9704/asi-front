@@ -93,6 +93,12 @@ eliminarVoluntarioEstado(usuario:UsuarioVoluntario,id):Observable<any>{
   
   return this._http.put(this.url+'eliminar-voluntario-estado/'+id,params,{headers:headers});
 }
+activarVoluntarioEstado(usuario:UsuarioVoluntario,id):Observable<any>{
+  let params = JSON.stringify(usuario);
+  let headers = new HttpHeaders().set('Content-Type','application/json')
+  
+  return this._http.put(this.url+'activar-voluntario-estado/'+id,params,{headers:headers});
+}
 borrarUsuario(id):Observable<any>{
   let headers = new HttpHeaders().set('Content-Type','application/json');
   return this._http.delete(this.url+'borrar-usuario/'+id, {headers:headers});

@@ -259,7 +259,9 @@ align-items: center; width: 100%;">
                       <td mat-cell *matCellDef="let element" class="btnsAcc" > 
                           <button *ngIf="element.estado != '3'" class="btn" (click)="editarFun(element)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                           <button *ngIf="element.estado != '3'" (click)="verificarEliminarFundacion(element._id)" class="btn"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                      </td>
+                          <button *ngIf="element.estado == '3' " [disabled]="activando == true" (click)="activarFundacion(element._id)" class="btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+
+                        </td>
                     </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

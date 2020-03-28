@@ -151,7 +151,8 @@
         <div class="modal-header" style="align-items: center;">
           <h5 class="modal-title" id="exampleModalLongTitle" style="font-size: 1.5rem; margin: 0;">Registro de voluntario</h5>
           <div class="btnModalVolAcc" >
-            <button *ngIf="actualizar == true" class="btn btn-danger" style="background: #bf3b3b !important;" (click)="eliminarVoluntarioEstado(usuario,usuario._id)">Eliminar voluntario</button>
+            <button *ngIf="actualizar == true && usuario.estado != '3'" class="btn btn-danger" style="background: #bf3b3b !important;" (click)="eliminarVoluntarioEstado(usuario,usuario._id)">Eliminar voluntario</button>
+            <button *ngIf="actualizar == true && usuario.estado == '3'" class="btn btn-danger" style="background: #3bbfad !important; border: 0;" (click)="activarVoluntarioEstado(usuario,usuario._id)">Activar voluntario</button>
 
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -407,7 +408,7 @@
                     <button type="submit" mat-button *ngIf="actualizar == false" (click)="registrarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
                     password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid || registrando == true" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
                     password.invalid || tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid || registrando == true" >Registrar</button>
-                    <button type="submit"  *ngIf="actualizar == true" (click)="actualizarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
+                    <button type="submit"  *ngIf="actualizar == true && usuario.estado != '3'" (click)="actualizarVoluntario(stepper)" [disabled]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
                  tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid || celular.invalid || registrando == true" [class.noval]="nombres.invalid || apellidos.invalid || cedula.invalid || fechaNacimiento.invalid || correo.invalid || 
                  tipoVoluntario.invalid || disponibilidadTiempo.invalid || telefono.invalid  || celular.invalid || registrando == true" >Actualizar</button>
       

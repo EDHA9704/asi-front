@@ -83,7 +83,7 @@ keyUrl
     private authenticationService: AuthenticationService,private userService:UserService,
     private router: Router,private _communcationService:CommunicationService) {
       this.url = environment.apiUrl;
-      this.currentUser = this.authenticationService.currentUserValue;
+      this.currentUser = this.authenticationService.currentUserValue; 
       this.fullUrl = this.router.url.toString()
       this.keyUrl = this.fullUrl.split('/')
      }
