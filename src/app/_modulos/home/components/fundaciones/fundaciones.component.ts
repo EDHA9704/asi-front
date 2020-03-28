@@ -328,6 +328,7 @@ export class FundacionesComponent implements OnInit {
             this.total = 0;
             this.advertencia =true;
             this.status = 'error';  
+            this.loading = false;
             $(".carga").fadeOut("slow");
             var errorMessage = <any>error;
            
