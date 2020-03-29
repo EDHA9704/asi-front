@@ -13,7 +13,6 @@ import {MomentModule} from 'angular2-moment';
 import {HeaderHomeComponent} from './components/home-header/home-header.component';
 import { NosotrosComponent } from './components/nosotros/nosotros.component';
 import { FooterComponent } from './components/footer/footer.component'
-import { NgxSpinnerModule } from "ngx-spinner";
 import {SharedModule} from 'src/app/_shared/shared.module'
 import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
 
@@ -34,7 +33,6 @@ import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION }
     HomeRoutingModule,
     MatCardModule,
     MomentModule,
-    NgxSpinnerModule,
     SharedModule,
     NgxUiLoaderModule
     

@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SpinnerComponent } from './components/spinner/spinner.component';
-
-import { NgxSpinnerModule } from "ngx-spinner";
 import { MapCustomComponent } from './components/map-custom/map-custom.component';
 
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
@@ -17,11 +14,10 @@ import { LoadingCustomComponent } from './components/loading-custom/loading-cust
 import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
 
 @NgModule({
-  declarations: [SpinnerComponent, MapCustomComponent, LoadingCustomComponent,EmptyElementComponent],
+  declarations: [MapCustomComponent, LoadingCustomComponent,EmptyElementComponent],
   entryComponents:[MapCustomComponent,LoadingCustomComponent,EmptyElementComponent],
   imports: [
     CommonModule,
-    NgxSpinnerModule,
     MatStepperModule,MatInputModule,MatCheckboxModule,
   MatIconModule,MatSelectModule,MatButtonModule,MatMenuModule,
   MatExpansionModule,MatFormFieldModule,MatDatepickerModule,MatNativeDateModule,
@@ -31,7 +27,6 @@ MatPaginatorModule,
 NgxUiLoaderModule,MatTabsModule
   ],
   exports:[
-    SpinnerComponent,
     MapCustomComponent,
 
     LoadingCustomComponent,

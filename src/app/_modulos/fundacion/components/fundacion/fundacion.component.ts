@@ -1,20 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { UsuarioFundacion } from 'src/app/_models/usuarioFundacion';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MascotaService } from 'src/app/_shared/services/mascota.service';
-import { UploadService } from 'src/app/_shared/services/upload.service';
-import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 import { Historia } from 'src/app/_models/historia';
 import { PortadaFundacion } from 'src/app/_models/portadaFundacion';
-declare var $:any;
+import { UsuarioFundacion } from 'src/app/_models/usuarioFundacion';
+import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 import { environment } from '../../../../../environments/environment';
 import { AuthenticationService, UserService } from '../../../../_shared/services';
-import { FundacionService } from 'src/app/_shared/services/fundacion.service';
-import { MessagesService } from 'src/app/_shared/messages/messages.service';
-import { SwiperComponent} from 'ngx-useful-swiper';
-import { CommunicationService } from 'src/app/_shared/communications/communication.service';
 
+declare var $:any;
 @Component({
   selector: 'app-fundacion',
   templateUrl: './fundacion.component.html',

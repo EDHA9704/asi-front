@@ -7,7 +7,6 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { SharedModule} from './../../_shared/shared.module';
 
   import {MomentModule} from 'angular2-moment';
-  import { NgxSpinnerModule } from "ngx-spinner";
 import { MisMascotasComponent } from './components/mis-mascotas/mis-mascotas.component';
 import { MisEmergenciasComponent } from './components/mis-emergencias/mis-emergencias.component';
 import { MisDonacionesComponent } from './components/mis-donaciones/mis-donaciones.component';
@@ -35,8 +34,6 @@ import { NosotrosComponent } from './components/nosotros/nosotros.component'
     FormsModule,ReactiveFormsModule,
     NgxUiLoaderModule,
     MomentModule,
-    NgxSpinnerModule,
-
     NgxUsefulSwiperModule,
     SharedModule
 

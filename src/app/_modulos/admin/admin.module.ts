@@ -19,7 +19,6 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
   import {MatTableModule} from '@angular/material/table';
 import { PanelComponent } from './components/panel/panel.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { NgxSpinnerModule } from "ngx-spinner";
 import {SharedModule} from 'src/app/_shared/shared.module'
 @NgModule({
   declarations: [AdminComponent,HeaderAdminComponent,AFundacionesComponent,NewfundacionComponent,
@@ -30,11 +29,8 @@ import {SharedModule} from 'src/app/_shared/shared.module'
     MomentModule,
     NgxUiLoaderModule,
     MatTableModule,
-   
     MatTooltipModule,
     SharedModule,
-    NgxSpinnerModule,
-  
   ]
 })
 export class AdminModule { }
